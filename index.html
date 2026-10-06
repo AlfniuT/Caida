@@ -2,7 +2,8 @@
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caída</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#24093f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Caída"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--felt:#1b4a36;--paper:#f3ead6;--ink:#2a1a14}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -146,6 +147,148 @@ button:disabled{opacity:.4}
 @keyframes drawIn{from{transform:translateY(-90px) scale(.4);opacity:0}}
 .sres{font-family:'Lilita One',Georgia,serif;font-size:42px;color:#ffd84a;-webkit-text-stroke:1.5px #3a1d06;text-shadow:0 4px 0 #3a1d06;animation:pop .5s ease-out}
 @media (prefers-reduced-motion: reduce){#ov.l3::before,#ov.l4::before{animation:none}}
+
+#app{padding:8px;gap:6px}
+.board{padding:6px;border-width:6px;gap:4px}
+.row{min-height:0}.mid .row{min-height:96px}#hd{min-height:96px;padding:3px 0;border-radius:12px;transition:box-shadow .3s,background .3s}
+#act{min-height:0}#act:empty{display:none}
+#tm{min-height:0!important}#tm:empty{display:none}
+.cg{grid-template-columns:repeat(4,1fr);gap:5px}
+.cg button{font-size:13px;padding:8px 2px;border-radius:8px;line-height:1.15}
+.cg .mc,.cg .pc{grid-column:auto}
+.cg .sq{background:#e0702a;color:#fff}
+.log{min-height:0;font-size:13px;padding:6px 8px}
+.hint{font-size:13px;padding:6px 8px}
+.grp{opacity:.55;transition:opacity .3s,box-shadow .3s,background .3s}
+.grp.t{opacity:1;outline:3px solid #ffd84a;box-shadow:0 0 18px #ffd84acc;background:#ffd84a26}
+.grp.t .gl{color:#ffd84a}
+#hd.myt{box-shadow:0 0 0 3px #ffd84a,0 0 22px #ffd84a99;background:#ffd84a1a}
+#p0.myt .av{box-shadow:0 0 0 3px #ffd84a,0 0 14px #ffd84a}
+.c.lastc{box-shadow:0 0 0 3px #fff,0 0 18px 4px #ffd84a!important;transform:translateY(-4px)}
+.cc{display:inline-block;font:800 11px system-ui,sans-serif;background:#ffd84a;color:#2a1a14;border-radius:8px;padding:1px 6px;margin:1px 2px;white-space:nowrap}
+.sb2{position:fixed;z-index:70;background:#fff;color:#2a1a14;font:800 15px system-ui,sans-serif;padding:6px 12px;border-radius:14px;box-shadow:0 4px 12px #0008;white-space:nowrap;pointer-events:none;animation:pop .35s ease-out}
+#rem{background:#ffd84a;color:#2a1a14;border-radius:10px;padding:8px 10px;font:600 14px/1.35 system-ui,sans-serif;text-align:center;animation:remp 1s infinite alternate}
+#rem:empty{display:none}
+@keyframes remp{from{box-shadow:0 0 0 0 #ffd84a88}to{box-shadow:0 0 0 6px #ffd84a00}}
+
+.st.top .sx,.seats.n2 .sx{max-width:none;flex-wrap:nowrap}
+.st.top .pl{white-space:nowrap}
+.seats.n3 .mid .c,.seats.n4 .mid .c{width:50px;height:74px}
+.seats.n3 .mid .row,.seats.n4 .mid .row{gap:5px;min-height:78px}
+#hd .c{width:60px;height:88px}#hd{min-height:92px}
+#rem{font-size:13px;padding:6px 8px}
+.pl{white-space:nowrap}
+
+html,body{overflow-x:hidden;max-width:100%}
+#app{width:100%;max-width:480px;overflow-x:hidden}
+.board{max-width:100%;overflow:hidden}
+.seats{grid-template-columns:auto minmax(0,1fr) auto!important}
+.seats.n2{grid-template-columns:0 minmax(0,1fr) 0!important}
+.mid{min-width:0}
+.sx{max-width:60px}
+.st.top .sx,.seats.n2 .sx{max-width:100%;flex-wrap:wrap}
+.sel{flex-wrap:wrap}
+.cg button{min-width:0;overflow-wrap:anywhere}
+@media (max-width:380px){
+.seats.n3 .mid .c,.seats.n4 .mid .c{width:44px;height:65px}
+.seats.n3 .mid .row,.seats.n4 .mid .row{min-height:68px;gap:4px}
+.mid .row .c{width:54px;height:79px}.mid .row{min-height:82px}
+#hd .c{width:56px;height:82px}
+.cg button{font-size:12px;padding:7px 1px}
+.c.back.s{width:28px;height:41px}.c.back.v{width:38px;height:25px}
+}
+
+.tbar{height:8px;background:#0005;border-radius:6px;overflow:hidden;margin:6px 0 4px}.tbar i{display:block;height:100%;background:#ffd84a;border-radius:6px}
+.tboard{position:relative;min-height:150px;justify-content:center}
+.trv{background:#fff;color:#2a1a14;font:800 14px system-ui,sans-serif;border-radius:12px;padding:6px 10px;text-align:center;align-self:center}
+.tbig{position:absolute;left:0;right:0;top:40%;text-align:center;font-family:'Lilita One',Georgia,serif;font-size:40px;color:#ffd84a;-webkit-text-stroke:1.5px #3a1d06;text-shadow:0 4px 0 #3a1d06;pointer-events:none;opacity:0}
+.tbig.on{animation:tbig 1.6s ease-out}
+@keyframes tbig{0%{opacity:0;transform:scale(.3)}15%{opacity:1;transform:scale(1.15)}30%{transform:scale(1)}80%{opacity:1}100%{opacity:0}}
+
+/* ====== Nuevo estilo ====== */
+:root{--bg1:#4a1a8c;--bg2:#24093f;--bg3:#12052b;--a1:#ff9a4a;--a2:#ff3d7f;--cy:#36d6ff;--vi:#7b4dff;--felt:#1d0a38}
+body{background:radial-gradient(130% 80% at 50% -10%,var(--bg1) 0%,var(--bg2) 50%,var(--bg3) 100%) fixed;font-family:'Nunito',system-ui,sans-serif}
+button{font-family:'Nunito',system-ui,sans-serif;font-weight:800;background:linear-gradient(180deg,#ffa356,#ff4f7b);color:#fff;box-shadow:0 3px 0 #a3204a,0 6px 14px #0005;text-shadow:0 1px 0 #0003}
+button:active{transform:translateY(2px);box-shadow:0 1px 0 #a3204a}
+button:disabled{box-shadow:none}
+.off{background:#ffffff14!important;color:#fff!important;box-shadow:none!important}
+.bk{background:#ffffff14!important;box-shadow:none!important;color:#fff;font-size:15px;padding:8px 14px}
+.box{background:#ffffff10;border:1px solid #ffffff1f;border-radius:16px}
+#menu h2,.sec{font-family:'Lilita One',Georgia,serif;font-weight:400;font-size:30px;letter-spacing:.5px;margin:6px 0 12px;background:linear-gradient(90deg,#fff,#ffd0e0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.pf{display:flex;align-items:center;gap:8px;background:#ffffff12;box-shadow:none;padding:4px 12px 4px 4px;border-radius:999px;font-size:15px;max-width:48%;overflow:hidden;white-space:nowrap}
+.cur{display:flex;align-items:center;gap:6px}
+.cp{display:flex;align-items:center;gap:4px;background:#00000040;border:1px solid #ffffff1a;padding:4px 10px 4px 5px;border-radius:999px;font-weight:900;font-size:15px}
+.plus{width:32px;height:32px;padding:0;border-radius:50%;font-size:22px;line-height:1}
+.logo{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 16px}
+.logo img{width:70px;border-radius:10px;box-shadow:0 8px 22px #0007;transform:rotate(-8deg)}
+.ttl{font-family:'Lilita One',Georgia,serif;font-size:50px;line-height:1;background:linear-gradient(180deg,#fff 20%,#ffc0d6 55%,#ff8a3d);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 #6d1a4a)}
+.hero{display:flex;align-items:center;gap:14px;width:100%;padding:16px;border-radius:22px;text-align:left;margin-bottom:12px;background:linear-gradient(135deg,#ff9a4a,#ff3d7f 60%,#c42a9e);box-shadow:0 5px 0 #8a1846,0 12px 26px #ff3d7f44}
+.hic{width:62px;height:62px;flex:none;background:#ffffff26;border-radius:18px;padding:6px}
+.htx{flex:1;display:flex;flex-direction:column}.htx b{font-family:'Lilita One',Georgia,serif;font-weight:400;font-size:32px;letter-spacing:1px}.htx small{font-size:13px;opacity:.9;font-weight:700}
+.chev{font-size:30px;opacity:.7;line-height:1}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px 12px;border-radius:18px;background:linear-gradient(180deg,#ffffff1c,#ffffff0a);border:1px solid #ffffff22;box-shadow:0 4px 0 #0004;font-size:14px}
+.tic{width:48px;height:48px}
+.badge{position:absolute;top:6px;right:6px;background:var(--a2);color:#fff;font:900 11px 'Nunito',system-ui;padding:2px 7px;border-radius:999px;box-shadow:0 0 0 2px #24093f}
+.mi{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:8px 0;padding:12px;border-radius:16px;background:linear-gradient(180deg,#ffffff1a,#ffffff0a);border:1px solid #ffffff1f;box-shadow:0 3px 0 #0004}
+.mic{width:46px;height:46px;flex:none}
+.mtx{flex:1;display:flex;flex-direction:column}.mtx b{font-size:17px}.mtx small{font-size:13px;opacity:.75;font-weight:700}
+.badge2{background:var(--a2);font:900 11px 'Nunito',system-ui;padding:2px 8px;border-radius:999px}
+.ptsb{background:linear-gradient(180deg,#ffa356,#ff4f7b);font-weight:900;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.daily .dh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.dg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.dc{position:relative;display:flex;flex-direction:column;align-items:center;padding:6px 2px;border-radius:12px;background:#00000035;border:1px solid #ffffff14;font-size:13px}
+.dc:last-child{grid-column:span 2}
+.dc small{opacity:.8;font-weight:800}.dci{width:30px;height:30px;margin:2px 0}
+.dc.done{opacity:.55}.dc i{position:absolute;top:2px;right:6px;font-style:normal;color:#5dff9e;font-weight:900}
+.dc.now{background:linear-gradient(180deg,#ffa356,#ff3d7f);box-shadow:0 0 0 2px #fff,0 0 18px #ff3d7f;animation:remp 1s infinite alternate}
+#dmod{position:fixed;inset:0;z-index:90;background:#0b0218cc;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.dbox{width:100%;max-width:420px;background:radial-gradient(120% 90% at 50% 0%,#5a24a8,#2a0d52);border:1px solid #ffffff30;border-radius:24px;padding:18px;box-shadow:0 20px 50px #000a;text-align:center;animation:pop .45s ease-out}
+.dgift{width:84px;height:84px;margin:-58px auto 6px;filter:drop-shadow(0 8px 14px #0008);animation:float 2s ease-in-out infinite}
+.dgift.pop{margin:4px auto;animation:pop .5s ease-out}
+@keyframes float{50%{transform:translateY(-6px) rotate(-4deg)}}
+.st{font-family:'Lilita One',Georgia,serif;font-weight:400;font-size:22px;display:flex;align-items:center;gap:6px;margin:18px 0 4px}
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.si{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 6px 10px;border-radius:16px;background:linear-gradient(180deg,#ffffff1a,#ffffff08);border:1px solid #ffffff1f;text-align:center;font-size:14px}
+.sic{width:46px;height:46px}
+.soon{position:absolute;top:6px;left:6px;background:#00000066;font:900 10px 'Nunito',system-ui;padding:2px 7px;border-radius:999px;letter-spacing:.5px;text-transform:uppercase}
+.pr{display:flex;align-items:center;gap:4px;font-size:12px;opacity:.8;font-weight:700}
+.spr{display:flex;align-items:center;gap:4px;background:#00000045;padding:3px 10px;border-radius:999px;font-weight:900}
+.setr{display:flex;align-items:center;gap:10px;margin-top:10px}
+.sb{font-family:'Nunito',system-ui,sans-serif}
+.txt h3{color:#ffb0cb}
+/* juego */
+.hint{background:#3a1670d9;border-color:var(--cy)}
+.cg button{background:linear-gradient(180deg,#ffb760,#ff7a45);color:#3a0f1a;text-shadow:none;box-shadow:0 2px 0 #b8481f}
+.cg .pc{background:linear-gradient(180deg,#5fe3ff,#2b8fe0);color:#fff}
+.cg .mc{background:linear-gradient(180deg,#ff6f86,#c8213f);color:#fff}
+.cg .sq{background:linear-gradient(180deg,#ff9a4a,#e0531e);color:#fff}
+.grp.t{outline-color:var(--cy);box-shadow:0 0 18px #36d6ffcc;background:#36d6ff22}.grp.t .gl{color:#9af0ff}
+#hd.myt{box-shadow:0 0 0 3px var(--cy),0 0 22px #36d6ff99;background:#36d6ff14}
+#p0.myt .av{box-shadow:0 0 0 3px var(--cy),0 0 14px var(--cy)}
+.c.lastc{box-shadow:0 0 0 3px #fff,0 0 18px 4px #ff7ab0!important}
+.cc{background:linear-gradient(180deg,#ffa356,#ff4f7b);color:#fff}
+#rem{background:linear-gradient(180deg,#ffd27a,#ff9a4a);color:#3a0f1a}
+.tbar i{background:linear-gradient(90deg,#ffa356,#ff3d7f)}
+.sel button{background:#ffffff14;box-shadow:none}
+.log{background:#00000040}
+.gd{background:#00000040}
+/* mesa de tamaño fijo */
+.board{height:384px;overflow:hidden}
+.seats{flex:1;min-height:0}
+.seats #tb{flex-wrap:wrap;align-content:center;overflow:hidden;min-height:0!important}
+.seats.n2 #tb{height:176px}.seats.n3 #tb,.seats.n4 #tb{height:146px}
+.seats .sx .bean{width:9px;height:6px}
+.seats .sks{width:32px;height:46px}.seats .ml{width:26px;height:38px}
+@media (max-height:700px){.board{height:356px}.seats.n2 #tb{height:160px}.seats.n3 #tb,.seats.n4 #tb{height:132px}}
+#dmod .dh{display:none}
+html{background:#12052b}
+body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#12052b 100%) no-repeat,#12052b!important}
+#menu h2,.sec{background:none!important;color:#fff!important;-webkit-text-fill-color:#fff;text-shadow:0 3px 0 #6d1a4a}
+.seats #tb{gap:6px!important;overflow:visible!important;padding:6px 7px;box-sizing:border-box}
+.mid{overflow:visible}
+.c.lastc{transform:none!important}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -175,11 +318,11 @@ button:disabled{opacity:.4}
 <div class="pile" id="p0"></div>
 </div>
 <div id="act"></div>
-<div class="sub" id="tm" style="text-align:center;min-height:20px"></div><div class="row mine" id="hd"></div>
+<div class="sub" id="tm" style="text-align:center;min-height:20px"></div><div id="rem"></div><div class="row mine" id="hd"></div>
 <div class="cg" id="cg"></div><div class="hint" id="hint"></div>
 <div class="log" id="lg"></div>
 <div class="sel" id="em" style="margin-top:4px"><button data-e="🔥 ¡Caída!">🔥</button><button data-e="😂">😂</button><button data-e="🤥 ¡Mentiroso!">🤥</button><button data-e="👏">👏</button><button data-e="😡">😡</button></div>
-<div class="sel" style="flex-wrap:wrap;margin-bottom:10px"><button data-t="madera">Madera</button><button data-t="pano">Paño</button><button data-t="mantel">Mantel</button><button id="vz">🔊 Voz</button><button id="snd">🔔 Sonido</button><button id="dk">Mazo</button></div>
+<div class="sel" style="flex-wrap:wrap;margin-bottom:10px"><button data-t="madera">Madera</button><button data-t="pano">Paño</button><button data-t="mantel">Mantel</button><button id="vz">🔊 Voz</button><button id="snd">🔔 Sonido</button><button id="mus">🎵 Música</button><button id="dk">Mazo</button></div>
 <div id="ov"></div>
 </div>
 <script>
@@ -187,13 +330,13 @@ const ORD=[1,2,3,4,5,6,7,10,11,12];let META=30;
 const SU=[['oros','●','#e0a800'],['copas','♥','#d62f2f'],['espadas','♠','#2f6fd6'],['bastos','♣','#2e9a45']];
 const $=id=>document.getElementById(id),sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const P=n=>n<=7?1:n==10?2:n==11?3:4;
-let N=2,entry=100;
+let N=2,entry=100,IND=false;const MULTI=()=>N==3||IND;
 let RN=null;const nm=p=>p==0?'Tú':(RN&&RN[p])?RN[p]:(N==2?'El rival':(N==3?['','Rafa','Luis']:['','Rafa','Marta','Luis'])[p]);
-const tm=p=>N==3?p:p%2,nxt=p=>(p+1)%N,Z=()=>Array.from({length:N},()=>[]),F=()=>Array(N).fill(false);
+const tm=p=>MULTI()?p:p%2,nxt=p=>(p+1)%N,Z=()=>Array.from({length:N},()=>[]),F=()=>Array(N).fill(false);
 const rivalsOf=p=>[...Array(N).keys()].filter(q=>tm(q)!=tm(p));
-const tn=t=>t==0?(N==4?'tu equipo':'Tú'):(N==4?'los rivales':nm(t));
+const tn=t=>t==0?(N==4&&!IND?'tu equipo':'Tú'):(N==4&&!IND?'los rivales':nm(t));
 const tcaps=t=>caps.reduce((a,c,i)=>a+(tm(i)==t?c:0),0);
-const TT=()=>N==3?[0,1,2]:[0,1],base=t=>N==3?(t==mano?14:13):20,holderOf=t=>N==4?pileAt[t]:t,rake=e=>e>=5000?.10:e>=2000?.07:e>=1000?.05:.03;
+const TT=()=>MULTI()?[...Array(N).keys()]:[0,1],base=t=>N==3?(t==mano?14:13):IND?10:20,holderOf=t=>N==4&&!IND?pileAt[t]:t,rake=e=>e>=5000?.10:e>=2000?.07:e>=1000?.05:.03;
 let pileAt=[2,1],TRN=null,trnEntry=100;
 const RKS={ronda:0,patrulla:1,'vigía':2,registro:3,flor:4,'casa chica':5,'casa grande':5,'flor patrulla':6,'flor registro':7};
 const lbl=c=>c.n+' de '+SU[c.s][0];
@@ -206,7 +349,7 @@ if(t.startsWith('Tú ')){t=t.replace(' y se lleva ',' y te llevas ').replace('T�
 const M={tira:'tiras',canta:'cantas',suma:'sumas',pide:'pides',llega:'llegas',tiene:'tienes',gana:'ganas',dice:'dices',va:'vas',enseña:'enseñas','no tenía':'no tenías','no tiene':'no tienes'};
 return t.replace(/Tú (tira|canta|suma|pide|llega|tiene|gana|dice|va|enseña|no tenía|no tiene)(?=[\s.,:!]|$)/g,(m,v)=>'Tú '+M[v])}
 function msg(t){log.push(T(t))}
-function add(p,n){score[p]+=n;if(score[p]>=META)over=true}
+function add(p,n){score[p]+=n;if(score[p]>=META)over=true;try{gmLevel()}catch(e){}}
 const PIP={1:[[29,42]],2:[[29,25],[29,59]],3:[[29,22],[29,42],[29,62]],4:[[19,26],[39,26],[19,58],[39,58]],5:[[19,26],[39,26],[29,42],[19,58],[39,58]],6:[[19,24],[39,24],[19,42],[39,42],[19,60],[39,60]],7:[[19,24],[39,24],[29,33],[19,42],[39,42],[19,60],[39,60]]};
 const NCOL=['#c08a00','#c8312f','#2457a6','#2f8a3e'];
 function nSym(s){
@@ -221,14 +364,14 @@ for(let i=0;i<Math.floor(n/15);i++)h+='<span class="cap"></span>';
 for(let i=0;i<n%15;i++)h+=`<span class="bean" style="--r:${(i*53)%180}deg"></span>`;return h}
 function stackHTML(id,n,per){per=per||4;const L=Math.min(8,Math.ceil(n/per));
 return `<div class="sk${n?'':' e'}" id="${id}"><div class="sks">${Array.from({length:L},(_,i)=>`<i class="ml${deckStyle()!='clasico'?' m':''}" style="left:${i*2}px;bottom:${i*2}px"></i>`).join('')}</div><span class="skn">${n}</span></div>`}
-function setHolders(){if(N==4){if(tm(mano)==0)pileAt[0]=(mano+2)%4;else pileAt[1]=(mano+2)%4}}
-function teamLbl(t){return t==0?(N==4?'Tu equipo':nameHTML(store.name||'Tú')):(N==4?'Rivales':(N==2?'Rival':nm(t)))}
+function setHolders(){if(N==4&&!IND){if(tm(mano)==0)pileAt[0]=(mano+2)%4;else pileAt[1]=(mano+2)%4}}
+function teamLbl(t){return t==0?(N==4&&!IND?'Tu equipo':nameHTML(store.name||'Tú')):(N==4&&!IND?'Rivales':IND?nm(t):(N==2?'Rival':nm(t)))}
 function seatHTML(p){
 const side=N>=3&&!(N==4&&p==2);
-const bs=hands[p].map(()=>`<div class="c back${N>2?' s':''}${side?' v':''}${deckStyle()!='clasico'?' m':''}"></div>`).join('');
+const bs=hands[p].map(()=>`<div class="c back s${side?' v':''}${deckStyle()!='clasico'?' m':''}"></div>`).join('');
 const t=tm(p),own=holderOf(t)==p;
 const extra=(own?pile(score[t],teamLbl(t))+stackHTML('cap'+p,tcaps(t)):'')+(mano==p?stackHTML('dp',deck.length,5)+'<div class="dl">Mazo</div>':'');
-return `<div class="grp${turn==p&&!over?' t':''}" data-p="${p}"><div class="gl">${nm(p)}${N==4&&p==2?' (compañera)':''}</div><div class="gb${side?' vv':''}">${bs}</div><div class="sx">${extra}</div></div>`}
+return `<div class="grp${turn==p&&!over?' t':''}" data-p="${p}"><div class="gl">${turn==p&&!over?'▶ ':''}${nm(p)}${N==4&&!IND&&p==2?' (compañera)':''}</div>${ccHTML(p)}<div class="gb${side?' vv':''}">${bs}</div><div class="sx">${extra}</div></div>`}
 function gBack(r){const e=document.createElement('div');e.className='c back'+(deckStyle()!='clasico'?' m':'');
 e.style.cssText=`position:fixed;left:${r.left}px;top:${r.top}px;width:30px;height:44px;z-index:50;margin:0;pointer-events:none`;document.body.appendChild(e);return e}
 async function dealAnim(){
@@ -239,14 +382,14 @@ const dst=p==0?document.querySelector('#hd'):document.querySelector('#seats [dat
 await fly(g,{left:r1.left+r1.width/2-15,top:r1.top+r1.height/2-22},170);g.remove();render()}
 dealt=hands.map(h=>[...h]);missPen=F()}
 function render(){
-$('p0').innerHTML=avatarHTML(30)+(holderOf(0)==0?pile(score[0],teamLbl(0))+stackHTML('cap0',tcaps(0)):'')+(mano==0?stackHTML('dp',deck.length,5)+'<div class="dl">Mazo</div>':'');$('p1').innerHTML='';
+$('p0').innerHTML=avatarHTML(30)+ccHTML(0)+(holderOf(0)==0?pile(score[0],teamLbl(0))+stackHTML('cap0',tcaps(0)):'')+(mano==0?stackHTML('dp',deck.length,5)+'<div class="dl">Mazo</div>':'');$('p1').innerHTML='';
 $('meta').textContent='a '+META+' · mano: '+nm(mano)+' · tus cartas '+TT().map(tcaps).join(' / ');
 $('seats').className='seats n'+N;
 const SEAT=N==2?{top:1}:N==3?{right:1,left:2}:{right:1,top:2,left:3};
 for(const k of ['top','left','right'])$('s-'+k).innerHTML=SEAT[k]!=null?seatHTML(SEAT[k]):'';
 $('dpile').innerHTML='';
-$('tb').innerHTML=table.map(cardHTML).join('')+(tmp?cardHTML(tmp).replace('class="c','class="c tmp'):'');
-$('hd').innerHTML=hands[0].map(cardHTML).join('');
+$('tb').innerHTML=table.map(c=>last&&last.id==c.id?cardHTML(c).replace('class="c','class="c lastc'):cardHTML(c)).join('')+(tmp?cardHTML(tmp).replace('class="c','class="c tmp'):'');
+fitTable();$('hd').innerHTML=hands[0].map(cardHTML).join('');$('hd').classList.toggle('myt',turn==0&&!over&&hands[0].length>0);$('p0').classList.toggle('myt',turn==0&&!over);
 $('lg').innerHTML=log.slice(-4).map(t=>'<div>'+t+'</div>').join('');renderCg();
 document.querySelectorAll('#hd .c').forEach(el=>el.onclick=()=>{if(turn==0&&!busy&&!over){const c=hands[0].find(x=>x.id==el.dataset.id);busy=true;play(0,c)}});
 }
@@ -289,13 +432,13 @@ if(p==0){const e=dec[0].find(d=>(name=='flor'&&(d.name=='patrulla'||d.name=='reg
 if(e){name='flor '+(name=='flor'?e.name:name);dec[0]=dec[0].filter(d=>d!==e)}}
 if(dec[p].some(d=>d.name==name))return;
 const d={name,h:[...h],t:seq++,ch:false,void:false,say:h.length,p};dec[p].push(d);
-msg(nm(p)+' canta '+name+'!');render();flashCanto(p,name,d.h);if(opt.mode=='practica'&&p!=0)msg('🎓 '+nm(p)+' canta '+name+': '+(EXP[name]||''))}
+msg(nm(p)+' canta '+name+'!');render();flashCanto(p,name,d.h);bubble(p,'🎵 ¡'+name+'!');if(p==0&&isLearn()&&name!='trivilín')toast('🔔 Recuerda: cada vez que tires una carta tienes que repetir el canto');if(name=='trivilín'){trivilin(p,d);return}if(opt.mode=='practica'&&p!=0)msg('🎓 '+nm(p)+' canta '+name+': '+(EXP[name]||''))}
 function challenge(p,only){
 const R=rivalsOf(p),L=only?[only]:R.flatMap(q=>dec[q].filter(d=>!d.ch));let any=false;
 for(const d of L){const q=d.p;d.ch=true;any=true;
 if(btnValid(d.name,d.h)){add(tm(q),1);msg('Estaba bien cantado: '+d.name+'. +1 para '+tn(tm(q))+' porque dudaron de él')}
-else{d.void=true;add(tm(p),2);msg('¡MAL CANTO! '+nm(q)+' no tenía '+d.name+'. +2 para '+tn(tm(p)));flash('¡MAL CANTO!')}}
-if(!only)for(const q of R)if(!missPen[q]){const mn=missName(q);if(mn){missPen[q]=true;any=true;add(tm(p),2);msg('¡MAL CANTO! '+nm(q)+' no avisó que tenía '+mn+'. +2 para '+tn(tm(p)));flash('¡MAL CANTO!')}}
+else{d.void=true;add(tm(p),2);if(p==0)ST().mc++;msg('¡MAL CANTO! '+nm(q)+' no tenía '+d.name+'. +2 para '+tn(tm(p)));flash('¡MAL CANTO!')}}
+if(!only)for(const q of R)if(!missPen[q]){const mn=missName(q);if(mn){missPen[q]=true;any=true;add(tm(p),2);if(p==0)ST().mc++;msg('¡MAL CANTO! '+nm(q)+' no avisó que tenía '+mn+'. +2 para '+tn(tm(p)));flash('¡MAL CANTO!')}}
 if(!any)return;render();if(over)end()}
 function resolve(){
 if(tcan){add(tm(mano),tcan.pts);msg(nm(mano)+' suma '+tcan.name+' de la mesa +'+tcan.pts);tcan=null}
@@ -305,15 +448,15 @@ if(d.name=='trivilín'){if(forceW==null)forceW=tm(p);over=true;msg(nm(p)+' tiene
 const f=info(d.h);C.push({p,d,k:[RK[d.name]??0,(d.name=='ronda'&&f.pair!==undefined)?ORD.indexOf(f.pair):f.hi]})}
 for(const c of C)msg(nm(c.p)+' enseña '+c.d.name+' ('+c.d.h.map(x=>x.n+SU[x.s][1]).join(' ')+')');
 if(C.length){C.sort((a,b)=>b.k[0]-a.k[0]||b.k[1]-a.k[1]||(((a.p-mano-1+N*2)%N)-((b.p-mano-1+N*2)%N)));
-const w=C[0],n=ptsOf(w.d.name,w.d.h);add(tm(w.p),n);msg(nm(w.p)+' gana el canto: +'+n+' puntos'+(C.length>1?' (los demás no suman)':''))}
+const w=C[0],n=ptsOf(w.d.name,w.d.h);add(tm(w.p),n);setTimeout(()=>{flash('<div style="font-size:44px">🎵 '+(w.p==0?'¡Ganas el canto!':'¡'+nm(w.p)+' gana el canto!')+'</div><div style="font-size:22px">'+w.d.name+': +'+n+' para '+tn(tm(w.p))+'</div>',2);speak((w.p==0?'Ganas el canto: ':nm(w.p)+' gana el canto: ')+w.d.name)},300);if(w.p==0){ST().cantos++;ST().best=Math.max(ST().best||0,n)}msg(nm(w.p)+' gana el canto: +'+n+' puntos'+(C.length>1?' (los demás no suman)':''))}
 dec=Z();lost=F();asked=false;playedBy=Z()}
 function renderCg(){
 const can=turn==0&&!busy&&!over&&hands[0].length==3;
 const pc=can&&!asked?bestC(hands[0]):null,canP=!!pc&&score[0]+pc.pts>=META;
-$('cg').innerHTML=btns().map(n=>cbtn(n,can)).join('')+`<button class="pc" ${canP?'':'disabled'}>¡Pido canto!</button><button class="mc" ${rivalsOf(0).some(q=>dec[q].some(d=>!d.ch))&&!over&&!opt.noCheat?'':'disabled'}>¡Mal canto!</button>`;
+$('cg').innerHTML=btns().map(n=>cbtn(n,can)).join('')+`<button class="pc" ${canP?'':'disabled'}>¡Pido canto!</button><button class="mc" ${rivalsOf(0).some(q=>dec[q].some(d=>!d.ch))&&!over&&!opt.noCheat?'':'disabled'}>¡Mal canto!</button><button class="sq" ${!over&&rivalsOf(0).some(q=>dec[q].some(d=>d.missed&&!d.void))?'':'disabled'}>🔥 ¡Se quemó!</button>`;
 document.querySelectorAll('#cg button[data-n]').forEach(b=>b.onclick=()=>{const d=dOf(b.dataset.n);if(d)resay(d);else declare(0,b.dataset.n)});
 document.querySelector('#cg .mc').onclick=()=>challenge(0);
-document.querySelector('#cg .pc').onclick=()=>pidoCanto(0)}
+document.querySelector('#cg .pc').onclick=()=>pidoCanto(0);document.querySelector('#cg .sq').onclick=()=>burnCall()}
 function flash(t,lv=0){const o=$('ov');o.className=lv>=2?'l'+lv:'';
 o.innerHTML=T(t)+(lv==4?Array.from({length:16},(_,i)=>`<span class="cf" style="left:${(i*37)%96}%;animation-delay:${(i%5)*.25}s">${['🎉','👑','✨','🔥'][i%4]}</span>`).join(''):'');
 o.style.display='none';void o.offsetWidth;o.style.display='flex';
@@ -344,7 +487,7 @@ function cbtn(n,can){
 const d=dOf(n),mine=turn==0&&!busy&&!over,len=hands[0].length;
 if(d){const need=mine&&len<3&&!d.auto&&d.say!=len;return `<button ${need?'':'disabled'} data-n="${n}">${need?'🔔 ':'✔ '}${need&&len==1?vista(n):n}</button>`}
 return `<button ${can?'':'disabled'} data-n="${n}">${n}</button>`}
-function resay(d){const len=hands[0].length;if(d.say==len)return;d.say=len;msg(nm(0)+' dice: '+(len==1?vista(d.name):d.name));render()}
+function resay(d){const len=hands[0].length;if(d.say==len)return;d.say=len;d.missed=false;const tx=len==1?vista(d.name):d.name;msg(nm(0)+' dice: '+tx);render();bubble(0,'🔔 '+tx);speak(tx);remind()}
 function vista(n){return (['registro','trivilín'].includes(n)?'visto':'vista')+' mi '+n}
 function emote(p,t){const e=document.createElement('div');e.className='bub';e.textContent=t;
 e.style.cssText=`position:absolute;${p?'top':'bottom'}:50px;left:${10+Math.floor(Math.random()*50)}%`;
@@ -380,7 +523,221 @@ canto(lv){const t=NOW();const N=[440,554,659,880,1109];for(let i=0;i<1+lv;i++)tn
 win(){const t=NOW();[523,659,784,1047,784,1047].forEach((f,i)=>tn0(f,t+i*.12,.3,'triangle',.15))},
 lose(){const t=NOW();[392,370,349,330].forEach((f,i)=>tn0(f,t+i*.22,.35,'triangle',.12))}};
 document.addEventListener('pointerdown',()=>{if(sndOn)au()},{passive:true});
-function speak(t){if(!vozOn)return;try{const u=new SpeechSynthesisUtterance(t);u.lang='es-VE';u.rate=.85;u.pitch=1.2;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+let VOZ=null;function pickVoz(){try{const v=speechSynthesis.getVoices();VOZ=['es-VE','es-US','es-MX','es-CO','es-419','es-ES'].map(l=>v.find(x=>x.lang.replace('_','-')==l)).find(Boolean)||v.find(x=>/^es/i.test(x.lang))||null}catch(e){}}
+try{pickVoz();speechSynthesis.onvoiceschanged=pickVoz}catch(e){}
+
+const SK=()=>entry==0?(opt.dif=='dificil'?1:.45):.75;const FORGET_=()=>.22+(1-SK())*.25;
+const deN=q=>nm(q)=='El rival'?'del rival':'de '+nm(q);const art=n=>['registro','trivilín'].includes(n)?'el':'la';
+function ccHTML(p){try{const L=(dec[p]||[]).filter(d=>!d.void&&!(lost&&lost[p]));return L.length?'<div>'+L.map(d=>'<span class="cc">🎵 '+d.name+'</span>').join('')+'</div>':''}catch(e){return ''}}
+function seen(p,d){if(d.name!='ronda')return false;const pl=playedBy[p]||[];return pl.some((c,i)=>pl.some((e,j)=>i!=j&&e.n==c.n))}
+function autoSee(p){if(over||!hands[p])return;const len=hands[p].length;for(const d of (dec[p]||[]))if(!d.void&&!d.auto&&len<3&&d.say!=len&&seen(p,d)){d.say=len;d.missed=false;msg(p==0?'Tu ronda ya se vio: no hace falta repetirla':T('La ronda '+deN(p)+' ya se vio'));bubble(p,'👀 Vista mi ronda')}}
+function bubble(p,text,ms){const el=p==0?($('p0').querySelector('.av')||$('p0')):(document.querySelector('#seats [data-p="'+p+'"] .gl')||document.querySelector('#seats [data-p="'+p+'"]'));if(!el)return;
+if(!bubble.m)bubble.m={};if(bubble.m[p])bubble.m[p].remove();const r=el.getBoundingClientRect(),b=document.createElement('div');bubble.m[p]=b;b.className='sb2'+(p==0?' up':'');b.textContent=text;document.body.appendChild(b);
+const bw=b.offsetWidth,bh=b.offsetHeight;let x=r.left+r.width/2-bw/2;x=Math.max(6,Math.min(innerWidth-bw-6,x));
+b.style.left=x+'px';b.style.top=(p==0?r.top-bh-8:r.bottom+6)+'px';setTimeout(()=>b.remove(),ms||2400)}
+function isLearn(){return entry==0||(store.played||0)<5}
+function setRem(t){const e=$('rem');if(e)e.innerHTML=t||''}
+function remind(){if(over||turn!=0||!isLearn()){setRem('');return}const len=hands[0].length;
+const need=dec[0].filter(d=>!d.void&&!d.auto&&len<3&&d.say!=len);
+if(need.length){const n=need[0].name;setRem('🔔 <b>¡Repite tu canto!</b> Toca «'+(len==1?vista(n):n)+'» antes de tirar. Si no, un rival puede decir «se quemó» y lo pierdes.');speak('¡Repite tu canto!')}
+else if(len==3&&!dec[0].length&&opt.mode!='practica')setRem('💡 Si tienes canto, tócalo antes de tirar tu primera carta.');
+else setRem('')}
+function burnFlash(who,d,pts,team){const t='¡SE QUEMÓ '+(art(d.name)+' '+d.name).toUpperCase()+'!';
+flash('<div style="font-size:46px">🔥 '+t+'</div><div style="font-size:22px">'+who+'. +'+pts+' para '+tn(team)+'</div>',2);sfx.hit();speak('¡Se quemó '+art(d.name)+' '+d.name+'!')}
+function burnCall(){let any=false;
+for(const q of rivalsOf(0))for(const d of dec[q])if(d.missed&&!d.void){d.void=true;d.burnt=true;any=true;add(tm(0),1);ST().quem++;
+msg('¡Se quemó '+art(d.name)+' '+d.name+' '+deN(q)+'! +1 para '+tn(tm(0)));burnFlash(nm(q)+' no lo repitió',d,1,tm(0));bubble(q,'😬 ¡Se me quemó!')}
+if(!any)return;render();if(over)end()}
+function partnerForgot(bp,d){setTimeout(()=>{if(over||d.void)return;if(Math.random()<.7){const q=rivalsOf(bp)[0];d.void=true;d.burnt=true;add(tm(q),1);
+msg('¡Se quemó '+art(d.name)+' '+d.name+' de '+nm(bp)+'! +1 para '+tn(tm(q)));bubble(q,'🔥 ¡Se quemó!');burnFlash(nm(bp)+' no lo repitió',d,1,tm(q));render();if(over)end()}},2300)}
+async function trivilin(p,d){busy=true;stopTimer();await sleep(1900);if(over)return;
+msg((p==0?'Enseñas tus cartas: ':nm(p)+' enseña sus cartas: ')+d.h.map(x=>x.n+SU[x.s][1]).join(' '));
+if(btnValid('trivilín',d.h)){forceW=tm(p);if(p==0)ST().triv++;const dbl=score.every((x,i)=>i==forceW||x==0);over=true;
+msg('¡TRIVILÍN MATA PARTIDA!'+(dbl?' Y VALE DOBLE (el rival no tenía puntos)':''));render();
+flash('<div style="font-size:30px">🔥💎👑💎🔥</div><div style="font-size:52px">¡TRIVILÍN MATA PARTIDA!</div>'+(dbl?'<div style="font-size:42px">¡Y VALE DOBLE!</div>':'')+'<div style="font-size:22px">'+(p==0?'Ganas':nm(p)+' gana')+' automáticamente</div>',4);
+sfx.caida(4);speak('¡Trivilín mata partida'+(dbl?' y vale doble!':'!'));await sleep(3400);end()}
+else{d.void=true;const q=p==0?nxt(0):0;add(tm(q),2);msg('¡MAL CANTO! '+nm(p)+' no tenía trivilín. +2 para '+tn(tm(q)));
+flash('¡MAL CANTO!<br><span style="font-size:22px">No tenía trivilín. +2 para '+tn(tm(q))+'</span>',1);speak('¡Mal canto!');render();if(over)return end();
+busy=turn!=0;render();if(turn==0)startTimer()}}
+
+function ST(){if(!store.st)store.st={};const d={games:0,wins:0,streak:0,maxStreak:0,caidas:0,rey:0,ml:0,cantos:0,best:0,mc:0,quem:0,triv:0,gold:0};for(const k in d)if(store.st[k]==null)store.st[k]=d[k];return store.st}
+const ACH=[
+['p1','🎴 Primera partida','Juega tu primera partida',s=>s.games>=1,50],
+['w1','🥇 Primera victoria','Gana una partida',s=>s.wins>=1,100],
+['w10','🏅 10 victorias','Gana 10 partidas',s=>s.wins>=10,300],
+['w50','👑 50 victorias','Gana 50 partidas',s=>s.wins>=50,1000],
+['c1','💥 Primera caída','Da tu primera caída',s=>s.caidas>=1,50],
+['c25','🔥 25 caídas','Da 25 caídas',s=>s.caidas>=25,250],
+['rey','🤴 Caída de rey','Da una caída con el rey',s=>s.rey>=1,150],
+['ml','🧹 Mesa limpia','Haz una mesa limpia',s=>s.ml>=1,100],
+['k10','🎵 Cantor','Gana 10 cantos',s=>s.cantos>=10,200],
+['mc5','🕵️ Cazador de trampas','Descubre 5 mal cantos',s=>s.mc>=5,200],
+['q3','👀 Siempre pendiente','Di «se quemó» 3 veces',s=>s.quem>=3,150],
+['tv','💎 Trivilín','Gana con trivilín',s=>s.triv>=1,500],
+['r3','⚡ Racha de 3','Gana 3 partidas seguidas',s=>s.maxStreak>=3,200],
+['tu','🎓 Alumno aplicado','Termina el tutorial',s=>!!store.tutDone,200]];
+function checkAch(){const s=ST();store.ach=store.ach||[];const nw=ACH.filter(a=>!store.ach.includes(a[0])&&a[3](s));
+nw.forEach((a,i)=>{store.ach.push(a[0]);store.gold+=a[4];setTimeout(()=>{toast('🏆 ¡Logro! '+a[1]+' (+'+a[4]+' 💰)');sfx.chime()},i*2800)});if(nw.length)save()}
+function statsHTML(bk){const s=ST(),pct=s.games?Math.round(s.wins/s.games*100):0;
+const L=[['🎴 Partidas jugadas',s.games],['🥇 Partidas ganadas',s.wins+' ('+pct+'%)'],['⚡ Racha actual',s.streak],['🔥 Mejor racha',s.maxStreak],['💥 Caídas dadas',s.caidas],['🤴 Caídas de rey',s.rey],['🧹 Mesas limpias',s.ml],['🎵 Cantos ganados',s.cantos],['⭐ Mejor canto',s.best+' puntos'],['🕵️ Mal cantos descubiertos',s.mc],['👀 «Se quemó» que dijiste',s.quem],['💎 Trivilines',s.triv],['💰 Oro ganado en partidas',s.gold]];
+return bk+'<h2>📊 Estadísticas</h2>'+L.map(x=>`<div class="box" style="display:flex;justify-content:space-between;gap:10px;margin:6px 0"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
+function logrosHTML(bk){const s=ST(),got=store.ach||[];
+return bk+`<h2>🏅 Logros</h2><p class="sb">${got.length} de ${ACH.length} conseguidos. Cada logro da oro una sola vez.</p>`+ACH.map(a=>{const ok=got.includes(a[0]);return `<div class="box" style="display:flex;align-items:center;gap:10px;margin:6px 0;${ok?'':'opacity:.6'}"><div style="font-size:26px">${ok?'✅':'🔒'}</div><div style="flex:1"><b>${a[1]}</b><br><span class="sub">${a[2]}</span></div><b>+${a[4]} 💰</b></div>`}).join('')}
+const DR=[100,150,200,250,300,400,600];
+function dayStr(o){const d=new Date();d.setDate(d.getDate()+(o||0));return d.toLocaleDateString('en-CA')}
+function dailyInfo(){const d=store.daily||{last:'',streak:0},today=dayStr(0);const can=d.last!=today;const k=can?(d.last==dayStr(-1)?(d.streak%7)+1:1):d.streak;return{can,k,r:DR[(k||1)-1],nextR:DR[(k%7)]}}
+function claimDaily(){const i=dailyInfo();if(!i.can)return;store.daily={last:dayStr(0),streak:i.k};store.gold+=i.r;save();sfx.chime();toast('🎁 Día '+i.k+': +'+i.r+' de oro');showMenu(curView=='premios'?'premios':'home')}
+
+/* ---------- Tutorial jugable ---------- */
+const TS=[
+{t:'Las cartas',x:'Caída se juega con 40 cartas españolas: del 1 al 7, la sota (10), el caballo (11) y el rey (12), en cuatro palos: oros, copas, espadas y bastos. Gana quien llegue primero a los puntos de la mesa (24, 30 o 40). Se juega hacia la derecha.',hand:[[1,0],[10,1],[11,2],[12,3]],seq:[]},
+{t:'La apertura: 1 o 4',x:'Quien reparte pone 4 cartas en la mesa. Antes dice «uno» (van subiendo: 1, 2, 3, 4) o «cuatro» (van bajando: 4, 3, 2, 1). Si una carta sale en su número, «pega» y suma esos puntos. Toca «4 ↓».',btns:['1 ↑','4 ↓'],seq:[{want:{btn:'4 ↓'},fx:'open4'}]},
+{t:'Capturar cartas',x:'En tu turno tiras una carta. Si en la mesa hay una igual, te la llevas, y también las que sigan en escalera (5, 6, 7…). Toca tu 5.',table:[[5,1],[6,3],[7,0],[11,2]],hand:[[5,2],[12,1],[3,0]],seq:[{want:{card:5},ok:'¡Te llevaste el 5, el 6 y el 7! Con tu carta son 4.'}]},
+{t:'¡Caída!',x:'Si el jugador anterior acaba de tirar una carta (la que brilla) y tú tienes una igual, es CAÍDA y ganas puntos: del 1 al 7 vale 1, la sota 2, el caballo 3 y el rey 4. El rival acaba de tirar el rey. ¡Dale caída!',table:[[3,1],[12,0]],last:12,hand:[[12,3],[4,1],[6,0]],seq:[{want:{card:12},ok:'¡Caída de rey! +4 puntos',big:'¡CAÍDA DE REY!',pts:4,fx:'caida'}]},
+{t:'Mesa limpia',x:'Si te llevas todas las cartas de la mesa es MESA LIMPIA: +4 puntos. Ojo: en la última ronda del mazo no vale. Toca la carta que deja la mesa vacía.',table:[[2,1],[3,2]],hand:[[7,3],[2,0],[11,1]],seq:[{want:{card:2},ok:'¡Mesa limpia! +4 puntos',big:'¡MESA LIMPIA!',pts:4}]},
+{t:'Los cantos',x:'Algunas combinaciones de tus 3 cartas valen puntos: ronda (dos iguales), vigía (dos iguales y una seguida), patrulla (tres seguidas), registro (1, 11 y 12), flor (las tres del mismo palo) y casa grande o chica. Se cantan ANTES de tirar la primera carta. Tienes 3, 3 y 7: toca «ronda» y después tira una carta.',hand:[[3,0],[3,2],[7,1]],btns:['ronda','patrulla','flor'],seq:[{want:{btn:'ronda'},ok:'¡Cantaste ronda! Ahora tira una carta.',big:'¡RONDA!'},{want:{anycard:1},ok:'Bien. Pasemos a lo más importante…'}]},
+{t:'Repetir el canto',x:'¡Muy importante! Cada vez que tires una carta tienes que repetir tu canto. En la última carta se dice «vista mi ronda». Toca «🔔 ronda» y luego tira una carta.',hand:[[3,2],[7,1]],btns:['🔔 ronda'],seq:[{want:{btn:'🔔 ronda'},ok:'¡Eso! Ahora tira.'},{want:{anycard:1},ok:'Te queda una carta: di «vista mi ronda».',btns:['🔔 vista mi ronda']},{want:{btn:'🔔 vista mi ronda'},ok:'¡Vista mi ronda! Ahora tira la última.'},{want:{anycard:1},ok:'¡Perfecto! Tu ronda vale. (Si tiras primero las dos cartas iguales, la ronda ya se vio y no hace falta repetirla).'}]},
+{t:'Se quemó',x:'Si alguien canta y en la siguiente carta NO repite su canto, puedes decir «¡Se quemó!»: ganas 1 punto y su canto ya no vale. Pero si nadie lo dice, el canto sigue valiendo, y en la última carta todavía puede decir «vista mi…». ¡Hay que estar pendiente! Rafa cantó flor y en su segunda carta no dijo nada…',rival:'🗣️ Rafa cantó 🎵 flor… y tiró su segunda carta sin repetirla',btns:['¡Mal canto!','🔥 ¡Se quemó!'],seq:[{want:{btn:'🔥 ¡Se quemó!'},ok:'¡Se quemó la flor de Rafa! +1 para ti',big:'¡SE QUEMÓ!',pts:1}]},
+{t:'Mal canto',x:'Si alguien canta algo que no tiene es MAL CANTO. Si lo descubres y lo dices ganas 2 puntos, y su canto no vale (el tuyo sí). Pero si sí lo tenía, el punto es para él. Rafa cantó flor (las tres del mismo palo) y ya tiró un 4 de copas y un 6 de espadas…',rival:'🗣️ Rafa cantó 🎵 flor',table:[[4,1],[6,2]],btns:['🔥 ¡Se quemó!','¡Mal canto!'],seq:[{want:{btn:'¡Mal canto!'},ok:'¡Mal canto! Copas y espadas no son flor. +2 para ti',big:'¡MAL CANTO!',pts:2}]},
+{t:'Pido canto',x:'Si con los puntos de tu canto llegas a la meta, toca «¡Pido canto!» antes de tirar: se comparan los cantos de todos y, si el tuyo es el mejor, ganas de una vez.',seq:[]},
+{t:'Trivilín',x:'Tres cartas iguales es TRIVILÍN: ¡mata partida! Ganas automáticamente, y si el rival no tenía puntos, vale doble. Tienes tres 5: toca «trivilín».',hand:[[5,0],[5,1],[5,3]],btns:['ronda','trivilín'],seq:[{want:{btn:'trivilín'},ok:'¡Trivilín mata partida!',big:'¡TRIVILÍN!',fx:'caida'}]},
+{t:'El final de la mano',x:'Cuando se acaba el mazo, quien capturó de último se lleva lo que quede en la mesa. Después se cuentan las cartas: cada carta por encima de 20 suma 1 punto (con 3 jugadores, por encima de 13 o 14; en individual de 4, por encima de 10). Ejemplo: 24 cartas son +4 puntos.',seq:[]},
+{t:'¡Listo!',x:'Ya sabes lo básico. Ahora juega una partida contra la IA «Con ayudas»: te dice qué canto tienes y te recuerda repetirlo.',final:true}];
+let TU={i:0,st:0,hand:[],table:[],btns:[],pts:0,fb:'',done:false,busy:false,last:null};
+const mkC=a=>({id:a[1]*100+a[0],n:a[0],s:a[1]});
+function tutLoad(i){const L=TS[i];TU={i,st:0,pts:i?TU.pts:0,hand:(L.hand||[]).map(mkC),table:(L.table||[]).map(mkC),btns:L.btns||[],fb:'',done:!L.seq||!L.seq.length,busy:false,last:L.last||null};
+if(L.final){store.tutDone=1;save();setTimeout(checkAch,600)}showMenu('guia');setTimeout(()=>speak(L.t),300)}
+function tutHTML(bk){const L=TS[TU.i];
+let h=`<button class="bk" onclick="showMenu('home')">← Salir del tutorial</button><div class="sub" style="text-align:center">Lección ${TU.i+1} de ${TS.length} · Puntos de práctica: ${TU.pts}</div><div class="tbar"><i style="width:${(TU.i+1)/TS.length*100}%"></i></div><h2>${L.t}</h2><div class="box txt">🧑‍🏫 ${L.x}</div>`;
+if(L.final)return h+`<button class="mb" onclick="tutPlay()">🎓 Jugar con ayudas</button><button class="mb bk" onclick="tutLoad(0)">↺ Repetir tutorial</button>`;
+h+=`<div class="board tboard" data-t="madera">${L.rival?`<div class="trv">${L.rival}</div>`:''}<div class="sub" style="text-align:center;color:#fff">Mesa</div><div class="row" id="ttb">${TU.table.length?TU.table.map(c=>TU.last==c.n?svgCard(c).replace('class="c','class="c lastc'):svgCard(c)).join(''):'<span class="sub" style="color:#fff">vacía</span>'}</div><div class="tbig" id="tbig"></div></div>`;
+if(TU.hand.length)h+=`<div class="sub" style="text-align:center;margin-top:8px">Tus cartas</div><div class="row mine" id="thd">${TU.hand.map(svgCard).join('')}</div>`;
+if(TU.btns.length&&!TU.done)h+=`<div class="cg" style="margin-top:8px">${TU.btns.map(b=>`<button onclick="tutBtn('${b}')">${b}</button>`).join('')}</div>`;
+h+=`<div class="hint" style="margin-top:8px">${TU.fb}</div>`;
+if(TU.done)h+=`<button class="mb" onclick="tutLoad(${TU.i+1})">Siguiente ▶</button>`;
+return h}
+function tutBind(){document.querySelectorAll('#thd .c').forEach(el=>el.onclick=()=>tutCard(+el.dataset.id))}
+function tutBig(t){const e=$('tbig');if(!e)return;e.textContent=t;e.className='tbig';void e.offsetWidth;e.className='tbig on'}
+function tutWrong(){TU.fb='❌ Esa no es. Lee la explicación y prueba otra vez.';sfx.lose();showMenu('guia')}
+function tutOk(st){TU.fb='✅ '+(st.ok||'¡Bien!');if(st.pts)TU.pts+=st.pts;if(st.btns)TU.btns=st.btns;TU.st++;if(TU.st>=TS[TU.i].seq.length)TU.done=true;
+showMenu('guia');if(st.big)tutBig(st.big);if(st.fx=='caida')sfx.caida(4);else sfx.hit();speak((st.big||st.ok||'').replace(/[¡!]/g,''))}
+function tutCard(id){if(TU.done||TU.busy)return;const st=TS[TU.i].seq[TU.st];if(!st)return;const c=TU.hand.find(x=>x.id==id),w=st.want;
+if(!(w.anycard||(w.card!=null&&c.n==w.card)))return tutWrong();
+TU.hand=TU.hand.filter(x=>x!==c);const m=TU.table.find(x=>x.n==c.n);
+if(m){const g=[m];let k=ORD.indexOf(m.n)+1;while(k<10){const x=TU.table.find(y=>y.n==ORD[k]);if(!x)break;g.push(x);k++}TU.table=TU.table.filter(x=>!g.includes(x));sfx.capture()}else{TU.table.push(c);sfx.flip()}
+TU.last=null;tutOk(st)}
+async function tutBtn(b){if(TU.done||TU.busy)return;const st=TS[TU.i].seq[TU.st];if(!st)return;if(st.want.btn!=b)return tutWrong();
+if(st.fx=='open4'){TU.busy=true;TU.btns=[];TU.fb='Dijiste «cuatro»: la 1.ª carta pega si es 4, la 2.ª si es 3, la 3.ª si es 2 y la 4.ª si es 1.';TU.table=[];speak('¡Cuatro!');showMenu('guia');await sleep(1200);
+const cs=[[4,1],[7,3],[2,0],[1,2]];for(let i=0;i<4;i++){TU.table.push(mkC(cs[i]));showMenu('guia');sfx.flip();const e=4-i;if(cs[i][0]==e){TU.pts+=e;showMenu('guia');tutBig('¡PEGÓ EL '+e+'! +'+e);sfx.hit();speak('Pegó el '+e);await sleep(1500)}else await sleep(900)}
+TU.busy=false;TU.done=true;TU.st=1;TU.fb='✅ Pegaron el 4, el 2 y el 1: +7 puntos. Si no pega ninguna es «mal echada» y el rival gana 1 punto. Si sale una carta repetida, se devuelve al mazo y es punto para el rival.';showMenu('guia');return}
+tutOk(st)}
+function tutPlay(){opt.players=2;opt.mode='practica';RN=null;startGame(0)}
+
+/* ---------- Íconos propios ---------- */
+const GD='<defs><linearGradient id="gP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb05c"/><stop offset="1" stop-color="#ff3d7f"/></linearGradient><linearGradient id="gB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3de0ff"/><stop offset="1" stop-color="#7b4dff"/></linearGradient><linearGradient id="gG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe27a"/><stop offset="1" stop-color="#f0a020"/></linearGradient></defs>';
+const ICO={
+play:'<rect x="9" y="9" width="20" height="28" rx="4" transform="rotate(-14 19 23)" fill="url(#gP)"/><rect x="18" y="11" width="20" height="28" rx="4" transform="rotate(10 28 25)" fill="#fff"/><path d="M28.5 21c-2-3-6.5-1-4.5 2.5l4.5 4.5 4.5-4.5c2-3.5-2.5-5.5-4.5-2.5z" fill="#ff3d7f"/>',
+learn:'<path d="M24 9 3 18.5 24 28l21-9.5z" fill="url(#gB)"/><path d="M12 23v8c0 3 6 6 12 6s12-3 12-6v-8l-12 5.5z" fill="#7b4dff"/><path d="M41 20v10" stroke="#ffc83d" stroke-width="3" stroke-linecap="round"/><circle cx="41" cy="32" r="3" fill="#ffc83d"/>',
+trophy:'<path d="M14 7h20v9a10 10 0 0 1-20 0z" fill="url(#gG)"/><path d="M14 10H8a6 6 0 0 0 7 9M34 10h6a6 6 0 0 1-7 9" stroke="#ffc83d" stroke-width="3" fill="none"/><rect x="21" y="25" width="6" height="7" fill="#f0a020"/><rect x="13" y="32" width="22" height="7" rx="2" fill="#7b4dff"/><path d="M24 11l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#fff"/>',
+gift:'<rect x="8" y="20" width="32" height="20" rx="3" fill="url(#gP)"/><rect x="6" y="14" width="36" height="8" rx="2" fill="#ff8a3d"/><rect x="21" y="14" width="6" height="26" fill="#ffc83d"/><path d="M24 14c-3-8-12-8-11-2 1 3 7 2 11 2zm0 0c3-8 12-8 11-2-1 3-7 2-11 2z" fill="#ffc83d"/>',
+shop:'<rect x="9" y="20" width="30" height="20" rx="2" fill="#fff"/><path d="M7 11h34l-2 10H9z" fill="url(#gP)"/><path d="M14 11l-2 10M19.5 11l-1 10M24 11v10M28.5 11l1 10M34 11l2 10" stroke="#fff" stroke-width="2"/><rect x="20" y="28" width="8" height="12" rx="1" fill="#7b4dff"/><circle cx="14" cy="28" r="3" fill="#ffc83d"/><circle cx="34" cy="28" r="3" fill="#36d6ff"/>',
+friends:'<circle cx="17" cy="16" r="7" fill="#36d6ff"/><path d="M4 38c1-8 7-12 13-12s12 4 13 12z" fill="#1f8fd6"/><circle cx="32" cy="19" r="6" fill="#ff8a3d"/><path d="M23 38c1-7 5-10 10-10s9 3 10 10z" fill="#ff3d7f"/>',
+profile:'<circle cx="24" cy="17" r="9" fill="url(#gB)"/><path d="M7 42c2-10 9-14 17-14s15 4 17 14z" fill="#7b4dff"/>',
+coin:'<circle cx="24" cy="24" r="19" fill="url(#gG)" stroke="#d98a00" stroke-width="3"/><circle cx="24" cy="24" r="12.5" fill="none" stroke="#d98a00" stroke-width="2"/><path d="M29 18.5a8 8 0 1 0 0 11" stroke="#b86a00" stroke-width="3.5" fill="none" stroke-linecap="round"/>',
+gem:'<path d="M12 8h24l8 12-20 22L4 20z" fill="#5fe3ff"/><path d="M4 20h40L24 42z" fill="#1f8fd6"/><path d="M12 8l6 12h12l6-12M18 20l6 22 6-22" stroke="#fff" stroke-opacity=".7" stroke-width="1.5" fill="none"/>',
+robot:'<rect x="9" y="14" width="30" height="23" rx="7" fill="url(#gB)"/><circle cx="18.5" cy="25" r="4.5" fill="#fff"/><circle cx="29.5" cy="25" r="4.5" fill="#fff"/><circle cx="19" cy="25.5" r="2.2" fill="#2b0f57"/><circle cx="30" cy="25.5" r="2.2" fill="#2b0f57"/><path d="M24 14V8" stroke="#ff8a3d" stroke-width="3"/><circle cx="24" cy="7" r="3" fill="#ff8a3d"/><rect x="18" y="31.5" width="12" height="2.4" rx="1.2" fill="#fff"/>',
+table:'<ellipse cx="24" cy="27" rx="18" ry="9" fill="#8a4f22"/><ellipse cx="24" cy="25" rx="18" ry="9" fill="#c8843f"/><rect x="17" y="19" width="7" height="10" rx="1.5" fill="#fff" transform="rotate(-12 20 24)"/><rect x="25" y="19" width="7" height="10" rx="1.5" fill="#fff" transform="rotate(12 28 24)"/><circle cx="6" cy="15" r="4" fill="#36d6ff"/><circle cx="42" cy="15" r="4" fill="#ff3d7f"/><circle cx="10" cy="41" r="4" fill="#ffc83d"/><circle cx="38" cy="41" r="4" fill="#7b4dff"/>',
+plus:'<circle cx="24" cy="24" r="19" fill="url(#gP)"/><path d="M24 14v20M14 24h20" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>',
+medal:'<path d="M15 3h7l4 13h-7zM33 3h-7l-4 13h7z" fill="#ff3d7f"/><circle cx="24" cy="30" r="13" fill="url(#gG)" stroke="#d98a00" stroke-width="3"/><path d="M24 22l2.5 5 5.5.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.5-.8z" fill="#fff"/>',
+stats:'<rect x="7" y="26" width="9" height="15" rx="2.5" fill="#36d6ff"/><rect x="19.5" y="16" width="9" height="25" rx="2.5" fill="#ff8a3d"/><rect x="32" y="7" width="9" height="34" rx="2.5" fill="#ff3d7f"/>',
+clock:'<circle cx="24" cy="24" r="18" fill="url(#gB)"/><path d="M24 13v12l8 5" stroke="#fff" stroke-width="3.5" stroke-linecap="round" fill="none"/>',
+scroll:'<rect x="12" y="8" width="24" height="32" rx="3" fill="#fff"/><path d="M17 16h14M17 22h14M17 28h9" stroke="#7b4dff" stroke-width="2.5" stroke-linecap="round"/><rect x="9" y="5" width="30" height="6" rx="3" fill="#ff8a3d"/><rect x="9" y="37" width="30" height="6" rx="3" fill="#ff8a3d"/>',
+note:'<circle cx="14" cy="35" r="6.5" fill="#ff3d7f"/><circle cx="33" cy="31" r="6.5" fill="#ff8a3d"/><path d="M20 35V12l19.5-5v24" stroke="#ff3d7f" stroke-width="4" fill="none" stroke-linejoin="round"/>',
+ask:'<path d="M8 8h32a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4H22l-9 7v-7H8a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="url(#gB)"/><text x="24" y="29" text-anchor="middle" font-family="Lilita One,sans-serif" font-size="19" fill="#fff">?</text>',
+tap:'<rect x="13" y="5" width="21" height="29" rx="3.5" fill="#fff" stroke="#ff3d7f" stroke-width="2.5"/><text x="23.5" y="25" text-anchor="middle" font-family="Lilita One,sans-serif" font-size="15" fill="#ff3d7f">1</text><path d="M27 31v-7a2.2 2.2 0 0 1 4.4 0v4.5l6 2v8.5l-4 6h-8.5l-4.4-8.4 3.2-1.2 3.3 3z" fill="#ffc83d" stroke="#b86a00" stroke-width="1.5"/>',
+video:'<rect x="5" y="10" width="38" height="28" rx="7" fill="url(#gP)"/><path d="M20.5 17.5v13l11-6.5z" fill="#fff"/>',
+speaker:'<path d="M7 19h8l11-8v26l-11-8H7z" fill="#36d6ff"/><path d="M32 17a9 9 0 0 1 0 14M36.5 12.5a15 15 0 0 1 0 23" stroke="#36d6ff" stroke-width="3" fill="none" stroke-linecap="round"/>',
+mic:'<rect x="18" y="5" width="12" height="23" rx="6" fill="#ff8a3d"/><path d="M11.5 22a12.5 12.5 0 0 0 25 0M24 34.5v7M17 42h14" stroke="#ff8a3d" stroke-width="3" fill="none" stroke-linecap="round"/>',
+cards:'<rect x="6" y="12" width="18" height="26" rx="3" transform="rotate(-18 15 25)" fill="#7b4dff"/><rect x="15" y="9" width="18" height="26" rx="3" fill="#fff"/><rect x="24" y="12" width="18" height="26" rx="3" transform="rotate(18 33 25)" fill="url(#gP)"/>',
+frame:'<circle cx="24" cy="24" r="16" fill="#2b0f57" stroke="url(#gP)" stroke-width="6"/><circle cx="24" cy="20" r="5" fill="#ffc83d"/><path d="M15 33c2-5 5-7 9-7s7 2 9 7" fill="#ffc83d"/>',
+name:'<rect x="4" y="13" width="40" height="22" rx="11" fill="url(#gB)"/><text x="24" y="29" text-anchor="middle" font-family="Lilita One,sans-serif" font-size="13" fill="#fff">ABC</text>',
+emoji:'<circle cx="24" cy="24" r="18" fill="url(#gG)"/><circle cx="18" cy="21" r="2.5" fill="#5a2a00"/><circle cx="30" cy="21" r="2.5" fill="#5a2a00"/><path d="M16 28c4 6 12 6 16 0" stroke="#5a2a00" stroke-width="3" fill="none" stroke-linecap="round"/>'};
+let ICN=0;const I=(k,z)=>{const u='x'+(++ICN);return `<svg viewBox="0 0 48 48" width="${z||'100%'}" height="${z||'100%'}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GD.replace(/id="g(\w)"/g,'id="g$1'+u+'"')}${(ICO[k]||'').replace(/url\(#g(\w)\)/g,'url(#g$1'+u+')')}</svg>`};
+const mi=(ic,t,sub,f,badge)=>`<button class="mi" onclick="${f}"><span class="mic">${I(ic)}</span><span class="mtx"><b>${t}</b><small>${sub}</small></span>${badge?`<span class="badge2">${badge}</span>`:''}<span class="chev">›</span></button>`;
+const tile=(ic,t,f,badge)=>`<button class="tile" onclick="${f}">${badge?`<span class="badge">${badge}</span>`:''}<span class="tic">${I(ic)}</span><span>${t}</span></button>`;
+const PARENT={practica:'jugar',salas:'jugar',torneo:'jugar',friends:'jugar',tutorial:'aprender',how:'aprender',rules:'aprender',cantos:'aprender',stats:'logrosm',logros:'logrosm',hist:'logrosm'};
+const PLBL={home:'Inicio',jugar:'Jugar',aprender:'Aprender',logrosm:'Logros'};
+function homeHTML(){const di=dailyInfo();
+return `<div class="logo"><img src="${IMG.back}" alt=""><div><div class="ttl">Caída</div><div class="sb" style="margin:0">El juego de cartas venezolano</div></div></div>`
++(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)
++`<button class="hero" onclick="showMenu('jugar')"><span class="hic">${I('play')}</span><span class="htx"><b>JUGAR</b><small>Contra la IA, salas, torneo y amigos</small></span><span class="chev">›</span></button>
+<div class="tiles">${tile('learn','Aprender',"showMenu('aprender')",store.tutDone?'':'Nuevo')}${tile('trophy','Logros',"showMenu('logrosm')")}${tile('gift','Premios',"showMenu('premios')",di.can?'¡1!':'')}${tile('shop','Tienda',"showMenu('tienda')")}${tile('friends','Amigos',"showMenu('friends')")}${tile('profile','Perfil',"showMenu('profile')")}</div>`}
+function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas','Mesas abiertas de 100, 500, 1.000… únete',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Jugar con un amigo','Invita con un código (pronto)',"showMenu('friends')")}
+function aprenderHTML(bk){return bk+`<h2 class="sec">Aprender</h2>`+mi('tap','Tutorial jugable','Aprende jugando en 5 minutos',"tutLoad(0)",store.tutDone?'':'Nuevo')+mi('ask','Cómo jugar','Lo básico en pocas palabras',"showMenu('how')")+mi('note','Cantos','Todos los cantos y cuánto valen',"showMenu('cantos')")+mi('scroll','Reglas','Las reglas completas',"showMenu('rules')")+mi('learn','Guía escrita','Explicación paso a paso',"showMenu('tutorial')")}
+function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' conseguidos',"showMenu('logros')")+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
+function cantosHTML(bk){const L=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
+return bk+`<h2 class="sec">Cantos</h2><p class="sb">Se cantan antes de tirar la primera carta y se repiten en cada carta.</p>`+L.map(n=>`<div class="box" style="display:flex;gap:12px;align-items:center;margin:8px 0"><span style="width:38px;flex:none">${I('note')}</span><div style="flex:1"><b style="font-size:17px;text-transform:capitalize">${n}</b><br><span class="sub">${EXP[n]||''}</span></div><span class="ptsb">${n=='ronda'?'1–4':n=='trivilín'?'Gana':PTS[n]}</span></div>`).join('')}
+function premiosHTML(bk){return bk+`<h2 class="sec">Premios</h2>`+dailyHTML()+mi('video','Ver un video','Gana 200 de oro al instante',"watchVideo()")+mi('trophy','Logros','Cada logro te da oro',"showMenu('logros')")}
+function dailyHTML(){const i=dailyInfo();
+const cells=DR.map((r,j)=>{const d=j+1,done=d<i.k||(d==i.k&&!i.can),now=d==i.k&&i.can;return `<div class="dc${done?' done':''}${now?' now':''}"><small>Día ${d}</small><span class="dci">${I(d==7?'gift':'coin')}</span><b>${r}</b>${done?'<i>✓</i>':''}</div>`}).join('');
+return `<div class="box daily"><div class="dh"><b>Recompensa diaria</b><span class="sub">${i.can?'Hoy te toca el día '+i.k:'Vuelve mañana'}</span></div><div class="dg">${cells}</div>`+(i.can?`<button class="mb" onclick="claimDailyX()">Reclamar +${i.r} de oro</button>`:`<p class="sub" style="text-align:center;margin:8px 0 0">Mañana: +${i.nextR} de oro. Si faltas un día, vuelves al día 1.</p>`)+`</div>`}
+function dailyPopup(){const i=dailyInfo();if(!i.can||$('dmod'))return;const d=document.createElement('div');d.id='dmod';
+d.innerHTML=`<div class="dbox"><div class="dgift">${I('gift')}</div><div class="ttl" style="font-size:30px">¡Recompensa diaria!</div><p class="sub" style="text-align:center">Día ${i.k} de 7. Entra cada día y el premio sube.</p>${dailyHTML()}<button class="bk" style="width:100%;margin-top:4px" onclick="$('dmod').remove()">Más tarde</button></div>`;document.body.appendChild(d)}
+const _claim=claimDaily;
+function claimDailyX(){const m=$('dmod');_claim();if(m){const b=m.querySelector('.dbox');b.innerHTML=`<div class="dgift pop">${I('coin')}</div><div class="ttl" style="font-size:34px">+${DR[(store.daily.streak||1)-1]} de oro</div><p class="sub" style="text-align:center">¡Vuelve mañana por más!</p><button class="mb" onclick="$('dmod').remove()">¡Genial!</button>`}}
+const GEMP=[[100,'0,99'],[550,'4,99'],[1200,'9,99'],[2500,'19,99'],[6500,'49,99']];
+const XITEMS=[['cards','Mazo dorado','oro',2000],['frame','Marco de plata','oro',800],['emoji','Emojis especiales','oro',200],['frame','Marco de fuego animado','gemas',1200],['cards','Mazo de lujo','gemas',800],['table','Mesa de mármol','gemas',500],['profile','Avatar real','gemas',300],['name','Nombre arcoíris','gemas',250]];
+function tiendaHTML2(bk){const cur=c=>`<span class="pr">${I(c=='oro'?'coin':'gem',16)} ${c=='oro'?'Con oro':'Con gemas'}</span>`;
+return bk+`<h2 class="sec">Tienda</h2><p class="sb">Las compras con dinero real llegan cuando el juego esté en Google Play.</p>
+<h3 class="st">Objetos exclusivos</h3><div class="sg">${XITEMS.map(x=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I(x[0])}</span><b>${x[1]}</b>${cur(x[2])}<span class="spr">${I(x[2]=='oro'?'coin':'gem',16)} ${x[3].toLocaleString('es')}</span></div>`).join('')}</div>
+<h3 class="st">Gemas ${I('gem',20)}</h3><p class="sub">Solo con dinero real o ganando torneos. Para lo más exclusivo.</p><div class="sg">${GEMP.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('gem')}</span><b>${g[0].toLocaleString('es')} gemas</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div>
+<h3 class="st">Oro ${I('coin',20)}</h3><p class="sub">Se gana jugando, con premios diarios, logros y videos. También se podrá comprar.</p><div class="sg">${PACKS.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('coin')}</span><b>${g[0].toLocaleString('es')} de oro</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div>`
++mi('video','Ver un video','+200 de oro gratis ahora',"watchVideo()")}
+function settingsHTML(){const r=(ic,l,on,f)=>`<div class="setr"><span style="width:30px;flex:none">${I(ic)}</span><span style="flex:1">${l}</span><button class="sm ${on?'':'off'}" onclick="${f}">${on?'Sí':'No'}</button></div>`;
+return `<div class="box"><b>Ajustes</b>${r('note','Música (menú y partida)',store.music!==false,"togSet('music')")}${r('speaker','Sonidos del juego',sndOn,"togSet('snd')")}${r('mic','Voz de los cantos',vozOn,"togSet('voz')")}</div>`}
+function togSet(k){if(k=='music'){store.music=store.music===false;store.music?musStart():(musStop(),gmStop())}else if(k=='snd'){sndOn=!sndOn;store.snd=sndOn}else{vozOn=!vozOn;store.voz=vozOn;if(vozOn)speak('Voz activada')}save();applySet();showMenu('profile')}
+function applySet(){if(store.snd===false)sndOn=false;if(store.voz===false)vozOn=false;const a=$('vz'),b=$('snd'),c=$('mus');if(a)a.textContent=vozOn?'🔊 Voz':'🔇 Voz';if(b)b.textContent=sndOn?'🔔 Sonido':'🔕 Sonido';if(c)c.textContent=store.music!==false?'🎵 Música':'🔇 Música'}
+/* ---------- Música del menú (hecha con código, sin derechos) ---------- */
+const MU={on:false,t:null,nx:0,i:0,g:null};
+function musAC(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}if(AC.state=='suspended')AC.resume();return AC}catch(e){return null}}
+const NF=n=>440*Math.pow(2,(n-69)/12);
+const PROG=[[57,60,64],[50,57,62,65],[55,59,62],[48,55,60,64],[53,57,60],[50,57,62,65],[52,56,59,62],[57,60,64]];
+function mnote(f,t,d,ty,v,lp){const a=AC,o=a.createOscillator(),g=a.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+if(lp){const f2=a.createBiquadFilter();f2.type='lowpass';f2.frequency.value=lp;o.connect(f2).connect(g)}else o.connect(g);g.connect(MU.g);o.start(t);o.stop(t+d+.05)}
+function musTick(){if(!MU.on||!AC)return;const E=.24;while(MU.nx<AC.currentTime+.35){const i=MU.i,bar=Math.floor(i/6)%8,sub=i%6,ch=PROG[bar],t=MU.nx,cyc=Math.floor(i/48)%2;
+if(sub==0){mnote(NF(ch[0]-12),t,1.3,'sine',.5);ch.forEach(n=>mnote(NF(n),t,1.5,'sawtooth',.035,900))}
+if(sub==2||sub==4)ch.forEach((n,k)=>mnote(NF(n),t+k*.012,.32,'triangle',.11,2600));
+const pat=cyc?[2,3,1,2,0,1]:[0,1,2,1,2,3],tones=[...ch.slice(0,3).map(n=>n+12),ch[0]+24],n=tones[pat[sub]%tones.length];
+if(!(sub==5&&bar%2))mnote(NF(n),t,.38,'triangle',sub%2?.07:.1,3400);
+MU.nx+=E;MU.i++}}
+function musStart(){if(MU.on||store.music===false||$('menu').style.display=='none')return;const a=musAC();if(!a)return;MU.g=a.createGain();MU.g.gain.setValueAtTime(0,a.currentTime);MU.g.gain.linearRampToValueAtTime(.16,a.currentTime+2.5);MU.g.connect(a.destination);MU.on=true;MU.nx=a.currentTime+.15;MU.i=0;MU.t=setInterval(musTick,80)}
+function musStop(){if(!MU.on)return;MU.on=false;clearInterval(MU.t);const a=AC,g=MU.g;try{g.gain.cancelScheduledValues(a.currentTime);g.gain.setValueAtTime(g.gain.value,a.currentTime);g.gain.linearRampToValueAtTime(0,a.currentTime+.6);setTimeout(()=>g.disconnect(),900)}catch(e){}}
+document.addEventListener('pointerdown',()=>{if($('menu')&&$('menu').style.display!='none')musStart()},{passive:true});
+/* ---------- Mesa de tamaño fijo ---------- */
+function fitTable(){const tb=$('tb');if(!tb)return;const els=[...tb.querySelectorAll('.c')],n=els.length;if(!n)return;const W=(tb.clientWidth||220)-14,base=N>2?48:58,gap=6;
+const rows=(W-(n-1)*gap)/n>=(N>2?40:46)?1:2,per=Math.ceil(n/rows),w=Math.max(30,Math.min(base,Math.floor((W-(per-1)*gap)/per))),h=Math.round(w*1.47);els.forEach(e=>{e.style.width=w+'px';e.style.height=h+'px'})}
+
+/* ---------- Música de partida con tensión ---------- */
+const GM={on:false,t:null,nx:0,i:0,g:null,lvl:0,hot:false};
+const GPROG=[[50,53,57],[46,50,53],[48,52,55],[45,49,52]];
+function gnz(t,d,f,v){const a=AC,s=a.createBufferSource();s.buffer=NB;const fl=a.createBiquadFilter();fl.type='highpass';fl.frequency.value=f;const g=a.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(fl).connect(g).connect(GM.g);s.start(t);s.stop(t+d+.02)}
+function gkick(t,v){const a=AC,o=a.createOscillator(),g=a.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(42,t+.16);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+.3);o.connect(g).connect(GM.g);o.start(t);o.stop(t+.32)}
+function gn(f,t,d,ty,v,lp){const a=AC,o=a.createOscillator(),g=a.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+if(lp){const f2=a.createBiquadFilter();f2.type='lowpass';f2.frequency.value=lp;o.connect(f2).connect(g)}else o.connect(g);g.connect(GM.g);o.start(t);o.stop(t+d+.05)}
+function gmTick(){if(!GM.on||!AC)return;
+while(GM.nx<AC.currentTime+.35){const L=GM.lvl,E=[.3,.22,.165][L],i=GM.i,bar=Math.floor(i/8)%4,st=i%8,ch=GPROG[bar],t=GM.nx,up=L==2&&Math.floor(i/32)%2?1:0,c=ch.map(n=>n+up);
+if(st==0){gn(NF(c[0]-12),t,E*7,'sine',.35);gn(NF(c[0]),t,E*3,'triangle',.14,1200);c.forEach(n=>gn(NF(n),t,E*8,'sawtooth',L?.03:.035,L==2?1800:L?1300:1100))}
+if(L==0){if(st==2||st==6)c.forEach((n,k)=>gn(NF(n+12),t+k*.015,.45,'triangle',.12,3000));const mel=[0,null,2,1,null,2,1,null];if(mel[st]!=null)gn(NF(c[mel[st]]+24),t,.55,'triangle',.11,4000);if(st==4)gnz(t,.08,4000,.07)}
+if(L>=1){gn(NF(c[0]-12),t,E*.8,'sine',.25);if(st%2)gnz(t,.05,6000,.12);if(st==4)gnz(t,.12,1500,.18);if(st%2==0)gn(NF(c[st/2%3]+12),t,E*1.6,'triangle',.06,3000)}
+if(L==2){if(st==0||st==1)gkick(t,st?.35:.55);if(st==4||st==5)gkick(t,st==5?.3:.45);gn(NF(c[st%3]+24),t,E*.7,'square',.025,2600);c.forEach(n=>gn(NF(n+12),t,E*.9,'sawtooth',.018,2200))}
+GM.nx+=E;GM.i++}}
+function gmStart(){if(GM.on||store.music===false)return;const a=musAC();if(!a)return;GM.g=a.createGain();GM.g.gain.setValueAtTime(0,a.currentTime);GM.g.gain.linearRampToValueAtTime(.17,a.currentTime+1.5);GM.g.connect(a.destination);GM.on=true;GM.nx=a.currentTime+.2;GM.i=0;GM.t=setInterval(gmTick,80)}
+function gmStop(){if(!GM.on)return;GM.on=false;clearInterval(GM.t);const a=AC,g=GM.g;try{g.gain.cancelScheduledValues(a.currentTime);g.gain.setValueAtTime(g.gain.value,a.currentTime);g.gain.linearRampToValueAtTime(0,a.currentTime+.8);setTimeout(()=>g.disconnect(),1000)}catch(e){}}
+function gmLevel(){if(!score||over)return;const rem=score.map(x=>META-x),close=rem.filter(r=>r<=5).length,near=rem.filter(r=>r<=8).length;
+const L=close>=2?2:near>=1?1:0;if(L==GM.lvl)return;const prev=GM.lvl;GM.lvl=L;if(GM.g&&AC)GM.g.gain.linearRampToValueAtTime(L==2?.18:L?.17:.17,AC.currentTime+1);
+if(L>prev){if(L==2&&!GM.hot){GM.hot=true;setTimeout(()=>{if(!over){flash('<div style="font-size:46px">🔥 ¡FINAL DE INFARTO!</div><div style="font-size:22px">Todos están a punto de ganar</div>',3);speak('¡Final de infarto!')}},1600)}
+else if(L==1)setTimeout(()=>{if(!over)toast('🥁 ¡Se pone tenso! Alguien está cerca de ganar')},1200)}}
+function speak(t){if(!vozOn)return;try{if(!VOZ)pickVoz();const u=new SpeechSynthesisUtterance(t.replace(/<[^>]*>/g,''));if(VOZ){u.voice=VOZ;u.lang=VOZ.lang}else u.lang='es-ES';u.rate=.95;u.pitch=1.15;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function shout(call){
 flash('<div style="font-size:76px">¡'+(call==1?'UNOOO':'CUATROOO')+'!</div><div style="font-size:22px">'+nm(mano)+' va '+(call==1?'hacia arriba ↑':'hacia abajo ↓')+'</div>',3);
 speak(call==1?'¡Unooo!':'¡Cuatrooo!');sfx.drum()}
@@ -400,8 +757,8 @@ return false}
 function botWatch(pl){
 const acc=1;
 for(const d of dec[pl].filter(x=>!x.ch)){
-if(!btnValid(d.name,d.h)&&!feasible(d.name,playedBy[pl])&&Math.random()<.85)challenge(acc,d)}
-const mn=missName(pl);if(mn&&!missPen[pl]&&(playedBy[pl].length==3||(mn=='ronda'&&playedBy[pl].some((c,i)=>playedBy[pl].some((e,j)=>i!=j&&e.n==c.n))))&&Math.random()<.85){missPen[pl]=true;add(tm(acc),2);msg('¡MAL CANTO! '+nm(pl)+' no avisó que tenía '+mn+'. +2 para '+tn(tm(acc)));flash('¡MAL CANTO!')}}
+if(!btnValid(d.name,d.h)&&!feasible(d.name,playedBy[pl])&&Math.random()<.85*SK())challenge(acc,d)}
+const mn=missName(pl);if(mn&&!missPen[pl]&&(playedBy[pl].length==3||(mn=='ronda'&&playedBy[pl].some((c,i)=>playedBy[pl].some((e,j)=>i!=j&&e.n==c.n))))&&Math.random()<.85*SK()){missPen[pl]=true;add(tm(acc),2);msg('¡MAL CANTO! '+nm(pl)+' no avisó que tenía '+mn+'. +2 para '+tn(tm(acc)));flash('¡MAL CANTO!')}}
 function bestC(h){const l=info(h).has.filter(n=>n!='trivilín').sort((a,b)=>ptsOf(b,h)-ptsOf(a,h));
 return l[0]?{name:l[0],pts:ptsOf(l[0],h),k:l[0]=='ronda'?ORD.indexOf(info(h).pair):info(h).hi}:null}
 function pidoCanto(p){
@@ -417,7 +774,7 @@ msg(nm(p)+' tiene '+mine.name+' ('+mine.pts+')');
 for(let q=0;q<N;q++){if(q==p)continue;const b=bestC(hands[q]);msg(b?nm(q)+' tiene '+b.name+' ('+b.pts+')':nm(q)+' no tiene canto')}
 msg('Gana el canto: '+nm(w)+' con '+wc.name);
 const t=tm(w);
-if(score[t]+wc.pts>=META){add(t,wc.pts);msg(t==0?'¡Llegas a '+META+' y ganas!':'¡'+(N==2?'El rival llega':'Los rivales llegan')+' a '+META+' y ganan!');render();setTimeout(end,1800);return}
+if(score[t]+wc.pts>=META){add(t,wc.pts);msg(t==0?'¡Llegas a '+META+' y ganas!':'¡'+(N==4&&!IND?'Los rivales llegan a '+META+' y ganan':nm(t)+' llega a '+META+' y gana')+'!');render();setTimeout(end,1800);return}
 dec[w].push({name:wc.name,h:[...hands[w]],t:seq++,ch:true,void:false,auto:true,p:w});
 msg('No alcanza para ganar: se juega la mano');render();
 if(p==0)busy=false}
@@ -436,7 +793,7 @@ if(table.some(x=>x.n==c.n)){add(tm(nxt(mano)),1);deck.splice(Math.floor(Math.ran
 table.push(c);sfx.flip();const slot=table.length,exp=call==1?slot:5-slot;
 if(c.n==exp){add(tm(mano),c.n);hits++;msg('Pegó el '+c.n+': +'+c.n+' para '+tn(tm(mano)));flashHit(c);await sleep(900)}
 render();await sleep(700)}
-if(!hits){add(tm(nxt(mano)),1);msg('No pegó ninguna: punto para '+tn(tm(nxt(mano))))}
+if(!hits){const r=tm(nxt(mano));add(r,1);msg('¡Mal echada! No pegó ninguna: +1 para '+tn(r));render();flash('<div style="font-size:54px">¡MAL ECHADA!</div><div style="font-size:22px">'+(mano==0?'No pegaste':nm(mano)+' no pegó')+' ninguna carta. +1 para '+tn(r)+'</div>',1);sfx.lose();speak('¡Mal echada!');await sleep(2200)}
 await sleep(500)}
 async function newHand(){
 tcan=null;asked=false;lost=F();playedBy=Z();busy=true;setHolders();deck=mkDeck();table=[];hands=Z();caps=Array(N).fill(0);last=null;lastCap=null;
@@ -449,25 +806,28 @@ const tc=tableCanto();if(tc){const pt=PTS[tc],lv=pt>=16?4:pt>=10?3:pt>=6?2:1;add
 flash((lv>=2?'<div style="font-size:30px">✨🎊✨</div>':'')+'<div style="font-size:'+[40,50,58,64][lv-1]+'px">¡'+tc.toUpperCase()+' EN MESA!</div><div style="font-size:22px">+'+pt+' para '+tn(tm(mano))+'</div>',lv);speak(tc+' en mesa');render();await sleep(1700)}
 turn=nxt(mano);last={id:table[3].id,by:mano};
 next()}
-function next(){busy=turn!=0;render();hintUpdate();if(over){stopTimer();return end()}if(turn!=0){stopTimer();setTimeout(botPlay,1000)}else startTimer()}
+function next(){busy=turn!=0;render();hintUpdate();if(over){stopTimer();return end()}autoSee(turn);if(turn!=0){stopTimer();setRem('');setTimeout(()=>{if(!over)botPlay()},opt.mode=='locura'?1300:2000)}else{startTimer();remind()}}
 function capSize(c){const m=table.find(x=>x.n==c.n);if(!m)return 0;let k=ORD.indexOf(m.n)+1,s=2;
 while(k<10&&table.find(x=>x.n==ORD[k])){s++;k++}return s}
-function botPlay(){
+function botBurn(bp){for(const q of rivalsOf(bp))for(const d of dec[q])if(d.missed&&!d.void&&Math.random()<.6*SK()){d.void=true;d.burnt=true;add(tm(bp),1);
+msg('¡'+nm(bp)+' dice que se quemó '+art(d.name)+' '+d.name+' '+(q==0?'tuya':deN(q))+'! +1 para '+tn(tm(bp)));bubble(bp,'🔥 ¡Se quemó!');burnFlash(q==0?'No lo repetiste':nm(q)+' no lo repitió',d,1,tm(bp));return true}return false}
+function botPlay(){if(botBurn(turn)){render();if(over)return end();setTimeout(()=>{if(!over)botPlayB()},2000);return}botPlayB()}
+function botPlayB(){
 const bp=turn,h=hands[bp];
 if(!asked&&h.length==3){const b=bestC(h);if(b&&score[tm(bp)]+b.pts>=META){pidoCanto(bp);if(over)return;busy=true}}
 if(!dec[bp].length&&h.length==3){const L=lost[bp]?[]:info(h).has.slice();
-if(!opt.noCheat&&!(N==4&&bp==2)&&Math.random()<.15){const B=NAMES.filter(allowedName),pk=B[Math.floor(Math.random()*B.length)],bst=Math.max(-1,...L.map(n=>RKS[n]??0));if((RKS[pk]??0)>bst)L.splice(0,L.length,pk)}
+if(!opt.noCheat&&!(N==4&&!IND&&bp==2)&&Math.random()<.15*SK()){const B=NAMES.filter(allowedName),pk=B[Math.floor(Math.random()*B.length)],bst=Math.max(-1,...L.map(n=>RKS[n]??0));if((RKS[pk]??0)>bst)L.splice(0,L.length,pk)}
 const U=[...new Set(L)];
-if(U.length){U.forEach((n,k)=>setTimeout(()=>declare(bp,n),k*800));setTimeout(()=>botPlay2(bp),U.length*800+700);return}}
+if(U.length){U.forEach((n,k)=>setTimeout(()=>{if(!over)declare(bp,n)},k*1500));setTimeout(()=>botPlay2(bp),U.length*1500+1300);return}}
 botPlay2(bp)}
 function botPlay2(bp){
 if(over)return;
 const h=hands[bp];
-if(h.length<3)for(const d of dec[bp])if(!d.void&&!lost[bp]){d.say=h.length;msg(nm(bp)+' dice: '+(h.length==1?vista(d.name):d.name))}
+let said=false;if(h.length<3)for(const d of dec[bp])if(!d.void&&!lost[bp]&&!d.auto){if(d.missed&&Math.random()<.5){d.missed=false;d.say=h.length;const tx=h.length==1?vista(d.name):d.name;msg(nm(bp)+' dice: '+tx);bubble(bp,'🔔 '+tx);speak(tx);said=true}else if(!d.missed&&Math.random()<FORGET_()){d.missed=true}else if(!d.missed){d.say=h.length;const tx=h.length==1?vista(d.name):d.name;msg(nm(bp)+' dice: '+tx);bubble(bp,'🔔 '+tx);speak(tx);said=true}}
 let b=null,bs=0;
-h.forEach(c=>{const s=capSize(c);if(s>bs){bs=s;b=c}});
+h.forEach(c=>{const s=capSize(c);if(s>bs){bs=s;b=c}});if(Math.random()>SK())b=h[Math.floor(Math.random()*h.length)];
 if(!b)b=[...h].sort((x,y)=>P(x.n)-P(y.n))[0];
-play(bp,b)}
+if(said)setTimeout(()=>{if(!over)play(bp,b)},1200);else play(bp,b)}
 function ghost(c,r){const d=document.createElement('div');d.innerHTML=cardHTML(c);const e=d.firstChild;
 e.style.cssText+=`;position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;z-index:50;margin:0;pointer-events:none;box-shadow:0 8px 18px #000a`;
 document.body.appendChild(e);return e}
@@ -477,19 +837,20 @@ const a=e.animate([{transform:'none',opacity:1},{transform:`translate(${to.left-
 await a.finished;e.style.left=to.left+'px';e.style.top=to.top+'px';e.style.opacity=fade?0:1;a.cancel()}
 async function play(p,card){
 busy=true;
-if(p==0){stopTimer();for(const d of dec[0])if(!d.void&&!d.auto&&d.say!=hands[0].length){d.void=true;msg('Dejaste de cantar '+d.name+': se quemó')}}
+if(p==0){stopTimer();setRem('');for(const d of dec[0])if(!d.void&&!d.auto&&!d.missed&&d.say!=hands[0].length){d.missed=true;if(isLearn())msg('🔔 No repetiste '+d.name+': si un rival dice «se quemó», lo pierdes')}}
+if(p!=0)bubble(p,'🃏 Tira '+lbl(card),2600);
 if(p==0&&hands[0].length==3&&!dec[0].length&&info(hands[0]).has.length)msg('Se quemó tu canto: no lo cantaste');
 const src=p==0?document.querySelector('#hd [data-id="'+card.id+'"]'):document.querySelector('#seats [data-p="'+p+'"] .back');
 const g=ghost(card,src.getBoundingClientRect());src.style.visibility='hidden';
 const m=table.find(c=>c.n==card.n);
 if(!m){playLogic(p,card);const el=document.querySelector('#tb [data-id="'+card.id+'"]');
-if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),550);el.style.visibility='';sfx.flip()}g.remove();return}
+if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),p?1000:550);el.style.visibility='';sfx.flip()}g.remove();return}
 const grp=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;grp.push(x);k++}
-await fly(g,document.querySelector('#tb [data-id="'+m.id+'"]').getBoundingClientRect(),550);
+await fly(g,document.querySelector('#tb [data-id="'+m.id+'"]').getBoundingClientRect(),p?1000:550);
 const gs=[g];
 for(const x of grp){const el=document.querySelector('#tb [data-id="'+x.id+'"]');gs.push(ghost(x,el.getBoundingClientRect()));el.style.visibility='hidden'}
-sfx.capture();await sleep(350);
+sfx.capture();await sleep(p?700:350);
 const cpe=document.querySelector('#cap'+holderOf(tm(p))),cr=cpe&&cpe.getBoundingClientRect(),dest=cr?{left:cr.left,top:cr.top}:{left:innerWidth/2-29,top:tm(p)?-120:innerHeight+20};
 await Promise.all(gs.map(e=>fly(e,dest,600,true)));
 gs.forEach(e=>e.remove());playLogic(p,card)}
@@ -500,10 +861,10 @@ const m=table.find(c=>c.n==card.n);
 if(m){const g=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;g.push(x);k++}
 table=table.filter(c=>!g.includes(c));caps[p]+=g.length+1;lastCap=p;
-let t=nm(p)+' tira '+lbl(card)+' y se lleva '+(g.length+1);
+let t=nm(p)+' tira '+lbl(card)+' y se lleva '+(g.length+1);if(p)bubble(p,'Se lleva '+(g.length+1)+' cartas',2000);
 const ca=last&&last.id==m.id&&last.by!=p,ml=!table.length&&deck.length>0;
 if(ca&&(tm(p)==1||Math.random()<.5))setTimeout(()=>emote(tm(p)==1?p:1,tm(p)==1?'😏 ¡Caída!':'😡'),900);
-if(ca){add(tm(p),P(card.n));t+=' · ¡CAÍDA! +'+P(card.n)}
+if(ca&&p==0){ST().caidas++;if(card.n==12)ST().rey++}if(ml&&p==0)ST().ml++;if(ca){add(tm(p),P(card.n));t+=' · ¡CAÍDA! +'+P(card.n)}
 msg(t);last=null;
 if(ml){add(tm(p),4);msg((ca?'¡Caída más mesa limpia! ':'¡Mesa limpia! ')+'+4 para '+tn(tm(p)))}
 if(ca)flashCaida(card.n,ml,p);else if(ml){sfx.chime();flash('¡MESA LIMPIA!<br><span style="font-size:22px">+4 para '+tn(tm(p))+'</span>',1)}
@@ -525,11 +886,11 @@ msg('Cartas: '+TT().map(t=>(t==0?'tú ':tn(t)+' ')+tcaps(t)).join(', ')+' (cada 
 mano=nxt(mano);render();
 if(over)return end();
 setAct('<button id="nx">Siguiente mano</button>');$('nx').onclick=newHand}
-function end(){
+function end(){setRem('');gmStop();
 render();const w=forceW!=null?forceW:score.indexOf(Math.max(...score)),tg=TRN&&TRN.game;
-if(!settled){settled=true;w==0?sfx.win():sfx.lose();const dbl=forceW==0&&score.slice(1).every(x=>x==0),pay=Math.round(entry*(N==3?3:2)*(1-rake(entry)))*(dbl?2:1);if(w==0)store.gold+=pay;
-store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':entry==0?'Contra la IA':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry)});store.hist=store.hist.slice(0,30);save();
-msg(w!=0?(N==2?'Ganó el rival':N==3?'Ganó '+nm(w):'Ganaron los rivales')+(entry?'. Perdiste '+entry+' de oro':''):'¡Ganaste la partida!'+(pay?' +'+pay+' de oro':'')+(dbl?' (doble por trivilín)':''));
+if(!settled){settled=true;w==0?sfx.win():sfx.lose();const dbl=forceW!=null&&score.every((x,i)=>i==forceW||x==0),pay=Math.round(entry*(MULTI()?N:2)*(1-rake(entry)))*(dbl&&w==0?2:1);if(w==0)store.gold+=pay;else if(dbl&&entry)store.gold=Math.max(0,store.gold-entry);store.played=(store.played||0)+1;{const st=ST();st.games++;if(w==0){st.wins++;st.streak++;st.maxStreak=Math.max(st.maxStreak,st.streak);st.gold+=pay}else st.streak=0}setTimeout(checkAch,1500);
+store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':entry==0?'Contra la IA':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry*(dbl?2:1))});store.hist=store.hist.slice(0,30);save();
+msg(w!=0?(N==2?'Ganó el rival':MULTI()?'Ganó '+nm(w):'Ganaron los rivales')+(entry?'. Perdiste '+(dbl?entry*2+' de oro (doble por trivilín)':entry+' de oro'):''):'¡Ganaste la partida!'+(pay?' +'+pay+' de oro':'')+(dbl?' (doble por trivilín)':''));
 if(TRN&&TRN.playing)torneoResult(w==0)}
 render();
 if(tg){setAct('<button id="vb">Ver cuadro del torneo</button>');$('vb').onclick=()=>showMenu('torneo')}
@@ -549,9 +910,9 @@ if(cand.length==1)break;
 $('sres').textContent='¡Empate entre '+cand.map(nm).join(' y ')+'!';sfx.hit();await sleep(1700);rnd++}
 mano=cand[0];const t=mano==0?'¡Repartes tú!':T('¡Reparte '+nm(mano)+'!');
 $('sres').innerHTML='<div class="sres">'+t+'</div>';sfx.chime();speak(t);await sleep(2000);o.style.display='none'}
-function newGame(){forceW=null;dec=Z();score=Array(N==3?3:2).fill(0);pileAt=[2,1];over=false;mano=0;log=[];hands=Z();table=[];caps=Array(N).fill(0);sorteo().then(newHand)}
+function newGame(){forceW=null;GM.lvl=0;GM.hot=false;dec=Z();score=Array(MULTI()?N:2).fill(0);pileAt=[2,1];over=false;mano=0;log=[];hands=Z();table=[];caps=Array(N).fill(0);sorteo().then(newHand)}
 document.querySelectorAll('.sel button[data-t]').forEach(b=>b.onclick=()=>$('board').dataset.t=b.dataset.t);
-$('vz').onclick=e=>{vozOn=!vozOn;e.target.textContent=vozOn?'🔊 Voz':'🔇 Voz'};$('snd').onclick=e=>{sndOn=!sndOn;e.target.textContent=sndOn?'🔔 Sonido':'🔕 Sonido'};
+$('vz').onclick=e=>{vozOn=!vozOn;e.target.textContent=vozOn?'🔊 Voz':'🔇 Voz';if(vozOn)speak('Voz activada')};$('snd').onclick=e=>{sndOn=!sndOn;e.target.textContent=sndOn?'🔔 Sonido':'🔕 Sonido'};
 $('dk').onclick=e=>{store.deck=store.deck=='clasico'?'dorado':'clasico';save();e.target.textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');if(hands)render()};
 document.querySelectorAll('#em button').forEach(b=>b.onclick=()=>emote(0,b.dataset.e));
 const IMG={"back": "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2094%27%3E%3Cdefs%3E%3Cpattern%20id%3D%27p%27%20width%3D%278%27%20height%3D%278%27%20patternUnits%3D%27userSpaceOnUse%27%20patternTransform%3D%27rotate%2845%29%27%3E%3Crect%20width%3D%278%27%20height%3D%278%27%20fill%3D%27%236b1a2a%27%2F%3E%3Cpath%20d%3D%27M0%204H8M4%200V8%27%20stroke%3D%27%238d2d40%27%20stroke-width%3D%27.8%27%2F%3E%3C%2Fpattern%3E%3CradialGradient%20id%3D%27g%27%20cx%3D%27.4%27%20cy%3D%27.3%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23fbe08a%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23b8860b%27%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2764%27%20height%3D%2794%27%20rx%3D%277%27%20fill%3D%27url%28%23p%29%27%2F%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%2756%27%20height%3D%2786%27%20rx%3D%274%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%271.4%27%2F%3E%3Crect%20x%3D%277%27%20y%3D%277%27%20width%3D%2750%27%20height%3D%2780%27%20rx%3D%273%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%27.5%27%20stroke-dasharray%3D%272%202%27%2F%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2750%27%20r%3D%2717%27%20fill%3D%27%232a1706%27%20stroke%3D%27url%28%23g%29%27%20stroke-width%3D%272%27%2F%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2750%27%20r%3D%2713%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%27.6%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2757.5%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2721%27%20font-weight%3D%27700%27%20text-anchor%3D%27middle%27%20fill%3D%27url%28%23g%29%27%3EC%3C%2Ftext%3E%3Cpath%20d%3D%27M24%2032l3-6%205%204%205-4%203%206z%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%2713%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2751%27%20cy%3D%2713%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%2781%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2751%27%20cy%3D%2781%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3C%2Fsvg%3E"};
@@ -559,7 +920,7 @@ const IMGO={"1": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUEBAQ
 const IMGA={"oro": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUEBAQEAwUEBAQGBQUGCA0ICAcHCBALDAkNExAUExIQEhIUFx0ZFBYcFhISGiMaHB4fISEhFBkkJyQgJh0gISD/2wBDAQUGBggHCA8ICA8gFRIVICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICD/wAARCACAAIADASIAAhEBAxEB/8QAHQAAAQUBAQEBAAAAAAAAAAAABgAEBQcIAwIBCf/EAEMQAAIBAwMBBQUEBggFBQAAAAECAwQFEQAGEiEHEyIxQRQyUWFxFSNCkTNSYoGCoQgWcnOSorHBJDRDssJjdKPR4f/EABoBAAMBAQEBAAAAAAAAAAAAAAMEBQIAAQb/xAAyEQACAgEBBAgFBAMBAAAAAAABAgADESEEEjFBInGBkaGxwfATMlFh0QUUI0JSsuHx/9oADAMBAAIRAxEAPwDZelpaWunRaWloJue7aqvqZrZtPunMTGOoukw5QU7DzVAP0rj4Dwj1PpoF19dC79hwJtEZzhYSXe+2iw0yz3Wujpg54xoeryH4IoyWPyAOoF9xbiuQzZrGlBAfKpu7FGI+IhTLf4iuqN3P2vbX2fcZoNuRSbt3U/3ctfM/MK36vMD/AOOMAarTcV433uSP2ntA3jHt63SdVoAxQkfAQIeR/jOoln6hbZ8nRHieyUE2Qc5oy97zsNqkZN0drUdPMPOmt3dRY+WFDv8Az0G1Pa32QxyePcO5Lg364lqyD/NRqiLVRbUqJvZ9u7V3DuucH3lXuYyf7MYLfmdG1LsffUiBqLsToYE9Pa5CW/zvpNmdvmLHtx5xgVIvE4h7D2u9kLuAl63HRn9YyVYx/mOie0doG2rhIqbc7WG75vdp7g8cufliRVf8m1TlRsffsaE1XYtbZk9fZmwf8j50EXii2/RS9xuTY992zJ5c1JeP/DIOv7jrI3geizDtBmvhoeYM2fDuvcdBxNztNPdac/8AXtj8ZMfHupD1/hY/TRLZ9x2a/K4ttarzRfpadwUli/tI2GH5awzYKvc1oBn7O95faNOvVrc5wSPgYHJB/hOdH1j7XbVe6uGi3fSNt+9U7cYq+J2jWNvk58UR+TZX46ar2/aKvn6Y7mHZAvsiNw0PhNfaWq2sW/KigaKi3XKj07kLFdlUKvXyEyjohPo48B/Z1ZAIYAg5B6g6vbPtNe0Jv1HIk22pqjusJ90tLS0xBRaWloL31fqmmjp9uWicw3S4qS869TSU46PL/a6hV/aOfQ6FdatKGxzoJtELsFEidz7kN7qK20UFb7HY6HktzuKvwMhX3oI2/CAPff090dc4zVvPtMuG9JJNo7D42na1InCarX7oSRj1yPcj+AHibXXtP3S98uEfZhtBlprRQjjXzK3hYr1KFvVV82P4m6aH9rbUi3arU8Us1v2Rb5glRUoPvrnOcARoPxMxwAPIa+Te1rm+Pd2D6D1J5S5XUtYwP/Z42lablc5JaDs8o40SBcVm463EccC+vEnog+mSf56OLbtLYu3KhZpaSXe1+kHP2mvDCBm4hh3cI8cgIPRm8J+I1N2uCu3FTx0VkpFsm17X40EQPGIpxfKggd5N0YMXyoPlnz0c7ANtphJTRWSe3SM3GOpqUPKq884cjr0GemAR5DSFu1EAlR1/Xt/A0EMV06fdGtNQdotzjWOjSKzUCnMcJIpI8ByQO6h8WCvEEFuhyQdN7hsC826zy3G5bjSfuVXkFpjIzdOGSXY9SGJPzwfMakd2b2udJcqu12Z4YDSA95JIwDHAXkcn+2oAAyT6gaHK2hqq5mqq/cFUZYa+GEUWWMsqkg94XyAgIDMMADCnroOX0LHEyoPEAASQtuxrpc7PDc7ZuGOETq3DlTFGXyT3kYdcICD8ST5nXaro+0W1Rsk5W6UDNmSJXFWnEuSR3Mo5HCeEAP5jJ0O26hraRI6ynvlVSvUV88It5Zu+jXl+kBDeIdQeo8iPoSvaW9a+tuNNa7uUqFqo1aOVWVmHIErkrjOeJBBGVPxHXWGZxkqczRB4kAyrbptbZO5ZGea2naN7iXm9XbOQiiYKCxkhbDIoJwWXpn10Fblt10sZiot+0i11DKONHuGj8eR6cmHvD5Hr/rrRG+HtM8kVNWUSzyCSONZY1bvVkdiI0VlBwejHxeEYGcZzoCrKeqtNI8NdCLtYbl70cyYWVmJ6OvXhMzMPvMhPD1Hro9W0tgFuz/h9OE2EB+WV/tjed02JJDbLwxuu16gEROn3ndIfMx595f1oz+756O2ZvCGxRUkEtYtVtasCmlqg/IUfLoo5HzhJ6Anqh6Hp5Zi3Ft2PaSd5BJJcdl18pQHPKSgmBwVJ9CD6+v8ArI7B3O20L1/VW9zJPt65nMEr9Y4mfoG/u38mHoevx1QV2rb9xRx5j/Ic9PqIF6w43H4eU3hparjs6v8ALFLJs65Su81LGZaCWQ5aWnBwUJ9WjJA+alT8dWPr6ui9L6xanAyDbWa2KNOc88NNTS1NRIscMSF3dugVQMkn92sv9oG+6iy7Lum8uRjvO4ZBDb1bzghwe66enGPMh/afV0dqdaV2nDZI34yXqpSjbB6iHBeY/wCBGH8Wsndpdzjv/a1T2qbH2Xt6HnMg93lgSSf+Cfu1E/U7PiXJRyHSPoJR2KvCl+Z0EF7JYq6slodmW+Turld1FTcqlz1pqYeLDH6eI/EkDV1Wm1U24Kqj21aYXo9tW2MIq8cExsPfz1DPKDy5dCoHxJ0BbMjmg2fcN01cchuO552A4hspSIwHEMFbj3j4QEjHlo+ovtLb5p6Zi9KvfFpuMAVaqR0zlHBVA5k8IDADCgDqesPanZm3AdfXn+BKiDA3pMQ1slot8tVJOYIYZBFFSwwnii4xhWXoHVuhRveA8skHTqmtn2ZuSOupI1mq5AJI7fTRcSreZVzy48UY48lAwMn0LWmqZ6+pW4y2+le6VeFgbihkQgkFy4UcfI/HiFJzkjRDZr/ZLNWVNAY6mWaMsKqsCAjkqgkEZyqgHIHljOM9TqeWPAD3+JzAgGDe+tvVlBU0t8j4wR3RhFWKSZTBOw/C3JSVbywTgMqnGmIkt9NHi5XZzI5JZ6mtjjYHqSeOB6lh69GOOmrO3XcNpJt+Wn3hX0dPQSYbFRP3RODkFcENnPw1mq9LS9o94/qp2U26ansqOPtG9VCARqufJfDy+gzyc9MY01sqtcBnQDnygg+BrD56q3vLzs18CTRAiF6arjlZD6EDqemSME9fXyXElsSwz1k1VuCoCP7LKVpEGYhNMg958EnivugZ6kuTqnu1Hs72/wBn1ZtU2imq0qZrgsFT7ZU94JVCxsCRgBCeRyAcD4603tWotjbdWC30BoKamkeIKUYeIHxMOXiOST1PXz15tgFVQas5DTSOWEC56SSe4zyxiopK081moZHK8hIymQq2c9Si4GSCBhSPLXC77goZYEpbfTrMe7jxRIxISJvIFVBDOQPczhQDkhsDRpfIaC7UnCGpjaeLPdzREO0Z+Bx5g+oPQ/XBFeySG31z19REy1NO5aZeTNGMqQZAoxknK9fg2cZB0kjizUjJHL37EYVZGVlEtCrWu4Uk1RZrlAEenYF2jjVB4QB0UxAM3LPVRjzA1UlfYZ6KWu2VXt39RSA1Vsm9KiEjPEfHI6/UauW5FauqajmiWOaXizs1O7qtScMiHK8cRqEVgfPm+fLGq+3kHn2rSXym4i47enXGHVn7hj7r8cAEOG8OBhcaqbK7KQp547+X4M8sUMN7375w07O92V132bSXGGQy7g2zMpGT4p0Cnjn+8j5Rn9pQdaztlxpbvaKS6UMneUtXEs0TfFWGR/rrBmybsll7V6Q07cLbuCIR/Id54k/esox+/WtOyKvK2m67bkPW1VRaAH0gl8aD9zd4v8I1c/TrPh3tTyYbw9RJO2JvIH5jSR3aFVrUdpNpt7N93Q0D1DfIyyBc/wCGN/z1iypuNRcqXcl3DZqbxW9yhPn945bH5cRrVfaLWNH2jbsn5YNLZYwvyxDO/wDqw1lCyR86bbVOfdmvScgfXiEGl7DnarmPIgdwzGKRipB9vOXk1KqXqktlCqMtjpViiHBWKmKIH0PIEvJ5FcHiOp1Ku7ikhFbJBWR1jsjK0alZEz5hwcygrksGzjqfDjGmFmq4k3Rc6yaoGA7qPFkgmZumAoIPhHQlvr6amKiqsckdYKCGmSqlHdSSxxAM/IjPUdT0Ovm3sIbBGeHvxlPcziEG10jeSouAiWJf0FOijARQBywB5Y8K/wAHz0NUkUduvdVtK9s5p58pQXGakAk4jD5aUDEuGLDBOcZz56IbHXU9LY4KmaVI41j752foF5EsTn6nX2+UNv3LQpHJVy0k1JIZIaiIDlE/HByGBGCD1BHwOlktKu2eB0/E8KZmbo73smDfG6q3tPt1XeLuLgRTAF2hRAWBBUOuR7uATjGtO9j+79r7ns8bWChSnpqdnjiQU4pxA6hSwEQJUZVgeQJJ65OqgG3ILpdRNuHbkffSssENwmCNTOFUF2Uj33J6D0UZJ8tPv6NM0VLZa4KQq/ac4GP7hP8A61f2h1eguM5XHPTsk969cRz/AEkSr7g2xyOF+2Bn5DuoNTBuNbDRXZ6KYvHWVTtAzqghZVROLBB8A/Jg3nwx5ZGhH+khPJLXbfkhOW+1m4+gz3EGNF6W1rb2blhG4r6dTVMGfn99jxE+Y4kEgqBjjkaUscCiknmT5xilOInasrLft643Cjra+4VM/sayUokk5uHHItKhxn8OCi+E/Dy16uNWKq3UF2MQL1MCiRPRiVJA/f4l/j1HmpobvbrdBcFp7ik9QY4+LB/ZwqEnEg8QIIyCSCQ2D1GT2r0oaO0+xW0okNMnNI19Cp5ev0/npKxjvKG4+kbRQBkT1SVCfZpht0VZUxo7eMozlyTyOXIwfP4/XQjVU4q6+uope89mro5YChZnCFgT6ZRfvIz1zklunQa8PbKaaomSekjm8LxAyVIjQKfDnHFmLDj0OMfHXpGEctFKIYl7qUcVp2aZI1EqgDlkY6McsQfPyHno6IqHKnUz3U8RpKfM00O2aGoVitXaqt4gR5ggiRf5q2ti9nd2jbtRglib7i9WpnGPVlZJV/yyv+WsgXNAs+54B7sVekgH1Zh/vrRHZTVv9s9mlQTlng7hvmDSyr/4DV9Ti+px9f8AYZkqxc1uv28pLdp6svaXu2mPnVWVGX5/cTr/AKrrLNrqlgo9t1ROBT3hWY+gBCH/AG1rztfphRdq9juMgxBX0Bp3Poe7l6/5Zj+WscVNJLS2i+2phiotlUsoB9ODGNv9jojpjarVPMg94xM1H+FD9j4S8Z1dq2dXVZU5uQtUZREyh35Dlnyw/wCDAH1ydd6mWWFu8aG3xCMAyez8g6lR4VZS7cfCCevE9PI9cD9PVJcKSkuVOB3tZDHKHHFeTEAYLcsk8kXCgYAJJ1IQU8bQQxijSm5LxPtVXynMfIFvCiheRA9c+fnqCQF+YytxxiTdXJcarZcdPbqiNKqNV5Ryxd4kwQEGMr6gkAa927ekSUtLQUWz5Ky6yRLxapUxrUEZ8QjZiqxqAR1HTwjHUaY22vMMHs7jkUbxD5+Tfz8X0caKKO5xL4ZJUiK9eTeQ/wB9KNYawUxkZzPTWG6RkBe5d+boWOWotqUyRHlEKidVZfCy+4MgYDDp+yR6jQt2GVnsO2qt3cg/asoJH/txo+vF8eGMVkNOtZBFIrywd5w72Me8AfX5+Xw1T3ZxXJT7JqpT0DXiToP7gacqzZslgwBw9YLdAuQQj7ZbjDUvtmaUBoRe25hj0KiKDOdW5cWttHbjc7XdS1GozNTVcgzGD+JXOOg+DenXOs9dpNQa6x7eYNjld5evw+6hGjm37joGsy2a+sKdkpxTTIWCsuAVJ6nB9f3Y17dUf21WBnGcjtnAfyuAcRxLJbpb5Alljp42ZojIlMUYBVYsZH7slV6ZUZOTyPTA1PVjx9xLGOXKfCDp8emf56jBX0lJS00VPOk6FljcxUrRCPK+FmPUeLGP3jz0yudxmkgZY3LSEBE69eRyEH7urfRDpN1LuoA0jK6KTFTXGaeSY0lXNFE7STtxeNEKAnLszjoq5GTkDqPMkaZyxyT3CBqioFZN3yu8jpHkEOgyBkY6R+8mfyOmo+z6i2tC9wEMQXL0UzSU4doxkEA5SQhQOvQ/LyOuYuENLTz3B38EET1BVypYBVKgnK8gSzt1DYPEgjpp3cIPRgsjnK4rJhM+5anPhlr40H7mY/7a0J2TozX/ALNaQDxJF3x+ns0zf+Q1momT+qVL0JqLhVSVGPU4HBfzYnWteyO1hu1qlp0GYrHanTPoGxHCP+2TVsJm+pB9fIYkp2/idvt5w57e7SarYlLfY18dmq1lkI9IZAYpPy5K38Osfbtgjo+0MV0y4or7DmXHlyYcJR9Q65/i1+iF1ttJebNW2ivjEtJWQvBKnxVgQf8AXWE967Wrktt02tXKXvNgnZ4jjrMoUcsf24+Mg+YI03t9e5at3I9E+hi+xPvVmvmNRB3ZNbLBbq7blXMUqbVIxU5xyhJ6nOCeIIDkAZIGPXRxJVOv3kkk8YSRO/jCnGR+MocEkKxIHTodVBHcahZKTc1vPK428BKqMf8AXi/W+fTz/wDzVjU1TS3W3RVNqYiCZOcaooyuPEy4A808TFmPUED01G2uk72/9ePXz7+MrUOMbvv7SdqG9nrXqVYNCnBJpovHH4gSjj1IwDkYzjOMlMa93OaoqKRIoKdakF1aSDmPGnn0PkQenXywc9dQkU1VU01UtFQvDUMgSQU7AxSAeJWVc8gc9egx59NOIZ+Mkr22KeaiijFQ8TYWWmVj4seXkfeGOPXPgJJ0kauBHEQwfkY6uW8aP2ZrhHY6lKkJionmYd3C6oPDGjcV59B4yD11W+0ZWg7PFlYYFRdZnXPqFiQH+ba43m57buHaRXrvKoqpbXT0yikjjZ4gX8JwQASB1fOPUeeulfufa1SKemprrBQ0FIhjp6WCkl4RqTk9SSWYnqWPU6prQVq3Ap1wToSOrxigdfiZyABHW6pRJtCy1RPhpryTIT5ANGmP+w/lo6rP6vrVFasUvOrUus06CUOeg4gk+EY65z0A6ZJ1XtHuba8VPPQ1lyp6+3VIAmpp6aUcsHIKsOqsD5EaaWmo23/X0UW3paiSxzUuZoKktP8AeAeQHEZwcYyB8zrJ2dimGBG7k8OM2LV3tCNcQ9ElHU1FttlolWroreI5GqRgCRwHPEZ8sZ9SMAEn46fU8ntdVHPE2ICzJBM6sI3fALyZ+HHAUefHr5udR3s8KKRND7Fb2iecxRcTJPjyDAZA5NxwoGD5nn014qBPR0UElZSSzyFTHGlTlYk6cnLJkMcnJ6jGOIxpQoDoIbeIkpMzVSMEneczyBI1TCLOfJejeWfkRkYzoV3xVstkpbDQM8k9ykVUUlxmIHo3ByShZiSQOnU6lGrIKK3zV1xlRKZYy0wCjj3bjIjC4KnmCPIgoBjzOgb7Vmd6ndtfhaypBit8J8okxjn9AM4+pPqNMbNSQd48uHXyHrBXWAjd+vsyU2/SQV3aHQUygSW+xxCVyPJhD1/zSFR+/WvewC1yG033c9QMvX1QpYmP4o4chmHyMrSflrMWy7HXU9jpaWjh533ck0awI3mqEnuuXyJ5St+yo1vDbFgpNrbUtm3qHJgoIFhDHzcgdWPzJyT9dV9iTfuNnJdB18zJW1vuVhOba9nKS+qR7dNlzz0sO/bLE3t1tQJWpEMtJTg5EgHq0ZJPzUsPhq7tfGAZSrAEEYIPrqvbUtqFG4GTKrDW4deU/NXdNoW2V0W5LR4LbVSASrEMimkbqU+aN7yn93pqBtl9ksFY8nspktNQ4aenzkBs5Dx/lnWnO1fs0OyKqpvNqoVqdo1xK1NKwylGWPVG+ERPVW/AenljGc9xbdnssRrrcfa7OzDhJKuZKV/1JMeR8xn3WHz1DAKN8C7jyP1H5lsMGHxa+HlDb/hrzRJcKOrMhf3a1JOPeMxAAbHuyM7EnOEwvodfGq5YZIzPQ1jVYUZqPbcFxn3gGXqDjz6/XGq5tzXKkme5bYnw5H/EUDEEH4+H1B/n/LRFb98WysiNHXL9mT4KlJk5xK3HiCvkUwM4AIAPXjpN9mZfk1HiOv3iNLap0bSSdXbrRcZIzWWszcBhizojRqMeJnOQF8+vrj0zpum19rylTHTwskryLAxjI70J15H9TIIxn1OOnnqYWCOocVdvqJoDnKPSzCYAcxxHQqxwpJOQcnoNNmoJowqGsjiTOcTRSIylsgnLJ4eignB9V9dBVyBgEiFZQTnEipNtbZ9iSogpoXdpBF3RQqeRXkMH19AfLBI8wc6e/ZtvsfNaKnWFJo1ZJSqqZMrkg9enUMOvy9Tp2lLJPSxRyzQVCRrlUSnJb3OeCQmScnicn3vP466yWy20xDVBkeOEkKJSIECh1OACS4BBfoFGDri5OjEmcEA1AiS7mSSV6e21MVdJH/zMdUcqAPMBRgKPPGPq2undU9rjluFfVCN4ye8qXfl3RBYeEg+KQMFZSuU69cnpoXum9bVbIzTW8irkAC8IF4RsQGXLHqWJVsHJwfVdQNSLjVAXTdcphiHWnoB0ZunTw+g+v8h5nXZidW0HieoexBG5RoNffOe7zeBf65WNM62iKQtFACF5uxJMknxz1J0+25af6wXd7pdELWahYKUHhE7eawL9fNj6L9RrjY7TV7izPMEobVG+JqlI8sx9I489XfGBgdB5n5352Xdmbb+raeSakNFsu2sUKq3/ADbA+KJW/Fk/pJPX3R64b1J+BVx8h+YqSADbYdPOH/YPs6pr6yXtJvcX6VWitSFcAoejzgegIARP2AT+LWgteIoooIEghjWKKNQiIgwFA6AAeg171bpqWlBWvASLba1rl2i0tLS0aCniaGGogkp6iJJoZFKPG6hlZT0IIPmNZr7QuxC5WOWa+dn8TVlvYETWcgO8aHzEYbpJH/6Z6j8J9NaX0tBuoS5d1xDVXPU28pn5sXDa9FV1LVNjnForomIakmZljV/VVc+KM/sP+eoC7yV1LKKfdW34pZiPDPIpikcfESJ0f+ev0O3p2V7O3wTUXS3mmuXHitwo27qcD4E+Tj5MCNUZuDsA3zZYpE23X0u4beTk0s3GGQ/VHzEx+hXUp9murOnSHce+U02iqwYPRPhMkM1PBl7YK6kb4e0Aj+Q1NSVG5KCjFRBuCfuTEpVug5uT7q/EY650fXzYlRbpGG4Ng19qYecsMMsK/mvOP8tC/wDV7apkPC6VkJH4TLAxH58dCa1eDqR1jMOqH+pz1GQ1NU7quiF5L9UGIBhIQA3dkeXL4A/HUNHJBU9bpLXVJ+CzDifzGjQbc2oG8d1rJCemO9gTPy6Z0S2XYi3F1WwbDuN5c+UkqTTJ/okf5nXLcvBFJ6hica2/se8wDtFRM9SKfam3gazH6YKaiZfnk9E+vTU1T7Wp4p/b90V3t9UzAeywylgWPkryDzP7EeSfiNX7YOwXtAvESQ3mootsWs9TTR8ZHx/dR4jz/aZvpq8Nl9kWzNkyx1tFRNX3VBj7QriJJV+PAYCxj+yBoqbPdYcnojvMA+0VIMfMfCUz2fdh933Maa6b1hks9ijXEFqjHdSzJ+qVH6GM+q++3qRrT1FRUluoIKCgpoqWlp0EcUMShUjUdAAB5DTjS1UpoSld1BJltz2nLRaWlpaPAz//2Q=="};
 const store={name:'',gold:500,hist:[],friends:[],deck:'dorado',avatar:'oro',frame:'none',owned:['none'],nameStyle:'none',emotes:['🔥 ¡Caída!','😂','🤥 ¡Mentiroso!','👏','😡'],ownedEmo:['🔥 ¡Caída!','😂','🤥 ¡Mentiroso!','👏','😡']};
 let settled=true,curView='home';
-const opt={entry:100,mode:'normal',players:2,team:'parejas',meta:30,casa:true,flor:true,triv:false,noCheat:false,priv:false,code:''};
+const opt={dif:'facil',entry:100,mode:'normal',players:2,team:'parejas',meta:30,casa:true,flor:true,triv:true,noCheat:false,priv:false,code:''};
 let forceW=null;
 const BASE=['ronda','vigía','patrulla','registro'];
 function allowedName(n){return BASE.includes(n)||(n.startsWith('casa')&&opt.casa)||(n.startsWith('flor')&&opt.flor)||(n=='trivilín'&&opt.triv)}
@@ -584,11 +945,11 @@ const iv=setInterval(()=>{n--;if(n>0){$('vn').textContent=n;return}clearInterval
 function setName(){const v=esc($('nmI').value.trim());if(v){store.name=v;save();showMenu('home')}}
 function addFriend(){const v=esc($('fI').value.trim());if(v){store.friends.push(v);save();showMenu('friends')}}
 function delFriend(i){store.friends.splice(i,1);save();showMenu('friends')}
-function startGame(e){if(e!=null)opt.entry=e;e=opt.entry||0;
-if(opt.players==4&&opt.team!='parejas'){toast('El individual de 4 viene después. Juega 2, 3 o 4 en parejas.');return}
+function startGame(e){musStop();setTimeout(gmStart,400);if(e!=null)opt.entry=e;e=opt.entry||0;
+
 if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
 if(opt.mode=='practica'||e==0)RN=null;
-N=opt.mode=='practica'?2:opt.players;entry=e;META=opt.meta;store.gold-=e;save();settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
+N=opt.mode=='practica'?2:opt.players;IND=N==4&&opt.team=='solo';entry=e;META=opt.meta;store.gold-=e;save();settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
 const LES=[['Ronda','2 cartas iguales y una cualquiera. Del 1 al 7 vale 1 punto; el 10 vale 2; el 11, 3; el 12, 4.',[204,104,7]],
 ['Vigía · 7 puntos','Una ronda más una carta que le sigue o le antecede. Aquí 4, 4 y 5.',[204,104,305]],
 ['Patrulla · 6 puntos','3 cartas seguidas. Después del 7 sigue el 10.',[203,204,205]],
@@ -618,7 +979,7 @@ store.gold-=trnEntry;save();
 const names=['Tú y Marta',...shuf(TEAMS)],ord=shuf(names.map((_,i)=>i)),r0=[];
 for(let i=0;i<16;i+=2)r0.push({a:ord[i],b:ord[i+1],w:null});
 TRN={names,rounds:[r0],round:0,alive:true,done:false,playing:false,game:false,entry:trnEntry,prize:0};simRound();showMenu('torneo')}
-function torneoPlay(...a){RN=null;return torneoPlay_(...a)}
+function torneoPlay(...a){RN=null;IND=false;return torneoPlay_(...a)}
 function torneoPlay_(){const m=myMatch();if(!m||m.w!=null||TRN.done)return;
 TRN.playing=true;TRN.game=true;opt.mode='normal';
 N=4;entry=0;META=30;settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
@@ -669,7 +1030,7 @@ function renderEm(){$('em').innerHTML=store.emotes.map(e=>`<button data-e="${e}"
 function profileHTML(bk){
 const row=(prev,label,btn)=>`<div style="display:flex;align-items:center;gap:10px;margin-top:12px">${prev}<span style="flex:1">${label}</span>${btn}</div>`;
 const usd='<button class="sm" disabled>1 US$ · pronto</button>';
-return bk+`<h2>🎨 Personalización</h2><div class="box" style="text-align:center">${avatarHTML(96)}<br><br><span style="font-size:22px">${nameHTML()}</span></div>
+return bk+settingsHTML()+`<h2>🎨 Personalización</h2><div class="box" style="text-align:center">${avatarHTML(96)}<br><br><span style="font-size:22px">${nameHTML()}</span></div>
 <div class="box"><b>Avatar</b><br><br>${AVS.map(a=>`<span onclick="pickAv('${a[0]}')" style="cursor:pointer;margin:4px;display:inline-block;opacity:${store.avatar==a[0]?1:.6}">${avatarHTML(56,a[0],store.avatar==a[0]?'oro':'none')}</span>`).join('')}</div>
 <div class="box"><b>Marco del avatar</b>`+FR.map(f=>{const own=store.owned.includes(f[0]);
 return row(avatarHTML(44,store.avatar,f[0]),f[1],f[2]=='usd'?usd:own?`<button class="sm ${store.frame==f[0]?'off':''}" onclick="useFrame('${f[0]}')">${store.frame==f[0]?'Usando':'Usar'}</button>`:`<button class="sm" onclick="buyFrame('${f[0]}',${f[2]})">${f[2]} 💰</button>`)}).join('')+`</div>
@@ -683,7 +1044,7 @@ const ENTR=[100,200,500,1000,2000,5000];
 const PN=['Yorman','Daniela','El Gocho','Mariela','Juancho','La Negra','Kelvin','Yuli','Pancho','Wilmer','Génesis','Chuchú','Yusmary','Richard','Maite','Oriana','Jhonny','Carmen','Luisito','Vane'];
 const pk=a=>a[Math.floor(Math.random()*a.length)];
 const mix=a=>[...a].sort(()=>Math.random()-.5);
-const prize=(e,n)=>Math.round(e*(n==3?3:2)*(1-rake(e)));
+const prize=(e,n,solo)=>Math.round(e*(n==3||solo?n:2)*(1-rake(e)));
 function mkRooms(){const W=[[100,30],[200,10],[500,22],[1000,9],[2000,4],[5000,3]];
 const pick=()=>{let r=Math.random()*78;for(const[e,w]of W){if((r-=w)<0)return e}return 100};
 const out=[];for(let i=0;i<16;i++){const n=pk([2,2,2,3,4,4]),e=pick(),nm2=mix(PN),k=1+Math.floor(Math.random()*(n-1));
@@ -713,11 +1074,11 @@ return `<button class="bk" onclick="showMenu('salas')">← Salas</button><h2>Mes
 <div class="box"><b>${nOf(r)}</b><br><span class="sub">${rinfo(r)}. Cantos: ronda, vigía, patrulla y registro${r.casa?', casa grande y chica':''}${r.flor?', flor':''}.</span></div>
 <div class="box"><b>En la mesa</b>${r.pl.map(n=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px">${ini(n)} ${n}</div>`).join('')}${Array.from({length:r.n-r.pl.length},()=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;opacity:.6">${emptySeat} Puesto libre</div>`).join('')}</div>`
 +(r.n==4?`<div class="box"><b>¿Cómo quieren jugar?</b><br><span class="sub">Cada uno vota. Si hay empate decide quien creó la mesa.</span><br><br>${chip(VOTE=='parejas','👥 Por parejas',"VOTE='parejas';showMenu('sala')")} ${chip(VOTE=='solo','👤 Individual',"VOTE='solo';showMenu('sala')")}</div>`:'')
-+`<div class="box">Entrar cuesta <b>${r.e} 💰</b>. Si ganas te llevas ${prize(r.e,r.n)} 💰 (la casa se queda el ${Math.round(rake(r.e)*100)}%).</div>`
++`<div class="box">Entrar cuesta <b>${r.e} 💰</b>. Si ganas te llevas ${prize(r.e,r.n,r.team=='solo')} 💰 (la casa se queda el ${Math.round(rake(r.e)*100)}%).</div>`
 +(store.gold>=r.e?`<button class="mb" onclick="sitDown()">Sentarme (${r.e} 💰)</button>`:`<button class="mb" onclick="watchVideo()">🎬 Te falta oro: ver video (+200)</button>`)}
-function sitDown(){if(CUR.n==4&&VOTE=='solo'){toast('El individual de 4 viene después. Por ahora vota por parejas.');return}CUR.team=VOTE;showMenu('espera')}
+function sitDown(){CUR.team=VOTE;showMenu('espera')}
 function createRoom(){const e=opt.entry;if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
-if(opt.players==4&&opt.team!='parejas'){toast('El individual de 4 viene después. Juega 2, 3 o 4 en parejas.');return}
+
 CUR={id:-1,mine:true,n:opt.players,e,mode:opt.mode,team:opt.team,meta:opt.meta,flor:opt.flor,casa:opt.casa,pl:[],pool:mix(PN)};showMenu('espera')}
 function esperaHTML(){const r=CUR;const pop=[...ONL].sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.e);
 return `<h2>Esperando jugadores…</h2><div class="box"><b>Mesa de ${r.e} 💰, ${nOf(r)}</b><br><span class="sub">${rinfo(r)}</span>${r.mine&&opt.priv?`<br><br>Código para invitar: <b>${opt.code}</b>`:''}</div><div class="box" id="wbox"></div>
@@ -732,12 +1093,17 @@ function launchRoom(){const r=CUR;Object.assign(opt,{players:r.n,mode:r.mode,met
 RN=[null,...r.pl.slice(0,r.n-1)];if(ROOMS&&!r.mine)ROOMS=ROOMS.filter(x=>x!==r);startGame(r.e)}
 
 function showMenu(v){
-if(WT){clearInterval(WT);WT=null}stopTimer();if(TRN)TRN.game=false;
+if(WT){clearInterval(WT);WT=null}stopTimer();gmStop();if(TRN)TRN.game=false;
 if($('app').style.display!='none'){settled=true;over=true}
 $('app').style.display='none';$('cnt').style.display='none';curView=v;const m=$('menu');m.style.display='block';
-let h=`<div class="mt"><span onclick="showMenu('profile')" style="cursor:pointer">${avatarHTML(36)} ${nameHTML()}</span><span class="gd">💰 ${store.gold}</span><span><button class="sm" onclick="plus()">+</button> <button class="sm" onclick="watchVideo()">🎬 +200</button></span></div>`;
-const bk=`<button class="bk" onclick="showMenu('home')">← Menú</button>`;
-if(v=='home')h+=`<img src="${IMG.back}" style="display:block;margin:6px auto;width:110px;border-radius:10px"><h1>Caída</h1><p class="sb">El juego de cartas venezolano</p>`+(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)+`<button class="mb" onclick="showMenu('practica')">🤖 Contra la IA (gratis)</button><button class="mb" onclick="showMenu('salas')">🌐 Salas: jugar con personas</button><button class="mb" onclick="showMenu('torneo')">🏆 Torneo (prueba)</button><button class="mb" onclick="showMenu('tutorial')">🎓 Tutorial</button><button class="mb" onclick="showMenu('how')">❓ Cómo jugar</button><button class="mb" onclick="showMenu('rules')">📜 Reglas</button><button class="mb" onclick="showMenu('profile')">🎨 Personalización</button><button class="mb" onclick="showMenu('friends')">👥 Amigos</button><button class="mb" onclick="showMenu('hist')">🕑 Historial</button>`;
+let h=`<div class="hdr"><button class="pf" onclick="showMenu('profile')">${avatarHTML(38)}<span>${nameHTML()}</span></button><div class="cur"><span class="cp">${I('coin',20)}${store.gold.toLocaleString('es')}</span><span class="cp">${I('gem',20)}${(store.gems||0).toLocaleString('es')}</span><button class="plus" onclick="showMenu('tienda')" aria-label="Tienda">+</button></div></div>`;
+const par=PARENT[v]||'home',bk=`<button class="bk" onclick="showMenu('${par}')">‹ ${PLBL[par]||'Inicio'}</button>`;
+if(v=='home')h+=homeHTML();
+else if(v=='jugar')h+=jugarHTML(bk);
+else if(v=='aprender')h+=aprenderHTML(bk);
+else if(v=='logrosm')h+=logrosmHTML(bk);
+else if(v=='cantos')h+=cantosHTML(bk);
+else if(v=='premios')h+=premiosHTML(bk);
 else if(v=='play'||v=='practica'){
 const P=v=='practica';
 if(!P){if(opt.mode=='practica')opt.mode='normal';if(!opt.entry)opt.entry=100;if(opt.mode=='locura'&&opt.entry<500)opt.entry=500}
@@ -749,15 +1115,18 @@ h+=(P?bk:`<button class="bk" onclick="showMenu('salas')">← Salas</button>`)+(P
 <div class="box"><b>Modo</b><br>${tg('mode','normal','Normal (25 s)')} ${tg('mode','locura','🔥 Locura (5 s)')}`+(P?` ${tg('mode','practica','🎓 Con ayudas')}<br><span class="sub">Con ayudas es 1 vs 1, sin tiempo y con señas en pantalla.</span>`:'')+`</div>`
 +(P?'':`<div class="box"><b>Entrada</b><br>${ENTR.map(e=>`<button class="sm ${opt.entry===e?'':'off'}" style="${opt.mode=='locura'&&e<500?'opacity:.35':''}" onclick='setOpt("entry",${e})'>${e} 💰</button>`).join(' ')}`+(opt.mode=='locura'?'<br><span class="sub">Locura es de 500 en adelante.</span>':'')+`</div>`)+`
 <div class="box"><b>Cantos</b><br>Ronda, vigía, patrulla y registro siempre.<br><br>${tb('casa','Casa grande y chica')} ${tb('flor','Flor')} ${tb('triv','Trivilín')}</div>
-<div class="box"><b>Trampas</b><br>${tg('noCheat',false,'Con trampas')} ${tg('noCheat',true,'Sin trampas')}</div>`
+${P?`<div class="box"><b>Nivel de la IA</b><br>${tg('dif','facil','😊 Fácil')} ${tg('dif','dificil','😈 Difícil')}</div>`:''}<div class="box"><b>Trampas</b><br>${tg('noCheat',false,'Con trampas')} ${tg('noCheat',true,'Sin trampas')}</div>`
 +(P?`<button class="mb" onclick="RN=null;startGame(0)">🤖 Jugar gratis</button>`:
 `<div class="box"><b>Sala</b><br>${tg('priv',false,'Pública')} ${tg('priv',true,'Privada')}`+(opt.priv?`<br><br>Código: <b>${opt.code}</b><br>Para invitar amigos (se activa con cuentas).`:'')+`</div>
-<div class="box">Entrar cuesta <b>${opt.entry} 💰</b>. Si ganas te llevas ${prize(opt.entry,opt.players)} 💰 (la casa se queda el ${Math.round(rake(opt.entry)*100)}%).</div>
+<div class="box">Entrar cuesta <b>${opt.entry} 💰</b>. Si ganas te llevas ${prize(opt.entry,opt.players,opt.players==4&&opt.team=='solo')} 💰 (la casa se queda el ${Math.round(rake(opt.entry)*100)}%).</div>
 <button class="mb" onclick="createRoom()">Crear mesa y esperar jugadores</button>`+(store.gold<opt.entry?`<button class="mb" onclick="watchVideo()">🎬 Ver video (+200 💰)</button>`:''))}
 else if(v=='salas')h+=salasHTML(bk);
+else if(v=='guia')h+=tutHTML(bk);
+else if(v=='stats')h+=statsHTML(bk);
+else if(v=='logros')h+=logrosHTML(bk);
 else if(v=='sala')h+=salaHTML();
 else if(v=='espera')h+=esperaHTML();
-else if(v=='tienda')h+=tiendaHTML(bk);
+else if(v=='tienda')h+=tiendaHTML2(bk);
 else if(v=='torneo')h+=torneoHTML(bk);
 else if(v=='tutorial')h+=tutorialHTML(bk);
 else if(v=='profile')h+=profileHTML(bk);
@@ -765,17 +1134,18 @@ else if(v=='rules')h+=bk+`<h2>📜 Reglas</h2><div class="txt">${RUL}</div>`;
 else if(v=='how')h+=bk+`<h2>❓ Cómo jugar</h2><div class="txt">${HOW}</div>`;
 else if(v=='friends')h+=bk+`<h2>👥 Amigos</h2><div class="box"><input id="fI" maxlength="14" placeholder="Nombre de tu amigo"><button class="sm" onclick="addFriend()">Agregar</button></div>`+store.friends.map((f,i)=>`<div class="box">${f} <button class="sm" onclick="delFriend(${i})">✕</button></div>`).join('')+`<p class="sb">Por ahora la lista es solo de este teléfono. Con cuentas (Google Play) se conectarán de verdad.</p>`;
 else h+=bk+`<h2>🕑 Historial</h2>`+(store.hist.length?store.hist.map(x=>`<div class="box">${x.d} · <b>${x.r}</b> · ${x.s} · ${x.m||'Normal'} · ${x.n||2} jugadores${x.g?' · '+(x.g>0?'+':'')+x.g+' 💰':''}</div>`).join(''):`<p class="sb">Aún no has jugado ninguna partida.</p>`);
-m.innerHTML=h;if(v=='espera')startWait()}
+m.innerHTML=h;window.scrollTo(0,0);if(v=='espera')startWait();if(v=='guia')tutBind();if(AC&&AC.state!='suspended')musStart()}
 function put(id,k){const d=document.createElement('div');d.className='mini'+(deckStyle()!='clasico'?' m':'');d.style.bottom=(k*3)+'px';$(id).appendChild(d)}
 async function countAnim(){
 if(over)return;const o=$('cnt');o.style.display='flex';
 for(const t of TT()){const n=tcaps(t),B=base(t);
-o.innerHTML=`<div class="ct">Contando las cartas de ${t==0?(N==4?'tu equipo':'ti'):(N==2?'el rival':N==3?nm(t):'los rivales')}</div><div class="cz"><div id="cL" class="stk"></div><div id="cR" class="stk"></div></div><div class="ct2" id="cx"></div><div class="big" id="cn">0</div>`;
+o.innerHTML=`<div class="ct">Contando las cartas de ${t==0?(N==4&&!IND?'tu equipo':'ti'):(N==2?'el rival':MULTI()?nm(t):'los rivales')}</div><div class="cz"><div id="cL" class="stk"></div><div id="cR" class="stk"></div></div><div class="ct2" id="cx"></div><div class="big" id="cn">0</div>`;
 let L=0,R=0;
 for(let i=1;i<=Math.min(n,B);i++){if(i%2){L++;put('cL',L)}else{R++;put('cR',R)}$('cn').textContent=i;await sleep(90)}
 if(n>B){$('cx').innerHTML='Cartas de más: ';for(let k=1;k<=n-B;k++){$('cx').innerHTML+=`<span class="bn">${k}</span>`;$('cn').textContent='+'+k;await sleep(260)}}
-else $('cx').textContent=n<B?(N==3?`No llega a ${B}. Sin puntos`:`No llega a ${B}. ${t==0?(N==2?'El rival suma ':'Los rivales suman '):(N==2?'Tú sumas ':'Tu equipo suma ')}${Math.max(0,tcaps(1-t)-base(1-t))} puntos`):`Justo ${B}: sin puntos`;
+else $('cx').textContent=n<B?(MULTI()?`No llega a ${B}. Sin puntos`:`No llega a ${B}. ${t==0?(N==2?'El rival suma ':'Los rivales suman '):(N==2?'Tú sumas ':'Tu equipo suma ')}${Math.max(0,tcaps(1-t)-base(1-t))} puntos`):`Justo ${B}: sin puntos`;
 await sleep(900)}
 o.style.display='none'}
-load();$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');
-</script></body></html>
+load();applySet();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);
+</script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
+</body></html>
