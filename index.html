@@ -2,8 +2,7 @@
 <html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Caída</title>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#1b4a36">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--felt:#1b4a36;--paper:#f3ead6;--ink:#2a1a14}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -125,6 +124,28 @@ button:disabled{opacity:.4}
 .sx{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:flex-end;max-width:72px}
 .seats.n2 .sx{max-width:none}
 #p1:empty{display:none}
+
+:root{--nb:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20142%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cpattern%20id%3D%22r%22%20width%3D%2214%22%20height%3D%2214%22%20patternUnits%3D%22userSpaceOnUse%22%20patternTransform%3D%22rotate%2845%29%22%3E%3Crect%20width%3D%2214%22%20height%3D%2214%22%20fill%3D%22%237a1f2b%22%2F%3E%3Crect%20width%3D%227%22%20height%3D%227%22%20fill%3D%22%238e2836%22%2F%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22100%22%20height%3D%22142%22%20rx%3D%2210%22%20fill%3D%22%235e1520%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%2290%22%20height%3D%22132%22%20rx%3D%227%22%20fill%3D%22url%28%23r%29%22%20stroke%3D%22%23f2c230%22%20stroke-width%3D%222.5%22%2F%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2271%22%20r%3D%2221%22%20fill%3D%22%235e1520%22%20stroke%3D%22%23f2c230%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M60%2062a13%2013%200%201%200%200%2018%22%20fill%3D%22none%22%20stroke%3D%22%23f2c230%22%20stroke-width%3D%226%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E")}
+.c.nw{background:transparent;border:none;padding:0;box-shadow:0 2px 0 #0005,0 5px 12px #0006;border-radius:7px}
+.c.nw svg{width:100%;height:100%;display:block}
+.c.back,.c.back.m{background:var(--nb) center/100% 100% no-repeat;border:none;border-radius:6px}
+.mini,.mini.m,.ml,.ml.m{background:var(--nb) center/100% 100% no-repeat;border:none}
+#ov{font-family:'Lilita One',Georgia,serif;font-weight:400;letter-spacing:.5px;-webkit-text-stroke:1.5px #3a1d06}
+#ov.l3::before,#ov.l4::before{content:'';position:fixed;left:50%;top:50%;width:160vmax;height:160vmax;margin:-80vmax 0 0 -80vmax;z-index:-1;pointer-events:none;
+ background:repeating-conic-gradient(#ffd65a40 0 8deg,#0000 8deg 20deg);-webkit-mask:radial-gradient(circle,#000 0 15%,#0000 55%);mask:radial-gradient(circle,#000 0 15%,#0000 55%);animation:raysp 3s linear infinite}
+@keyframes raysp{to{transform:rotate(90deg)}}
+#ov [style*="font-size:2"],#ov span{-webkit-text-stroke:0;font-family:system-ui,sans-serif;font-weight:800}
+.fc{position:relative;width:64px;height:94px;perspective:600px;animation:drawIn .45s ease-out both}
+.fc .fi{position:absolute;inset:0;transition:transform .4s;transform-style:preserve-3d}
+.fc.up .fi{transform:rotateY(180deg)}
+.fc .fi>*{position:absolute;inset:0;margin:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.fc .fi>.fr{transform:rotateY(180deg)}
+.fc .fr .c{width:100%;height:100%}
+.fc.win{filter:drop-shadow(0 0 12px #f2c230) drop-shadow(0 0 4px #f2c230);animation:none;transform:scale(1.12);transition:transform .3s}
+.fc.lose{opacity:.4;transition:opacity .3s}
+@keyframes drawIn{from{transform:translateY(-90px) scale(.4);opacity:0}}
+.sres{font-family:'Lilita One',Georgia,serif;font-size:42px;color:#ffd84a;-webkit-text-stroke:1.5px #3a1d06;text-shadow:0 4px 0 #3a1d06;animation:pop .5s ease-out}
+@media (prefers-reduced-motion: reduce){#ov.l3::before,#ov.l4::before{animation:none}}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -153,11 +174,13 @@ button:disabled{opacity:.4}
 </div>
 <div class="pile" id="p0"></div>
 </div>
-<div class="sel"><button data-t="madera">Madera</button><button data-t="pano">Paño</button><button data-t="mantel">Mantel</button><button id="vz">🔊 Voz</button><button id="dk">Mazo</button></div><div class="sel" id="em"><button data-e="🔥 ¡Caída!">🔥</button><button data-e="😂">😂</button><button data-e="🤥 ¡Mentiroso!">🤥</button><button data-e="👏">👏</button><button data-e="😡">😡</button></div>
-<div class="log" id="lg"></div><div class="hint" id="hint"></div>
 <div id="act"></div>
 <div class="sub" id="tm" style="text-align:center;min-height:20px"></div><div class="row mine" id="hd"></div>
-<div class="cg" id="cg"></div><div id="ov"></div>
+<div class="cg" id="cg"></div><div class="hint" id="hint"></div>
+<div class="log" id="lg"></div>
+<div class="sel" id="em" style="margin-top:4px"><button data-e="🔥 ¡Caída!">🔥</button><button data-e="😂">😂</button><button data-e="🤥 ¡Mentiroso!">🤥</button><button data-e="👏">👏</button><button data-e="😡">😡</button></div>
+<div class="sel" style="flex-wrap:wrap;margin-bottom:10px"><button data-t="madera">Madera</button><button data-t="pano">Paño</button><button data-t="mantel">Mantel</button><button id="vz">🔊 Voz</button><button id="snd">🔔 Sonido</button><button id="dk">Mazo</button></div>
+<div id="ov"></div>
 </div>
 <script>
 const ORD=[1,2,3,4,5,6,7,10,11,12];let META=30;
@@ -165,7 +188,7 @@ const SU=[['oros','●','#e0a800'],['copas','♥','#d62f2f'],['espadas','♠','#
 const $=id=>document.getElementById(id),sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const P=n=>n<=7?1:n==10?2:n==11?3:4;
 let N=2,entry=100;
-const nm=p=>p==0?'Tú':(N==2?'El rival':(N==3?['','Rafa','Luis']:['','Rafa','Marta','Luis'])[p]);
+let RN=null;const nm=p=>p==0?'Tú':(RN&&RN[p])?RN[p]:(N==2?'El rival':(N==3?['','Rafa','Luis']:['','Rafa','Marta','Luis'])[p]);
 const tm=p=>N==3?p:p%2,nxt=p=>(p+1)%N,Z=()=>Array.from({length:N},()=>[]),F=()=>Array(N).fill(false);
 const rivalsOf=p=>[...Array(N).keys()].filter(q=>tm(q)!=tm(p));
 const tn=t=>t==0?(N==4?'tu equipo':'Tú'):(N==4?'los rivales':nm(t));
@@ -185,10 +208,14 @@ return t.replace(/Tú (tira|canta|suma|pide|llega|tiene|gana|dice|va|enseña|no 
 function msg(t){log.push(T(t))}
 function add(p,n){score[p]+=n;if(score[p]>=META)over=true}
 const PIP={1:[[29,42]],2:[[29,25],[29,59]],3:[[29,22],[29,42],[29,62]],4:[[19,26],[39,26],[19,58],[39,58]],5:[[19,26],[39,26],[29,42],[19,58],[39,58]],6:[[19,24],[39,24],[19,42],[39,42],[19,60],[39,60]],7:[[19,24],[39,24],[29,33],[19,42],[39,42],[19,60],[39,60]]};
-function svgCard(c){const col=SU[c.s][2],n=c.n;let g='';
-if(n<=7){const z=n==1?30:15;g=PIP[n].map(([x,y])=>`<use href="#s${c.s}" x="${x-z/2}" y="${y-z/2}" width="${z}" height="${z}"/>`).join('')}
-else g=`<rect x="9" y="17" width="40" height="50" rx="4" fill="none" stroke="${col}" stroke-width="1.5"/><text x="29" y="47" font-size="30" text-anchor="middle" fill="${col}">${{10:'♟',11:'♞',12:'♚'}[n]}</text><use href="#s${c.s}" x="21" y="50" width="16" height="16"/>`;
-return `<div class="c" data-id="${c.id}"><svg viewBox="0 0 58 84" width="100%" height="100%"><text x="5" y="13" font-size="11" font-weight="700" fill="${col}">${n}</text><text x="53" y="79" font-size="11" font-weight="700" fill="${col}" text-anchor="end">${n}</text>${g}</svg></div>`}
+const NCOL=['#c08a00','#c8312f','#2457a6','#2f8a3e'];
+function nSym(s){
+if(s==0)return '<circle cx="50" cy="97" r="24" fill="#f4c430" stroke="#b07d10" stroke-width="3"/><circle cx="50" cy="97" r="16.5" fill="none" stroke="#b07d10" stroke-width="2"/><circle cx="43" cy="90" r="4" fill="#fff3c0" opacity=".8"/>';
+if(s==1)return '<path d="M30 71H70Q70 100 50 104Q30 100 30 71Z" fill="#c8312f"/><path d="M37 77Q38 92 46 98" stroke="#fff" stroke-opacity=".45" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="46" y="103" width="8" height="12" fill="#a32422"/><ellipse cx="50" cy="119" rx="15" ry="4.5" fill="#c8312f"/>';
+if(s==2)return '<path d="M50 64L57 76V106H43V76Z" fill="#2457a6"/><path d="M50 70V104" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><rect x="32" y="105" width="36" height="6" rx="3" fill="#173c78"/><rect x="46" y="111" width="8" height="10" fill="#6b4a2a"/><circle cx="50" cy="124" r="4.5" fill="#173c78"/>';
+return '<path d="M45 126L42 84Q36 72 44 66Q51 61 58 67Q65 75 58 86L55 126Z" fill="#2f8a3e"/><circle cx="43" cy="93" r="3.6" fill="#1f5e2a"/><circle cx="57" cy="105" r="3.6" fill="#1f5e2a"/><circle cx="46" cy="116" r="3" fill="#1f5e2a"/><path d="M50 70Q47 90 50 124" stroke="#fff" stroke-opacity=".3" stroke-width="2" fill="none"/>'}
+function svgCard(c){const k=NCOL[c.s],n=c.n,F="Lilita One,Arial Rounded MT Bold,sans-serif";
+return `<div class="c nw" data-id="${c.id}"><svg viewBox="0 0 100 142" preserveAspectRatio="none"><rect width="100" height="142" rx="10" fill="#fffaf0"/><rect x="3.5" y="3.5" width="93" height="135" rx="8" fill="none" stroke="${k}" stroke-width="5"/><rect x="9" y="9" width="82" height="124" rx="5" fill="none" stroke="${k}" stroke-opacity=".25" stroke-width="1.5"/><text x="15" y="27" font-family="${F}" font-size="17" fill="${k}" text-anchor="middle">${n}</text><text x="85" y="127" font-family="${F}" font-size="17" fill="${k}" text-anchor="middle" transform="rotate(180 85 121)">${n}</text><text x="50" y="58" font-family="${F}" font-size="40" fill="${k}" text-anchor="middle">${n}</text>${nSym(c.s)}</svg></div>`}
 function pile(n,lb){let h='<span class="pl">'+lb+' '+n+'</span>';
 for(let i=0;i<Math.floor(n/15);i++)h+='<span class="cap"></span>';
 for(let i=0;i<n%15;i++)h+=`<span class="bean" style="--r:${(i*53)%180}deg"></span>`;return h}
@@ -218,7 +245,7 @@ $('seats').className='seats n'+N;
 const SEAT=N==2?{top:1}:N==3?{right:1,left:2}:{right:1,top:2,left:3};
 for(const k of ['top','left','right'])$('s-'+k).innerHTML=SEAT[k]!=null?seatHTML(SEAT[k]):'';
 $('dpile').innerHTML='';
-$('tb').innerHTML=table.map(cardHTML).join('')+(tmp?cardHTML(tmp).replace('class="c"','class="c tmp"'):'');
+$('tb').innerHTML=table.map(cardHTML).join('')+(tmp?cardHTML(tmp).replace('class="c','class="c tmp'):'');
 $('hd').innerHTML=hands[0].map(cardHTML).join('');
 $('lg').innerHTML=log.slice(-4).map(t=>'<div>'+t+'</div>').join('');renderCg();
 document.querySelectorAll('#hd .c').forEach(el=>el.onclick=()=>{if(turn==0&&!busy&&!over){const c=hands[0].find(x=>x.id==el.dataset.id);busy=true;play(0,c)}});
@@ -297,10 +324,10 @@ const ex='!'.repeat([1,3,5,7][lv-1]),size=[44,54,64,70][lv-1];
 let h=lv==4?`<div style="font-size:34px">👑 ¡CAÍDA DE REY${ex} 👑</div>`:`<div style="font-size:${size}px">¡CAÍDA${ex}</div>`;
 if(ml)h+='<div style="font-size:28px">+ MESA LIMPIA</div>';
 h+=`<div style="font-size:20px">${p==0?'diste':(N==2?'el rival te dio':nm(p)+' dio')} caída de ${n} · +${pts}</div>`;
-speak(['¡Caída!','¡Caída!','¡Caíííída!','¡Caída de rey!'][lv-1]);flash(h,lv)}
+speak(['¡Caída!','¡Caída!','¡Caíííída!','¡Caída de rey!'][lv-1]);sfx.caida(lv);flash(h,lv)}
 let tcan=null,asked=false,lost=[false,false],playedBy=[[],[]],vozOn=true,dealt=[[],[]],missPen=[false,false],tmr=null;
-function deckStyle(){return mano==0?(store.deck=='clasico'?'clasico':'dorado'):'dorado'}
-function cardHTML(c){return cardHTML0(c).replace('class="c"','class="c" style="border:3px solid '+SU[c.s][2]+'"')}
+function deckStyle(){return mano==0&&store.deck=='dorado'?'dorado':'clasico'}
+function cardHTML(c){if(deckStyle()=='clasico')return svgCard(c);return cardHTML0(c).replace('class="c"','class="c" style="border:3px solid '+SU[c.s][2]+'"')}
 function cardHTML0(c){
 if(deckStyle()=='clasico')return svgCard(c);
 if(c.s==0&&IMGO[c.n])return `<div class="c" data-id="${c.id}"><div class="coin" style="background-image:url(${IMGO[c.n]})"></div><svg class="ci" viewBox="0 0 58 84"><text x="5" y="13" font-size="11" font-weight="700" fill="${SU[0][2]}">${c.n}</text><text x="53" y="79" font-size="11" font-weight="700" fill="${SU[0][2]}" text-anchor="end">${c.n}</text></svg></div>`;
@@ -329,19 +356,40 @@ if(opt.mode!='practica'||turn!=0||hands[0].length!=3){h.innerHTML='';return}
 const l=info(hands[0]).has;
 h.innerHTML=l.length?'🎓 <b>Tienes '+l.join(' y ')+'.</b> '+l.map(n=>EXP[n]).join(' ')+' Toca el botón antes de tirar.':'🎓 No tienes canto en esta mano. Juega tus cartas y fíjate en lo que canta el rival.'}
 function startTimer(){stopTimer();if(opt.mode=='practica')return;const loco=opt.mode=='locura';let n=loco?5:25;
-const show=()=>{$('tm').textContent='⏱ '+n;$('tm').className=(loco||n<=5)?'tmr':''};show();
+const show=()=>{$('tm').textContent='⏱ '+n;if(n<=5&&n>0)sfx.tick();$('tm').className=(loco||n<=5)?'tmr':''};show();
 tmr=setInterval(()=>{n--;show();
 if(n<=0){stopTimer();if(turn==0&&!busy&&!over&&hands[0].length){busy=true;msg('Se acabó el tiempo: se tira una carta al azar');play(0,hands[0][Math.floor(Math.random()*hands[0].length)])}}},1000)}
+
+let sndOn=true,AC=null,NB=null;
+function au(){if(!sndOn)return null;try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}if(AC.state=='suspended')AC.resume();return AC}catch(e){return null}}
+function nz(t,d,ty,f1,f2,v){const a=au();if(!a)return;const s=a.createBufferSource();s.buffer=NB;const f=a.createBiquadFilter();f.type=ty;f.frequency.setValueAtTime(f1,t);f.frequency.exponentialRampToValueAtTime(f2,t+d);const g=a.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);s.connect(f).connect(g).connect(a.destination);s.start(t);s.stop(t+d+.02)}
+function tn0(f,t,d,ty,v){const a=au();if(!a)return;const o=a.createOscillator();o.type=ty||'triangle';o.frequency.setValueAtTime(f,t);const g=a.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v||.18,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+const NOW=()=>{const a=au();return a?a.currentTime:0};
+const sfx={
+swish(){nz(NOW(),.16,'bandpass',900,3200,.2)},
+flip(){const t=NOW();nz(t,.05,'highpass',2500,4000,.25);tn0(1700,t,.03,'sine',.06)},
+capture(){const t=NOW();nz(t,.09,'lowpass',700,300,.5);nz(t+.07,.09,'lowpass',700,300,.4)},
+hit(){const t=NOW();tn0(660,t,.12);tn0(990,t+.1,.22)},
+chime(){const t=NOW();[784,988,1319].forEach((f,i)=>tn0(f,t+i*.09,.35,'sine',.16))},
+tick(){tn0(1200,NOW(),.05,'square',.05)},
+drum(){const t=NOW();for(let i=0;i<10;i++)nz(t+i*.05,.06,'lowpass',500,200,.3+i*.03);tn0(392,t+.55,.35,'sawtooth',.07);tn0(523,t+.55,.35,'sawtooth',.06)},
+caida(lv){const t=NOW(),N=[523,659,784,1047,1319,1568];
+if(lv==4){for(let i=0;i<14;i++)nz(t+i*.05,.06,'lowpass',500,200,.35+i*.02);const t2=t+.75;[523,659,784,1047].forEach(f=>tn0(f,t2,.9,'sawtooth',.07));[1047,1319,1568,2093].forEach((f,i)=>tn0(f,t2+.15+i*.08,.4,'triangle',.12));return}
+for(let i=0;i<2+lv;i++)tn0(N[i],t+i*(.11-lv*.015),.25,'square',.08);nz(t,.12,'lowpass',400,150,.5)},
+canto(lv){const t=NOW();const N=[440,554,659,880,1109];for(let i=0;i<1+lv;i++)tn0(N[i],t+i*.08,.3,'triangle',.13);if(lv>=3)tn0(N[lv],t+.45,.6,'sine',.12)},
+win(){const t=NOW();[523,659,784,1047,784,1047].forEach((f,i)=>tn0(f,t+i*.12,.3,'triangle',.15))},
+lose(){const t=NOW();[392,370,349,330].forEach((f,i)=>tn0(f,t+i*.22,.35,'triangle',.12))}};
+document.addEventListener('pointerdown',()=>{if(sndOn)au()},{passive:true});
 function speak(t){if(!vozOn)return;try{const u=new SpeechSynthesisUtterance(t);u.lang='es-VE';u.rate=.85;u.pitch=1.2;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function shout(call){
 flash('<div style="font-size:76px">¡'+(call==1?'UNOOO':'CUATROOO')+'!</div><div style="font-size:22px">'+nm(mano)+' va '+(call==1?'hacia arriba ↑':'hacia abajo ↓')+'</div>',3);
-speak(call==1?'¡Unooo!':'¡Cuatrooo!')}
-function flashHit(c){
+speak(call==1?'¡Unooo!':'¡Cuatrooo!');sfx.drum()}
+function flashHit(c){sfx.hit();
 flash(`<div style="font-size:56px">¡PEGÓ EL ${c.n}!</div><div style="font-size:40px;letter-spacing:4px;color:${SU[c.s][2]};background:#f3ead6;border-radius:12px;padding:2px 12px">${SU[c.s][1].repeat(c.n)}</div><div style="font-size:22px">+${c.n} puntos</div>`,2)}
 function flashCanto(p,name,h){
 const pts=PTS[name]||1,lv=pts>=16?4:pts>=10?3:pts>=6?2:1;
 const lights=lv>=2?'<div style="font-size:30px">'+(lv==4?'🔥💎👑💎🔥':lv==3?'✨🎊✨':'💡✨💡')+'</div>':'';
-flash(lights+`<div style="font-size:${[40,52,60,64][lv-1]}px">¡${name.toUpperCase()}${'!'.repeat(lv+1)}</div><div style="font-size:20px">${p==0?'Cantas':nm(p)+' canta'}</div>`,lv);
+sfx.canto(lv);flash(lights+`<div style="font-size:${[40,52,60,64][lv-1]}px">¡${name.toUpperCase()}${'!'.repeat(lv+1)}</div><div style="font-size:20px">${p==0?'Cantas':nm(p)+' canta'}</div>`,lv);
 speak(name+'!')}
 function feasible(name,pl){
 const need=3-pl.length;if(need<=0)return btnValid(name,pl);
@@ -385,7 +433,7 @@ async function opening(call){
 let hits=0;
 while(table.length<4){const c=deck.pop();
 if(table.some(x=>x.n==c.n)){add(tm(nxt(mano)),1);deck.splice(Math.floor(Math.random()*(deck.length+1)),0,c);msg('Sale un '+c.n+' repetido: punto para '+tn(tm(nxt(mano))));tmp=c;render();await sleep(1100);tmp=null;continue}
-table.push(c);const slot=table.length,exp=call==1?slot:5-slot;
+table.push(c);sfx.flip();const slot=table.length,exp=call==1?slot:5-slot;
 if(c.n==exp){add(tm(mano),c.n);hits++;msg('Pegó el '+c.n+': +'+c.n+' para '+tn(tm(mano)));flashHit(c);await sleep(900)}
 render();await sleep(700)}
 if(!hits){add(tm(nxt(mano)),1);msg('No pegó ninguna: punto para '+tn(tm(nxt(mano))))}
@@ -423,7 +471,7 @@ play(bp,b)}
 function ghost(c,r){const d=document.createElement('div');d.innerHTML=cardHTML(c);const e=d.firstChild;
 e.style.cssText+=`;position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;z-index:50;margin:0;pointer-events:none;box-shadow:0 8px 18px #000a`;
 document.body.appendChild(e);return e}
-async function fly(e,to,ms,fade){
+async function fly(e,to,ms,fade){sfx.swish();
 const r=e.getBoundingClientRect();
 const a=e.animate([{transform:'none',opacity:1},{transform:`translate(${to.left-r.left}px,${to.top-r.top}px)`,opacity:fade?0:1}],{duration:ms,easing:'ease-in-out',fill:'forwards'});
 await a.finished;e.style.left=to.left+'px';e.style.top=to.top+'px';e.style.opacity=fade?0:1;a.cancel()}
@@ -435,13 +483,13 @@ const src=p==0?document.querySelector('#hd [data-id="'+card.id+'"]'):document.qu
 const g=ghost(card,src.getBoundingClientRect());src.style.visibility='hidden';
 const m=table.find(c=>c.n==card.n);
 if(!m){playLogic(p,card);const el=document.querySelector('#tb [data-id="'+card.id+'"]');
-if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),550);el.style.visibility=''}g.remove();return}
+if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),550);el.style.visibility='';sfx.flip()}g.remove();return}
 const grp=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;grp.push(x);k++}
 await fly(g,document.querySelector('#tb [data-id="'+m.id+'"]').getBoundingClientRect(),550);
 const gs=[g];
 for(const x of grp){const el=document.querySelector('#tb [data-id="'+x.id+'"]');gs.push(ghost(x,el.getBoundingClientRect()));el.style.visibility='hidden'}
-await sleep(350);
+sfx.capture();await sleep(350);
 const cpe=document.querySelector('#cap'+holderOf(tm(p))),cr=cpe&&cpe.getBoundingClientRect(),dest=cr?{left:cr.left,top:cr.top}:{left:innerWidth/2-29,top:tm(p)?-120:innerHeight+20};
 await Promise.all(gs.map(e=>fly(e,dest,600,true)));
 gs.forEach(e=>e.remove());playLogic(p,card)}
@@ -458,12 +506,12 @@ if(ca&&(tm(p)==1||Math.random()<.5))setTimeout(()=>emote(tm(p)==1?p:1,tm(p)==1?'
 if(ca){add(tm(p),P(card.n));t+=' · ¡CAÍDA! +'+P(card.n)}
 msg(t);last=null;
 if(ml){add(tm(p),4);msg((ca?'¡Caída más mesa limpia! ':'¡Mesa limpia! ')+'+4 para '+tn(tm(p)))}
-if(ca)flashCaida(card.n,ml,p);else if(ml)flash('¡MESA LIMPIA!<br><span style="font-size:22px">+4 para '+tn(tm(p))+'</span>',1);
+if(ca)flashCaida(card.n,ml,p);else if(ml){sfx.chime();flash('¡MESA LIMPIA!<br><span style="font-size:22px">+4 para '+tn(tm(p))+'</span>',1)}
 }else{table.push(card);last={id:card.id,by:p};msg(nm(p)+' tira '+lbl(card))}
 turn=nxt(p);
 if(tm(p)==0)botWatch(p);
 if(hands.every(x=>!x.length)){
-resolve();if(over){end();return}if(deck.length){busy=true;(async()=>{msg('Se reparten 3 cartas más');await dealAnim();if(!deck.length){msg('¡ÚLTIMAS! En esta ronda no vale mesa limpia');flash('¡ÚLTIMAS!!<br><span style="font-size:22px">no vale mesa limpia</span>',3);speak('¡Últimas!')}next()})();return}else return finishHand()}
+resolve();if(over){end();return}if(deck.length){busy=true;(async()=>{msg('Se reparten 3 cartas más');await dealAnim();if(!deck.length){msg('¡ÚLTIMAS! En esta ronda no vale mesa limpia');sfx.drum();flash('¡ÚLTIMAS!!<br><span style="font-size:22px">no vale mesa limpia</span>',3);speak('¡Últimas!')}next()})();return}else return finishHand()}
 next()}
 async function finishHand(){
 if(table.length&&lastCap!=null){
@@ -479,22 +527,31 @@ if(over)return end();
 setAct('<button id="nx">Siguiente mano</button>');$('nx').onclick=newHand}
 function end(){
 render();const w=forceW!=null?forceW:score.indexOf(Math.max(...score)),tg=TRN&&TRN.game;
-if(!settled){settled=true;const dbl=forceW==0&&score.slice(1).every(x=>x==0),pay=Math.round(entry*2*(1-rake(entry)))*(dbl?2:1);if(w==0)store.gold+=pay;
-store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry)});store.hist=store.hist.slice(0,30);save();
+if(!settled){settled=true;w==0?sfx.win():sfx.lose();const dbl=forceW==0&&score.slice(1).every(x=>x==0),pay=Math.round(entry*(N==3?3:2)*(1-rake(entry)))*(dbl?2:1);if(w==0)store.gold+=pay;
+store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':entry==0?'Contra la IA':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry)});store.hist=store.hist.slice(0,30);save();
 msg(w!=0?(N==2?'Ganó el rival':N==3?'Ganó '+nm(w):'Ganaron los rivales')+(entry?'. Perdiste '+entry+' de oro':''):'¡Ganaste la partida!'+(pay?' +'+pay+' de oro':'')+(dbl?' (doble por trivilín)':''));
 if(TRN&&TRN.playing)torneoResult(w==0)}
 render();
 if(tg){setAct('<button id="vb">Ver cuadro del torneo</button>');$('vb').onclick=()=>showMenu('torneo')}
-else{setAct('<button id="ng">Nueva partida ('+entry+' 💰)</button><button id="mn">Menú</button>');$('ng').onclick=startGame;$('mn').onclick=()=>showMenu('home')}}
+else{setAct(entry?'<button id="ng">Volver a las salas</button><button id="mn">Menú</button>':'<button id="ng">Jugar otra (gratis)</button><button id="mn">Menú</button>');$('ng').onclick=entry?()=>showMenu('salas'):()=>startGame(0);$('mn').onclick=()=>showMenu('home')}}
 async function sorteo(){
-const o=$('cnt');o.style.display='flex';let cand=[...Array(N).keys()],rnd=0;const d=mkDeck();
-while(cand.length>1){const dr=cand.map(p=>({p,c:d.pop()}));
-o.innerHTML=`<div class="ct">${rnd?'¡Empate! Sacan otra carta':'Sorteo: la carta más alta reparte'}</div><div class="row" style="min-height:0">${dr.map(x=>`<div style="text-align:center">${cardHTML(x.c)}<div class="gl">${nm(x.p)}</div></div>`).join('')}</div>`;
-await sleep(1700);const hi=Math.max(...dr.map(x=>ORD.indexOf(x.c.n)));cand=dr.filter(x=>ORD.indexOf(x.c.n)==hi).map(x=>x.p);rnd++}
-mano=cand[0];o.innerHTML=`<div class="ct">${mano==0?'Tú repartes primero':nm(mano)+' reparte primero'}</div>`;await sleep(1200);o.style.display='none'}
+const o=$('cnt');o.style.display='flex';let cand=[...Array(N).keys()],rnd=0;
+while(true){const d=mkDeck(),dr=cand.map(p=>({p,c:d.pop()}));
+o.innerHTML=`<div class="ct">${rnd?'¡Empate! Los empatados sacan otra':'Cada uno saca una carta: la más alta reparte'}</div><div class="row" style="min-height:0;gap:14px">${dr.map((x,i)=>`<div style="text-align:center"><div class="fc" id="fc${i}" style="animation-delay:${i*.35}s"><div class="fi"><div class="c back"></div><div class="fr">${svgCard(x.c)}</div></div></div><div class="gl" style="margin-top:8px">${nm(x.p)}</div></div>`).join('')}</div><div class="ct2" id="sres"></div>`;
+for(let i=0;i<dr.length;i++)setTimeout(()=>sfx.swish(),i*350);
+await sleep(dr.length*350+350);
+for(let i=0;i<dr.length;i++){$('fc'+i).classList.add('up');sfx.flip();await sleep(500)}
+await sleep(350);
+const hi=Math.max(...dr.map(x=>ORD.indexOf(x.c.n)));
+dr.forEach((x,i)=>$('fc'+i).classList.add(ORD.indexOf(x.c.n)==hi?'win':'lose'));
+cand=dr.filter(x=>ORD.indexOf(x.c.n)==hi).map(x=>x.p);
+if(cand.length==1)break;
+$('sres').textContent='¡Empate entre '+cand.map(nm).join(' y ')+'!';sfx.hit();await sleep(1700);rnd++}
+mano=cand[0];const t=mano==0?'¡Repartes tú!':T('¡Reparte '+nm(mano)+'!');
+$('sres').innerHTML='<div class="sres">'+t+'</div>';sfx.chime();speak(t);await sleep(2000);o.style.display='none'}
 function newGame(){forceW=null;dec=Z();score=Array(N==3?3:2).fill(0);pileAt=[2,1];over=false;mano=0;log=[];hands=Z();table=[];caps=Array(N).fill(0);sorteo().then(newHand)}
 document.querySelectorAll('.sel button[data-t]').forEach(b=>b.onclick=()=>$('board').dataset.t=b.dataset.t);
-$('vz').onclick=e=>{vozOn=!vozOn;e.target.textContent=vozOn?'🔊 Voz':'🔇 Voz'};
+$('vz').onclick=e=>{vozOn=!vozOn;e.target.textContent=vozOn?'🔊 Voz':'🔇 Voz'};$('snd').onclick=e=>{sndOn=!sndOn;e.target.textContent=sndOn?'🔔 Sonido':'🔕 Sonido'};
 $('dk').onclick=e=>{store.deck=store.deck=='clasico'?'dorado':'clasico';save();e.target.textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');if(hands)render()};
 document.querySelectorAll('#em button').forEach(b=>b.onclick=()=>emote(0,b.dataset.e));
 const IMG={"back": "data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2064%2094%27%3E%3Cdefs%3E%3Cpattern%20id%3D%27p%27%20width%3D%278%27%20height%3D%278%27%20patternUnits%3D%27userSpaceOnUse%27%20patternTransform%3D%27rotate%2845%29%27%3E%3Crect%20width%3D%278%27%20height%3D%278%27%20fill%3D%27%236b1a2a%27%2F%3E%3Cpath%20d%3D%27M0%204H8M4%200V8%27%20stroke%3D%27%238d2d40%27%20stroke-width%3D%27.8%27%2F%3E%3C%2Fpattern%3E%3CradialGradient%20id%3D%27g%27%20cx%3D%27.4%27%20cy%3D%27.3%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27%23fbe08a%27%2F%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27%23b8860b%27%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%2764%27%20height%3D%2794%27%20rx%3D%277%27%20fill%3D%27url%28%23p%29%27%2F%3E%3Crect%20x%3D%274%27%20y%3D%274%27%20width%3D%2756%27%20height%3D%2786%27%20rx%3D%274%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%271.4%27%2F%3E%3Crect%20x%3D%277%27%20y%3D%277%27%20width%3D%2750%27%20height%3D%2780%27%20rx%3D%273%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%27.5%27%20stroke-dasharray%3D%272%202%27%2F%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2750%27%20r%3D%2717%27%20fill%3D%27%232a1706%27%20stroke%3D%27url%28%23g%29%27%20stroke-width%3D%272%27%2F%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2750%27%20r%3D%2713%27%20fill%3D%27none%27%20stroke%3D%27%23e3b341%27%20stroke-width%3D%27.6%27%2F%3E%3Ctext%20x%3D%2732%27%20y%3D%2757.5%27%20font-family%3D%27Georgia%2Cserif%27%20font-size%3D%2721%27%20font-weight%3D%27700%27%20text-anchor%3D%27middle%27%20fill%3D%27url%28%23g%29%27%3EC%3C%2Ftext%3E%3Cpath%20d%3D%27M24%2032l3-6%205%204%205-4%203%206z%27%20fill%3D%27url%28%23g%29%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%2713%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2751%27%20cy%3D%2713%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2713%27%20cy%3D%2781%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3Ccircle%20cx%3D%2751%27%20cy%3D%2781%27%20r%3D%272%27%20fill%3D%27%23e3b341%27%2F%3E%3C%2Fsvg%3E"};
@@ -502,15 +559,15 @@ const IMGO={"1": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUEBAQ
 const IMGA={"oro": "data:image/jpeg;base64,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"};
 const store={name:'',gold:500,hist:[],friends:[],deck:'dorado',avatar:'oro',frame:'none',owned:['none'],nameStyle:'none',emotes:['🔥 ¡Caída!','😂','🤥 ¡Mentiroso!','👏','😡'],ownedEmo:['🔥 ¡Caída!','😂','🤥 ¡Mentiroso!','👏','😡']};
 let settled=true,curView='home';
-const opt={mode:'normal',players:2,team:'parejas',meta:30,casa:true,flor:true,triv:false,noCheat:false,priv:false,code:''};
+const opt={entry:100,mode:'normal',players:2,team:'parejas',meta:30,casa:true,flor:true,triv:false,noCheat:false,priv:false,code:''};
 let forceW=null;
 const BASE=['ronda','vigía','patrulla','registro'];
 function allowedName(n){return BASE.includes(n)||(n.startsWith('casa')&&opt.casa)||(n.startsWith('flor')&&opt.flor)||(n=='trivilín'&&opt.triv)}
 function btns(){return[...BASE,...(opt.casa?['casa grande','casa chica']:[]),...(opt.flor?['flor']:[]),...(opt.triv?['trivilín']:[])]}
 function btnValid(n,h){const x=info(h).has;return x.includes(n)||(n=='flor'&&x.some(y=>y.startsWith('flor ')))||(n=='patrulla'&&x.includes('flor patrulla'))||(n=='registro'&&x.includes('flor registro'))}
-function setOpt(k,v){opt[k]=v;if(k=='priv'&&v&&!opt.code)opt.code=Math.random().toString(36).slice(2,7).toUpperCase();showMenu('play')}
+function setOpt(k,v){if(k=='entry'&&opt.mode=='locura'&&v<500){toast('Locura es de 500 💰 en adelante');return}opt[k]=v;if(k=='mode'&&v=='locura'&&opt.entry<500)opt.entry=500;if(k=='priv'&&v&&!opt.code)opt.code=Math.random().toString(36).slice(2,7).toUpperCase();showMenu(curView)}
 function load(){try{const j=localStorage.getItem('caida');if(j)Object.assign(store,JSON.parse(j))}catch(e){}
-if(store.deck=='medieval')store.deck='dorado'}
+if(store.deck=='medieval')store.deck='dorado';if(!store.nw){store.nw=1;store.deck='clasico';save()}}
 function save(){try{localStorage.setItem('caida',JSON.stringify(store))}catch(e){}}
 const esc=x=>x.replace(/[<>&"']/g,'');
 function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2800)}
@@ -527,10 +584,10 @@ const iv=setInterval(()=>{n--;if(n>0){$('vn').textContent=n;return}clearInterval
 function setName(){const v=esc($('nmI').value.trim());if(v){store.name=v;save();showMenu('home')}}
 function addFriend(){const v=esc($('fI').value.trim());if(v){store.friends.push(v);save();showMenu('friends')}}
 function delFriend(i){store.friends.splice(i,1);save();showMenu('friends')}
-function startGame(){
+function startGame(e){if(e!=null)opt.entry=e;e=opt.entry||0;
 if(opt.players==4&&opt.team!='parejas'){toast('El individual de 4 viene después. Juega 2, 3 o 4 en parejas.');return}
-const e=opt.mode=='locura'?500:opt.mode=='practica'?0:100;
 if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
+if(opt.mode=='practica'||e==0)RN=null;
 N=opt.mode=='practica'?2:opt.players;entry=e;META=opt.meta;store.gold-=e;save();settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
 const LES=[['Ronda','2 cartas iguales y una cualquiera. Del 1 al 7 vale 1 punto; el 10 vale 2; el 11, 3; el 12, 4.',[204,104,7]],
 ['Vigía · 7 puntos','Una ronda más una carta que le sigue o le antecede. Aquí 4, 4 y 5.',[204,104,305]],
@@ -544,7 +601,7 @@ const LES=[['Ronda','2 cartas iguales y una cualquiera. Del 1 al 7 vale 1 punto;
 ['Mesa limpia','Si te llevas todas las cartas de la mesa ganas 4 puntos (menos en el último reparto, que se avisa con ¡ÚLTIMAS!).',[]],
 ['Mal canto y trampas','Puedes cantar lo que no tienes. Si te descubren, pierdes los puntos y ellos ganan 2. Si acusas mal, el otro gana 1.',[]],
 ['Pido canto','Si tu canto te hace llegar a la meta, pides canto y no se juega la mano.',[]],
-['Modos de juego','Normal (25 s), Locura (5 s, entrada 500), Parejas de 4 personas y Práctica con ayudas.',[]]];
+['Modos de juego','Normal (25 s), Locura (5 s, mesas de 500 en adelante), parejas de 4 personas y contra la IA gratis (con o sin ayudas).',[]]];
 function tutorialHTML(bk){return bk+'<h2>🎓 Tutorial</h2><p class="sb">Para jugar con ayudas en vivo, elige el modo Práctica al crear la mesa.</p>'+LES.map(l=>`<div class="box"><b>${l[0]}</b><p class="txt" style="margin:6px 0">${l[1]}</p>`+(l[2].length?`<div class="row" style="min-height:0;justify-content:flex-start">${l[2].map(id=>cardHTML({id,s:Math.floor(id/100),n:id%100})).join('')}</div>`:'')+'</div>').join('')}
 const TEAMS=['Los Caraqueños','Las Arepitas','Maracucho Power','Los Llaneros','Guaros FC','Las Cachapas','Los Andinos','Costeños','Los Mangos','Café Fuerte','Las Guacamayas','Los Cocuyos','Salto Ángel','Los Alacranes','Las Palmeras'];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
@@ -561,7 +618,8 @@ store.gold-=trnEntry;save();
 const names=['Tú y Marta',...shuf(TEAMS)],ord=shuf(names.map((_,i)=>i)),r0=[];
 for(let i=0;i<16;i+=2)r0.push({a:ord[i],b:ord[i+1],w:null});
 TRN={names,rounds:[r0],round:0,alive:true,done:false,playing:false,game:false,entry:trnEntry,prize:0};simRound();showMenu('torneo')}
-function torneoPlay(){const m=myMatch();if(!m||m.w!=null||TRN.done)return;
+function torneoPlay(...a){RN=null;return torneoPlay_(...a)}
+function torneoPlay_(){const m=myMatch();if(!m||m.w!=null||TRN.done)return;
 TRN.playing=true;TRN.game=true;opt.mode='normal';
 N=4;entry=0;META=30;settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
 function torneoResult(win){const m=myMatch(),need=TRN.round>=2?2:1,mine=m.a==0?'sa':'sb',opp=m.a==0?'sb':'sa',k=win?mine:opp;
@@ -619,25 +677,86 @@ return row(avatarHTML(44,store.avatar,f[0]),f[1],f[2]=='usd'?usd:own?`<button cl
 return row(`<span style="width:78px;font-size:18px">${nameHTML('Nombre',n[0])}</span>`,n[1],n[2]=='usd'?usd:own?`<button class="sm ${store.nameStyle==n[0]?'off':''}" onclick="useNS('${n[0]}')">${store.nameStyle==n[0]?'Usando':'Usar'}</button>`:`<button class="sm" onclick="buyNS('${n[0]}',${n[2]})">${n[2]} 💰</button>`)}).join('')+`</div>
 <div class="box"><b>Emojis de la mesa</b> (${store.emotes.length}/5)<br><small>Toca uno tuyo para ponerlo o quitarlo. Los demás cuestan 200 💰.</small><br><br>`+EMO_ALL.map(e=>{const own=store.ownedEmo.includes(e),sel=store.emotes.includes(e);
 return `<span onclick="${own?`pickEmo('${e}')`:`buyEmo('${e}')`}" style="display:inline-block;text-align:center;margin:4px;padding:6px 8px;border-radius:12px;background:${sel?'#ffd84a55':'#0004'};border:2px solid ${sel?'#ffd84a':'transparent'};cursor:pointer;min-width:56px"><span style="font-size:24px">${e.split(' ')[0]}</span><br><small>${own?(sel?'en mesa':'tuyo'):'200 💰'}</small></span>`}).join('')+`</div><p class="sb">Los precios son de prueba.</p>`}
+
+let WT=null,ROOMS=null,SF={n:0,e:0},CUR=null,VOTE='parejas',ONL=null;
+const ENTR=[100,200,500,1000,2000,5000];
+const PN=['Yorman','Daniela','El Gocho','Mariela','Juancho','La Negra','Kelvin','Yuli','Pancho','Wilmer','Génesis','Chuchú','Yusmary','Richard','Maite','Oriana','Jhonny','Carmen','Luisito','Vane'];
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const mix=a=>[...a].sort(()=>Math.random()-.5);
+const prize=(e,n)=>Math.round(e*(n==3?3:2)*(1-rake(e)));
+function mkRooms(){const W=[[100,30],[200,10],[500,22],[1000,9],[2000,4],[5000,3]];
+const pick=()=>{let r=Math.random()*78;for(const[e,w]of W){if((r-=w)<0)return e}return 100};
+const out=[];for(let i=0;i<16;i++){const n=pk([2,2,2,3,4,4]),e=pick(),nm2=mix(PN),k=1+Math.floor(Math.random()*(n-1));
+out.push({id:i,n,e,mode:e>=500&&Math.random()<.35?'locura':'normal',team:n==4&&Math.random()<.25?'solo':'parejas',meta:pk([24,30,30,30,40]),flor:Math.random()<.8,casa:Math.random()<.7,pl:nm2.slice(0,k),pool:nm2.slice(k)})}
+const c={};for(const r of out)c[r.e]=(c[r.e]||0)+r.pl.length;const b={100:96,200:31,500:64,1000:22,2000:9,5000:6};
+ONL=ENTR.map(e=>({e,n:b[e]+(c[e]||0)*3}));return out}
+const nOf=r=>r.n==2?'1 vs 1':r.n==3?'3 jugadores':(r.team=='parejas'?'4 por parejas':'4 individual');
+const chip=(on,l,f)=>`<button class="sm ${on?'':'off'}" onclick="${f}">${l}</button>`;
+const ini=n=>`<span class="av" style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;font:700 13px system-ui,sans-serif;color:#fff">${n[0]}</span>`;
+const emptySeat='<span class="av" style="width:30px;height:30px;border:2px dashed #fff6;background:none"></span>';
+const rinfo=r=>`${r.mode=='locura'?'🔥 Locura (5 s)':'Normal (25 s)'}, a ${r.meta} puntos${r.flor?', con flor':''}${r.casa?', con casa':''}`;
+function sf(k,v){SF[k]=v;showMenu('salas')}
+function salasHTML(bk){if(!ROOMS)ROOMS=mkRooms();const on=[...ONL].sort((a,b)=>b.n-a.n),t1=on[0],t2=on[1];
+const L=ROOMS.filter(r=>(!SF.n||r.n==SF.n)&&(!SF.e||r.e==SF.e)&&r.pl.length<r.n);
+return bk+`<h2>🌐 Salas</h2><div class="hint">Salas de prueba: por ahora los demás jugadores son la IA. Cuando conectemos el servidor serán personas reales.</div>
+<div class="box">🔥 <b>Más jugadas ahora:</b> mesas de ${t1.e} 💰 (${t1.n} jugando) y de ${t2.e} 💰 (${t2.n} jugando). Entra en esas y empiezas más rápido.<br><br><button class="sm" onclick="quickJoin(${t1.e})">⚡ Entrar rápido a una de ${t1.e}</button></div>
+<div class="box"><b>Jugadores</b><br>${chip(!SF.n,'Todas',"sf('n',0)")} ${chip(SF.n==2,'1 vs 1',"sf('n',2)")} ${chip(SF.n==3,'3',"sf('n',3)")} ${chip(SF.n==4,'4',"sf('n',4)")}
+<br><br><b>Entrada</b><br>${chip(!SF.e,'Todas',"sf('e',0)")} ${ENTR.map(e=>chip(SF.e==e,e+' 💰',`sf('e',${e})`)).join(' ')}</div>
+<button class="mb" onclick="showMenu('play')">➕ Crear mi mesa</button><button class="sm bk" onclick="ROOMS=null;showMenu('salas')">↻ Actualizar salas</button>`
++(L.length?L.map(r=>`<div class="box"><div style="display:flex;justify-content:space-between;gap:8px"><b>${r.e} 💰, ${nOf(r)}</b><span>${r.pl.length}/${r.n} 👤</span></div>
+<div style="margin:8px 0;display:flex;gap:6px;flex-wrap:wrap">${r.pl.map(ini).join('')}${emptySeat.repeat(r.n-r.pl.length)}</div>
+<div class="sub">${rinfo(r)}</div><button class="sm" style="margin-top:8px" onclick="openRoom(${r.id})">Ver mesa</button></div>`).join(''):'<p class="sb">No hay mesas con ese filtro. ¡Crea la tuya!</p>')}
+function quickJoin(e){const r=ROOMS.filter(r=>r.e==e&&r.pl.length<r.n).sort((a,b)=>b.pl.length/b.n-a.pl.length/a.n)[0];if(r)openRoom(r.id);else toast('No hay mesas libres de '+e+'. Crea una.')}
+function openRoom(id){CUR=ROOMS.find(r=>r.id==id);VOTE=CUR.team;showMenu('sala')}
+function salaHTML(){const r=CUR;
+return `<button class="bk" onclick="showMenu('salas')">← Salas</button><h2>Mesa de ${r.e} 💰</h2>
+<div class="box"><b>${nOf(r)}</b><br><span class="sub">${rinfo(r)}. Cantos: ronda, vigía, patrulla y registro${r.casa?', casa grande y chica':''}${r.flor?', flor':''}.</span></div>
+<div class="box"><b>En la mesa</b>${r.pl.map(n=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px">${ini(n)} ${n}</div>`).join('')}${Array.from({length:r.n-r.pl.length},()=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;opacity:.6">${emptySeat} Puesto libre</div>`).join('')}</div>`
++(r.n==4?`<div class="box"><b>¿Cómo quieren jugar?</b><br><span class="sub">Cada uno vota. Si hay empate decide quien creó la mesa.</span><br><br>${chip(VOTE=='parejas','👥 Por parejas',"VOTE='parejas';showMenu('sala')")} ${chip(VOTE=='solo','👤 Individual',"VOTE='solo';showMenu('sala')")}</div>`:'')
++`<div class="box">Entrar cuesta <b>${r.e} 💰</b>. Si ganas te llevas ${prize(r.e,r.n)} 💰 (la casa se queda el ${Math.round(rake(r.e)*100)}%).</div>`
++(store.gold>=r.e?`<button class="mb" onclick="sitDown()">Sentarme (${r.e} 💰)</button>`:`<button class="mb" onclick="watchVideo()">🎬 Te falta oro: ver video (+200)</button>`)}
+function sitDown(){if(CUR.n==4&&VOTE=='solo'){toast('El individual de 4 viene después. Por ahora vota por parejas.');return}CUR.team=VOTE;showMenu('espera')}
+function createRoom(){const e=opt.entry;if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
+if(opt.players==4&&opt.team!='parejas'){toast('El individual de 4 viene después. Juega 2, 3 o 4 en parejas.');return}
+CUR={id:-1,mine:true,n:opt.players,e,mode:opt.mode,team:opt.team,meta:opt.meta,flor:opt.flor,casa:opt.casa,pl:[],pool:mix(PN)};showMenu('espera')}
+function esperaHTML(){const r=CUR;const pop=[...ONL].sort((a,b)=>b.n-a.n).slice(0,2).map(x=>x.e);
+return `<h2>Esperando jugadores…</h2><div class="box"><b>Mesa de ${r.e} 💰, ${nOf(r)}</b><br><span class="sub">${rinfo(r)}</span>${r.mine&&opt.priv?`<br><br>Código para invitar: <b>${opt.code}</b>`:''}</div><div class="box" id="wbox"></div>
+<p class="sb" id="wtip">${r.mine&&!pop.includes(r.e)?'Ahora se juegan más mesas de '+pop.join(' y ')+' 💰: esas se llenan más rápido.':'Buscando jugadores para tu mesa…'}</p><button class="mb bk" onclick="showMenu('salas')">Salir de la mesa</button>`}
+function startWait(){const r=CUR;
+const seats=()=>{const w=$('wbox');if(!w)return;w.innerHTML=`<div style="display:flex;align-items:center;gap:8px">${avatarHTML(30)} ${nameHTML()}</div>`+r.pl.map(n=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px">${ini(n)} ${n}</div>`).join('')+Array.from({length:Math.max(0,r.n-1-r.pl.length)},()=>`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;opacity:.6">${emptySeat} Esperando…</div>`).join('')+`<div class="sub" style="margin-top:10px">${1+r.pl.length}/${r.n} sentados</div>`};
+seats();
+const go=()=>{let c=3;const cd=()=>{if(curView!='espera')return;$('wtip').innerHTML=`<span class="sres" style="font-size:34px">¡Empieza en ${c}!</span>`;sfx.tick();if(c--<=0)launchRoom();else setTimeout(cd,800)};cd()};
+if(1+r.pl.length>=r.n){go();return}
+WT=setInterval(()=>{r.pl.push(r.pool.pop());sfx.flip();seats();if(1+r.pl.length>=r.n){clearInterval(WT);WT=null;go()}},1200+Math.random()*900)}
+function launchRoom(){const r=CUR;Object.assign(opt,{players:r.n,mode:r.mode,meta:r.meta,flor:r.flor,casa:r.casa,team:r.team});
+RN=[null,...r.pl.slice(0,r.n-1)];if(ROOMS&&!r.mine)ROOMS=ROOMS.filter(x=>x!==r);startGame(r.e)}
+
 function showMenu(v){
-stopTimer();if(TRN)TRN.game=false;
+if(WT){clearInterval(WT);WT=null}stopTimer();if(TRN)TRN.game=false;
 if($('app').style.display!='none'){settled=true;over=true}
 $('app').style.display='none';$('cnt').style.display='none';curView=v;const m=$('menu');m.style.display='block';
 let h=`<div class="mt"><span onclick="showMenu('profile')" style="cursor:pointer">${avatarHTML(36)} ${nameHTML()}</span><span class="gd">💰 ${store.gold}</span><span><button class="sm" onclick="plus()">+</button> <button class="sm" onclick="watchVideo()">🎬 +200</button></span></div>`;
 const bk=`<button class="bk" onclick="showMenu('home')">← Menú</button>`;
-if(v=='home')h+=`<img src="${IMG.back}" style="display:block;margin:6px auto;width:110px;border-radius:10px"><h1>Caída</h1><p class="sb">El juego de cartas venezolano</p>`+(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)+`<button class="mb" onclick="showMenu('play')">▶ Jugar</button><button class="mb" onclick="showMenu('torneo')">🏆 Torneo (prueba)</button><button class="mb" onclick="showMenu('tutorial')">🎓 Tutorial</button><button class="mb" onclick="showMenu('how')">❓ Cómo jugar</button><button class="mb" onclick="showMenu('rules')">📜 Reglas</button><button class="mb" onclick="showMenu('profile')">🎨 Personalización</button><button class="mb" onclick="showMenu('friends')">👥 Amigos</button><button class="mb" onclick="showMenu('hist')">🕑 Historial</button>`;
-else if(v=='play'){
+if(v=='home')h+=`<img src="${IMG.back}" style="display:block;margin:6px auto;width:110px;border-radius:10px"><h1>Caída</h1><p class="sb">El juego de cartas venezolano</p>`+(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)+`<button class="mb" onclick="showMenu('practica')">🤖 Contra la IA (gratis)</button><button class="mb" onclick="showMenu('salas')">🌐 Salas: jugar con personas</button><button class="mb" onclick="showMenu('torneo')">🏆 Torneo (prueba)</button><button class="mb" onclick="showMenu('tutorial')">🎓 Tutorial</button><button class="mb" onclick="showMenu('how')">❓ Cómo jugar</button><button class="mb" onclick="showMenu('rules')">📜 Reglas</button><button class="mb" onclick="showMenu('profile')">🎨 Personalización</button><button class="mb" onclick="showMenu('friends')">👥 Amigos</button><button class="mb" onclick="showMenu('hist')">🕑 Historial</button>`;
+else if(v=='play'||v=='practica'){
+const P=v=='practica';
+if(!P){if(opt.mode=='practica')opt.mode='normal';if(!opt.entry)opt.entry=100;if(opt.mode=='locura'&&opt.entry<500)opt.entry=500}
 const tg=(k,x,l)=>`<button class="sm ${opt[k]===x?'':'off'}" onclick='setOpt("${k}",${JSON.stringify(x)})'>${l}</button>`;
 const tb=(k,l)=>`<button class="sm ${opt[k]?'':'off'}" onclick='setOpt("${k}",${!opt[k]})'>${opt[k]?'✔ ':''}${l}</button>`;
-h+=bk+`<h2>▶ Crear mesa</h2>
+h+=(P?bk:`<button class="bk" onclick="showMenu('salas')">← Salas</button>`)+(P?`<h2>🤖 Contra la IA</h2><p class="sb">Gratis: no cuesta oro y tampoco da oro. Es para practicar.</p>`:`<h2>➕ Crear mi mesa</h2>`)+`
 <div class="box"><b>Jugadores</b><br>${tg('players',2,'2')} ${tg('players',3,'3')} ${tg('players',4,'4')}`+(opt.players==4?`<br><br><b>Modo</b><br>${tg('team','parejas','Parejas')} ${tg('team','solo','Individual')}`:'')+`</div>
 <div class="box"><b>Puntos para ganar</b><br>${tg('meta',24,'24')} ${tg('meta',30,'30')} ${tg('meta',40,'40')}</div>
-<div class="box"><b>Modo</b><br>${tg('mode','normal','Normal · 25 s')} ${tg('mode','locura','🔥 Locura · 5 s')} ${tg('mode','practica','🎓 Práctica')}</div>
+<div class="box"><b>Modo</b><br>${tg('mode','normal','Normal (25 s)')} ${tg('mode','locura','🔥 Locura (5 s)')}`+(P?` ${tg('mode','practica','🎓 Con ayudas')}<br><span class="sub">Con ayudas es 1 vs 1, sin tiempo y con señas en pantalla.</span>`:'')+`</div>`
++(P?'':`<div class="box"><b>Entrada</b><br>${ENTR.map(e=>`<button class="sm ${opt.entry===e?'':'off'}" style="${opt.mode=='locura'&&e<500?'opacity:.35':''}" onclick='setOpt("entry",${e})'>${e} 💰</button>`).join(' ')}`+(opt.mode=='locura'?'<br><span class="sub">Locura es de 500 en adelante.</span>':'')+`</div>`)+`
 <div class="box"><b>Cantos</b><br>Ronda, vigía, patrulla y registro siempre.<br><br>${tb('casa','Casa grande y chica')} ${tb('flor','Flor')} ${tb('triv','Trivilín')}</div>
-<div class="box"><b>Trampas</b><br>${tg('noCheat',false,'Con trampas')} ${tg('noCheat',true,'Sin trampas')}</div>
-<div class="box"><b>Sala</b><br>${tg('priv',false,'Pública')} ${tg('priv',true,'Privada')}`+(opt.priv?`<br><br>Código: <b>${opt.code}</b><br>Para invitar amigos (se activa con cuentas).`:'')+`</div>
-<div class="box">${opt.mode=='practica'?'La práctica es <b>gratis</b>: sin oro, sin tiempo y con ayudas en pantalla.':'Entrar cuesta <b>'+(opt.mode=='locura'?500:100)+' 💰</b>. Si ganas te llevas '+Math.round((opt.mode=='locura'?500:100)*2*(1-rake(opt.mode=='locura'?500:100)))+' (la casa se queda el '+Math.round(rake(opt.mode=='locura'?500:100)*100)+'%).'}</div>
-<button class="mb" onclick="startGame()">🤖 Jugar contra la IA</button><button class="mb" disabled>👥 Con amigos · pronto</button>`+(store.gold<100?`<button class="mb" onclick="watchVideo()">🎬 Ver video (+200 💰)</button>`:'')}
+<div class="box"><b>Trampas</b><br>${tg('noCheat',false,'Con trampas')} ${tg('noCheat',true,'Sin trampas')}</div>`
++(P?`<button class="mb" onclick="RN=null;startGame(0)">🤖 Jugar gratis</button>`:
+`<div class="box"><b>Sala</b><br>${tg('priv',false,'Pública')} ${tg('priv',true,'Privada')}`+(opt.priv?`<br><br>Código: <b>${opt.code}</b><br>Para invitar amigos (se activa con cuentas).`:'')+`</div>
+<div class="box">Entrar cuesta <b>${opt.entry} 💰</b>. Si ganas te llevas ${prize(opt.entry,opt.players)} 💰 (la casa se queda el ${Math.round(rake(opt.entry)*100)}%).</div>
+<button class="mb" onclick="createRoom()">Crear mesa y esperar jugadores</button>`+(store.gold<opt.entry?`<button class="mb" onclick="watchVideo()">🎬 Ver video (+200 💰)</button>`:''))}
+else if(v=='salas')h+=salasHTML(bk);
+else if(v=='sala')h+=salaHTML();
+else if(v=='espera')h+=esperaHTML();
 else if(v=='tienda')h+=tiendaHTML(bk);
 else if(v=='torneo')h+=torneoHTML(bk);
 else if(v=='tutorial')h+=tutorialHTML(bk);
@@ -646,7 +765,7 @@ else if(v=='rules')h+=bk+`<h2>📜 Reglas</h2><div class="txt">${RUL}</div>`;
 else if(v=='how')h+=bk+`<h2>❓ Cómo jugar</h2><div class="txt">${HOW}</div>`;
 else if(v=='friends')h+=bk+`<h2>👥 Amigos</h2><div class="box"><input id="fI" maxlength="14" placeholder="Nombre de tu amigo"><button class="sm" onclick="addFriend()">Agregar</button></div>`+store.friends.map((f,i)=>`<div class="box">${f} <button class="sm" onclick="delFriend(${i})">✕</button></div>`).join('')+`<p class="sb">Por ahora la lista es solo de este teléfono. Con cuentas (Google Play) se conectarán de verdad.</p>`;
 else h+=bk+`<h2>🕑 Historial</h2>`+(store.hist.length?store.hist.map(x=>`<div class="box">${x.d} · <b>${x.r}</b> · ${x.s} · ${x.m||'Normal'} · ${x.n||2} jugadores${x.g?' · '+(x.g>0?'+':'')+x.g+' 💰':''}</div>`).join(''):`<p class="sb">Aún no has jugado ninguna partida.</p>`);
-m.innerHTML=h}
+m.innerHTML=h;if(v=='espera')startWait()}
 function put(id,k){const d=document.createElement('div');d.className='mini'+(deckStyle()!='clasico'?' m':'');d.style.bottom=(k*3)+'px';$(id).appendChild(d)}
 async function countAnim(){
 if(over)return;const o=$('cnt');o.style.display='flex';
@@ -658,6 +777,5 @@ if(n>B){$('cx').innerHTML='Cartas de más: ';for(let k=1;k<=n-B;k++){$('cx').inn
 else $('cx').textContent=n<B?(N==3?`No llega a ${B}. Sin puntos`:`No llega a ${B}. ${t==0?(N==2?'El rival suma ':'Los rivales suman '):(N==2?'Tú sumas ':'Tu equipo suma ')}${Math.max(0,tcaps(1-t)-base(1-t))} puntos`):`Justo ${B}: sin puntos`;
 await sleep(900)}
 o.style.display='none'}
-if('serviceWorker' in navigator&&location.protocol.startsWith('http')&&location.hostname!='localhost')navigator.serviceWorker.register('sw.js');
 load();$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');
 </script></body></html>
