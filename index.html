@@ -383,6 +383,9 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 .heap{position:relative;display:inline-block;width:42px;height:24px;flex:none;vertical-align:bottom}
 .heap .bean,.sx .heap .bean{position:absolute;width:10px;height:7px}
 .caps{display:inline-flex;flex:none}.caps .cap{width:24px;height:24px}.caps .cap+.cap{margin-left:-15px}.caps .cap::after{inset:6px}
+.ach{display:flex;align-items:center;gap:10px;margin:6px 0}.ach:not(.rdy):not(.done){opacity:.75}
+.ach .aci{font-size:26px}.ach.rdy{border:2px solid #ffd84a;background:linear-gradient(90deg,#ffd84a26,#ffffff0a);animation:remp 1s infinite alternate}
+.ach .sm{line-height:1.15;white-space:nowrap}.apb{height:6px;background:#0005;border-radius:4px;overflow:hidden;margin-top:4px}.apb i{display:block;height:100%;background:linear-gradient(90deg,#ffa356,#ff3d7f)}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -675,13 +678,19 @@ const ACH=[
 ['tv','💎 Trivilín','Gana con trivilín',s=>s.triv>=1,500],
 ['r3','⚡ Racha de 3','Gana 3 partidas seguidas',s=>s.maxStreak>=3,200],
 ['tu','🎓 Alumno aplicado','Termina el tutorial',s=>!!store.tutDone,200]];
-function checkAch(){const s=ST();store.ach=store.ach||[];const nw=ACH.filter(a=>!store.ach.includes(a[0])&&a[3](s));
-nw.forEach((a,i)=>{store.ach.push(a[0]);store.gold+=a[4];setTimeout(()=>{toast('🏆 ¡Logro! '+a[1]+' (+'+a[4]+' 💰)');sfx.chime()},i*2800)});if(nw.length)save()}
+const APROG={p1:['games',1],w1:['wins',1],w10:['wins',10],w50:['wins',50],c1:['caidas',1],c25:['caidas',25],rey:['rey',1],ml:['ml',1],k10:['cantos',10],mc5:['mc',5],q3:['quem',3],tv:['triv',1],r3:['maxStreak',3],tu:[null,1]};
+function achReady(){store.ach=store.ach||[];store.achR=store.achR||[];return store.achR}
+function checkAch(){const s=ST(),R=achReady();const nw=ACH.filter(a=>!store.ach.includes(a[0])&&!R.includes(a[0])&&a[3](s));
+nw.forEach((a,i)=>{R.push(a[0]);setTimeout(()=>{toast('🏆 ¡Logro conseguido! '+a[1]+' · Reclámalo en Logros');sfx.chime()},i*2800)});if(nw.length)save()}
+function claimAch(id){const R=achReady(),a=ACH.find(x=>x[0]==id);if(!a||!R.includes(id))return;store.achR=R.filter(x=>x!=id);store.ach.push(id);store.gold+=a[4];save();sfx.caida(2);toast('🏆 +'+a[4]+' de oro por «'+a[1]+'»');showMenu(curView)}
+function claimAllAch(){const R=[...achReady()];let g=0;R.forEach(id=>{const a=ACH.find(x=>x[0]==id);if(a){store.ach.push(id);g+=a[4]}});store.achR=[];store.gold+=g;save();sfx.caida(3);toast('🏆 +'+g+' de oro por tus logros');showMenu(curView)}
 function statsHTML(bk){const s=ST(),pct=s.games?Math.round(s.wins/s.games*100):0;
 const L=[['🎴 Partidas jugadas',s.games],['🥇 Partidas ganadas',s.wins+' ('+pct+'%)'],['⚡ Racha actual',s.streak],['🔥 Mejor racha',s.maxStreak],['💥 Caídas dadas',s.caidas],['🤴 Caídas de rey',s.rey],['🧹 Mesas limpias',s.ml],['🎵 Cantos ganados',s.cantos],['⭐ Mejor canto',s.best+' puntos'],['🕵️ Mal cantos descubiertos',s.mc],['👀 «Se quemó» que dijiste',s.quem],['💎 Trivilines',s.triv],['💰 Oro ganado en partidas',s.gold]];
 return bk+'<h2>📊 Estadísticas</h2>'+L.map(x=>`<div class="box" style="display:flex;justify-content:space-between;gap:10px;margin:6px 0"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('')}
-function logrosHTML(bk){const s=ST(),got=store.ach||[];
-return bk+`<h2>🏅 Logros</h2><p class="sb">${got.length} de ${ACH.length} conseguidos. Cada logro da oro una sola vez.</p>`+ACH.map(a=>{const ok=got.includes(a[0]);return `<div class="box" style="display:flex;align-items:center;gap:10px;margin:6px 0;${ok?'':'opacity:.6'}"><div style="font-size:26px">${ok?'✅':'🔒'}</div><div style="flex:1"><b>${a[1]}</b><br><span class="sub">${a[2]}</span></div><b>+${a[4]} 💰</b></div>`}).join('')}
+function logrosHTML(bk){const s=ST(),got=store.ach||[],R=achReady();
+return bk+`<h2>🏅 Logros</h2><p class="sb">${got.length} de ${ACH.length} reclamados. Cada logro da oro una sola vez.</p>`+(R.length>1?`<button class="mb" onclick="claimAllAch()">🏆 Reclamar todo (+${R.reduce((t,id)=>t+(ACH.find(a=>a[0]==id)||[0,0,0,0,0])[4],0)} de oro)</button>`:'')
++[...ACH].sort((a,b)=>(R.includes(b[0])-R.includes(a[0]))||(got.includes(a[0])-got.includes(b[0]))).map(a=>{const ok=got.includes(a[0]),rd=R.includes(a[0]),pr=APROG[a[0]],cur=pr&&pr[0]?Math.min(s[pr[0]]||0,pr[1]):(ok||rd?1:0),tot=pr?pr[1]:1;
+return `<div class="box ach${rd?' rdy':''}${ok?' done':''}"><div class="aci">${ok?'✅':rd?'🏆':'🔒'}</div><div style="flex:1;min-width:0"><b>${a[1]}</b><br><span class="sub">${a[2]}</span>${!ok&&!rd&&tot>1?`<div class="apb"><i style="width:${Math.round(cur/tot*100)}%"></i></div><span class="sub">${cur}/${tot}</span>`:''}</div>${rd?`<button class="sm" onclick="claimAch('${a[0]}')">Reclamar<br>+${a[4]} 💰</button>`:ok?'<span class="sub">Reclamado</span>':`<b>+${a[4]} 💰</b>`}</div>`}).join('')}
 const DR=[100,150,200,250,300,400,600];
 function dayStr(o){const d=new Date();d.setDate(d.getDate()+(o||0));return d.toLocaleDateString('en-CA')}
 function dailyInfo(){const d=store.daily||{last:'',streak:0},today=dayStr(0);const can=d.last!=today;const k=can?(d.last==dayStr(-1)?(d.streak%7)+1:1):d.streak;return{can,k,r:DR[(k||1)-1],nextR:DR[(k%7)]}}
@@ -806,10 +815,10 @@ function homeHTML(){const di=dailyInfo();
 return `<div class="logo"><img src="${IMG.back}" alt=""><div><div class="ttl">Caída</div><div class="sb" style="margin:0">El juego de cartas venezolano</div></div></div>`
 +(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)
 +`<button class="hero" onclick="showMenu('jugar')"><span class="hic">${I('play')}</span><span class="htx"><b>JUGAR</b><small>Contra la IA, salas, torneo y amigos</small></span><span class="chev">›</span></button>
-<div class="tiles">${tile('learn','Aprender',"showMenu('aprender')",store.tutDone?'':'Nuevo')}${tile('trophy','Logros',"showMenu('logrosm')")}${tile('gift','Premios',"showMenu('premios')",di.can?'¡1!':'')}${tile('shop','Tienda',"showMenu('tienda')")}${tile('friends','Amigos',"showMenu('friends')")}${tile('profile','Perfil',"showMenu('profile')")}</div>`}
+<div class="tiles">${tile('learn','Aprender',"showMenu('aprender')",store.tutDone?'':'Nuevo')}${tile('trophy','Logros',"showMenu('logrosm')",(store.achR||[]).length?'¡'+(store.achR||[]).length+'!':'')}${tile('gift','Premios',"showMenu('premios')",di.can?'¡1!':'')}${tile('shop','Tienda',"showMenu('tienda')")}${tile('friends','Amigos',"showMenu('friends')")}${tile('profile','Perfil',"showMenu('profile')")}</div>`}
 function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas','Mesas abiertas de 100, 500, 1.000… únete',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Jugar con un amigo','Invita con un código (pronto)',"showMenu('friends')")}
 function aprenderHTML(bk){return bk+`<h2 class="sec">Aprender</h2>`+mi('tap','Tutorial jugable','Aprende jugando en 5 minutos',"tutLoad(0)",store.tutDone?'':'Nuevo')+mi('ask','Cómo jugar','Lo básico en pocas palabras',"showMenu('how')")+mi('note','Cantos','Todos los cantos y cuánto valen',"showMenu('cantos')")+mi('scroll','Reglas','Las reglas completas',"showMenu('rules')")+mi('learn','Guía escrita','Explicación paso a paso',"showMenu('tutorial')")}
-function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' conseguidos',"showMenu('logros')")+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
+function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' reclamados',"showMenu('logros')",(store.achR||[]).length?(store.achR||[]).length+' por reclamar':'')+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
 function cantosHTML(bk){const L=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
 return bk+`<h2 class="sec">Cantos</h2><p class="sb">Se cantan antes de tirar la primera carta y se repiten en cada carta.</p>`+L.map(n=>`<div class="box" style="display:flex;gap:12px;align-items:center;margin:8px 0"><span style="width:38px;flex:none">${I('note')}</span><div style="flex:1"><b style="font-size:17px;text-transform:capitalize">${n}</b><br><span class="sub">${(EXPT[store.lang]&&EXPT[store.lang][n])||EXP[n]||''}</span></div><span class="ptsb">${n=='ronda'?'1–4':n=='trivilín'?'Gana':PTS[n]}</span></div>`).join('')}
 function premiosHTML(bk){return bk+`<h2 class="sec">Premios</h2>`+dailyHTML()+mi('video','Ver un video','Gana 200 de oro al instante',"watchVideo()")+mi('trophy','Logros','Cada logro te da oro',"showMenu('logros')")}
@@ -1064,6 +1073,12 @@ Tus iniciales|Your initials|Suas iniciais|Tes initiales|Deine Initialen|Le tue i
 Stickers animados|Animated stickers|Stickers animados|Stickers animés|Animierte Sticker|Sticker animati|Анимированные стикеры|动态贴纸|アニメスタンプ
 Sonidos|Sounds|Sons|Sons|Sounds|Suoni|Звуки|音效|サウンド
 Sonidos en la mesa|Sounds on table|Sons na mesa|Sons sur la table|Sounds am Tisch|Suoni sul tavolo|Звуки на столе|牌桌音效|テーブルのサウンド
+Reclamar todo|Claim all|Resgatar tudo|Tout récupérer|Alle abholen|Riscatta tutto|Забрать всё|全部领取|すべて受け取る
+Reclamados|Claimed|Resgatados|Récupérés|Abgeholt|Riscattati|Получено|已领取|受け取り済み
+Reclamado|Claimed|Resgatado|Récupéré|Abgeholt|Riscattato|Получено|已领取|受け取り済み
+por reclamar|to claim|para resgatar|à récupérer|abzuholen|da riscattare|ждут|待领取|未受取
+¡Logro conseguido!|Achievement unlocked!|Conquista desbloqueada!|Succès débloqué !|Erfolg freigeschaltet!|Obiettivo sbloccato!|Достижение получено!|成就达成！|実績解除！
+Reclámalo en Logros|Claim it in Achievements|Resgate em Conquistas|Récupère-le dans Succès|Hol ihn bei Erfolge ab|Riscattalo in Obiettivi|Забери в Достижениях|去成就领取|実績で受け取ろう
 ¡Desbloqueado!|Unlocked!|Desbloqueado!|Débloqué !|Freigeschaltet!|Sbloccato!|Открыто!|已解锁！|解放！
 ¡Nuevo emoji desbloqueado!|New emoji unlocked!|Novo emoji desbloqueado!|Nouvel émoji débloqué !|Neues Emoji freigeschaltet!|Nuova emoji sbloccata!|Новый эмодзи открыт!|新表情已解锁！|新しい絵文字を解放！
 No te alcanza el oro. Mira un video o reclama tu premio diario|Not enough gold. Watch a video or claim your daily reward|Ouro insuficiente. Veja um vídeo ou resgate seu prêmio diário|Pas assez d'or. Regarde une vidéo ou récupère ta récompense|Nicht genug Gold. Sieh ein Video oder hol deine Belohnung|Oro insufficiente. Guarda un video o riscatta il premio|Не хватает золота. Посмотри видео или забери награду|金币不足。观看视频或领取每日奖励|ゴールド不足。動画を見るか報酬を受け取ろう
@@ -1610,6 +1625,6 @@ if(n>B){$('cx').innerHTML='Cartas de más: ';for(let k=1;k<=n-B;k++){$('cx').inn
 else $('cx').textContent=n<B?(MULTI()?`No llega a ${B}. Sin puntos`:`No llega a ${B}. ${t==0?(N==2?'El rival suma ':'Los rivales suman '):(N==2?'Tú sumas ':'Tu equipo suma ')}${Math.max(0,tcaps(1-t)-base(1-t))} puntos`):`Justo ${B}: sin puntos`;
 await sleep(900)}
 o.style.display='none'}
-load();if(store.pend&&store.pend.e>0){const g=store.pend.e;store.gold+=g;store.pend=null;save();setTimeout(()=>toast('💰 Te devolvimos '+g+' de oro de la partida que no terminó'),1500)}if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);
+load();if(store.pend&&store.pend.e>0){const g=store.pend.e;store.gold+=g;store.pend=null;save();setTimeout(()=>toast('💰 Te devolvimos '+g+' de oro de la partida que no terminó'),1500)}if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);setTimeout(()=>{checkAch();if(curView=='home')showMenu('home')},2500);
 </script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
 </body></html>
