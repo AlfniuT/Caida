@@ -421,6 +421,21 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 .advs{color:#ffd84a;letter-spacing:2px}.advs i{font-style:normal;color:#ffffff33}.advs.big{font-size:34px;text-align:center;margin:8px 0}
 .advcard{text-align:center;background:linear-gradient(180deg,#ffffff14,#00000030);border:1px solid #ffffff22;border-radius:24px;padding:18px;margin-top:6px}.advcard.boss{border:2px solid #ffd84a;box-shadow:0 0 24px #ffd84a44}
 .advchips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0}.advchips span{background:#00000040;border-radius:999px;padding:4px 10px;font-weight:800;font-size:13px}
+
+#esum{position:fixed;inset:0;z-index:94;background:#0b0218b8;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+.esb{width:100%;max-width:380px;border-radius:26px;padding:20px;text-align:center;background:radial-gradient(120% 90% at 50% 0%,#5a24a8,#2a0d52);border:2px solid #ffffff30;box-shadow:0 20px 50px #000a;animation:pop .45s ease-out}
+.esb.win{border-color:#ffd84a;box-shadow:0 0 30px #ffd84a55,0 20px 50px #000a}.esi{width:80px;height:80px;margin:0 auto 4px;font-size:64px;line-height:80px}
+.esc{font-family:'Lilita One',Georgia,serif;font-size:26px;margin:4px 0 12px;color:#ffd84a}
+.esg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}.esg div{background:#00000035;border-radius:14px;padding:8px 2px}.esg b{display:block;font-family:'Lilita One',Georgia,serif;font-size:22px;font-weight:400}.esg small{font-size:10px;opacity:.75;font-weight:800}
+.esp{display:flex;align-items:center;justify-content:center;gap:6px;font-weight:900;font-size:20px;margin-bottom:12px}.esbt{display:flex;flex-direction:column;gap:6px}
+
+.onlme{display:flex;align-items:center;gap:10px}.code{color:#ffd84a;letter-spacing:1px}.onlr{display:flex;align-items:center;gap:6px}
+.bigcode{font-family:'Lilita One',Georgia,serif;font-size:46px;letter-spacing:8px;color:#ffd84a;text-shadow:0 3px 0 #0006;margin:4px 0 8px}
+.seg{display:flex;gap:6px;margin-bottom:8px}.seg button{flex:1;padding:8px 4px;font-size:13px;background:#ffffff14!important;box-shadow:none}.seg button.on{background:linear-gradient(180deg,#ffa356,#ff4f7b)!important}
+.lseats{display:grid;gap:8px;grid-template-columns:1fr 1fr;margin:10px 0}.lseats.s3{grid-template-columns:repeat(3,1fr)}
+.lseat{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;border-radius:18px;background:#ffffff14;border:1px solid #ffffff26;text-align:center}.lseat.empty{opacity:.55;border-style:dashed}.lseat small{opacity:.7;font-size:11px}
+.lq{width:56px;height:56px;border-radius:50%;background:#00000040;display:flex;align-items:center;justify-content:center;font-size:26px}
+.odot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#888;margin-right:4px}.odot.on{background:#5dff9e;box-shadow:0 0 6px #5dff9e}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -570,6 +585,67 @@ if(!old)g+=x.rw;if(st>old)g+=(st-old)*50;A.st[i]=Math.max(old,st);store.gold+=g;
 if(x.boss&&!old){['a:p_corona','diamante'].forEach(k=>{if(!store.owned.includes(k))store.owned.push(k)})}save();
 setTimeout(()=>{flash(`<div style="font-size:${x.boss?52:46}px">${x.boss?'👑 ¡ERES EL NUEVO REY!':'🏆 ¡MESA SUPERADA!'}</div><div style="font-size:34px;color:#ffd84a">${'★'.repeat(st)}${'☆'.repeat(3-st)}</div><div style="font-size:20px">${g?'+'+g+' de oro':'Ya tenías esas estrellas'}${x.boss&&!old?' · ¡Corona de diamante desbloqueada!':''}</div>`,4);fxBurst(x.boss?'oro':'confeti')},1700)}
 function advShare(){const t='🃏 Voy por '+advStars()+' de '+ADVS.length*3+' estrellas en el Modo Aventura de Caída. ¿Me superas? https://play.google.com/store/apps/details?id=com.alfniut.caida';if(navigator.share)navigator.share({text:t}).catch(()=>{});else{try{navigator.clipboard.writeText(t);toast('📋 Copiado para compartir')}catch(e){}}}
+
+/* ===== EN LÍNEA (Firebase) ===== */
+const NET={me:null,room:null,roomId:null,unR:null,pub:[],reqs:[],friends:[],busy:false,loaded:false};
+const RC=()=>Array.from({length:4},()=>'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*31)]).join('');
+function fbOk(){return !!(window.FB&&window.FB.db)}
+function myPub(){return{name:store.name||'Jugador',av:store.avatar||'oro',fr:store.frame||'none',ns:store.nameStyle||'none',lv:store.lv||1}}
+async function onlProfile(){if(!fbOk()||!window.FBU)return;const {F,db}=FB,u=FBU,ref=F.doc(db,'users',u.uid);
+try{const sn=await F.getDoc(ref);if(!sn.exists()){await F.setDoc(ref,{...myPub(),code:RC()+RC().slice(0,2),friends:[],room:null,google:!u.isAnonymous,lastSeen:F.serverTimestamp(),created:F.serverTimestamp()})}else{await F.updateDoc(ref,{...myPub(),google:!u.isAnonymous,lastSeen:F.serverTimestamp()})}
+NET.me=(await F.getDoc(ref)).data();NET.loaded=true;if(['online','friends','lobby'].includes(curView))showMenu(curView)}catch(e){console.warn(e);toast('No se pudo conectar: '+(e.code||e.message))}}
+window.addEventListener('fbauth',()=>{if(window.FBU)onlProfile();else{NET.me=null;if(['online','friends'].includes(curView))showMenu(curView)}});
+setInterval(()=>{if(fbOk()&&window.FBU&&!document.hidden){try{FB.F.updateDoc(FB.F.doc(FB.db,'users',FBU.uid),{lastSeen:FB.F.serverTimestamp()})}catch(e){}}},60000);
+async function onlLogin(kind){if(!fbOk()){toast('Necesitas internet para jugar en línea');return}const {U,auth}=FB;
+try{if(kind=='anon')await U.signInAnonymously(auth);else{const pv=new U.GoogleAuthProvider();try{if(auth.currentUser&&auth.currentUser.isAnonymous)await U.linkWithPopup(auth.currentUser,pv);else await U.signInWithPopup(auth,pv)}catch(e){if(e.code=='auth/credential-already-in-use'){await U.signInWithPopup(auth,pv)}else if(e.code=='auth/popup-blocked'||e.code=='auth/operation-not-supported-in-this-environment'){await U.signInWithRedirect(auth,pv)}else throw e}}
+toast('✅ ¡Conectado!');onlProfile()}catch(e){toast('No se pudo entrar: '+(e.code||e.message))}}
+async function onlLogout(){if(!fbOk())return;await onlLeave(true);await FB.U.signOut(FB.auth);NET.me=null;showMenu('online')}
+const onlineAgo=t=>t&&t.toMillis&&Date.now()-t.toMillis()<150000;
+function onlAv(pi,sz){return avatarHTML(sz||40,pi.av||'oro',pi.fr||'none')}
+function onlineHTML(bk){
+if(!fbOk())return bk+`<h2 class="sec">🌐 En línea</h2><div class="box">📶 ${window.FBERR?'No hay conexión a internet. Conéctate y vuelve a entrar.':'Conectando…'}</div>`;
+if(!window.FBU)return bk+`<h2 class="sec">🌐 Jugar en línea</h2><p class="sb">Juega con personas reales y con tus amigos. (Versión de prueba)</p><button class="mb" onclick="onlLogin('google')">${I('profile',22)} Entrar con Google</button><p class="sub" style="text-align:center">Guarda tu cuenta y tus amigos aunque cambies de teléfono</p><button class="mb bk" onclick="onlLogin('anon')">Entrar como invitado</button><p class="sub" style="text-align:center">Rápido, sin cuenta. Después puedes vincular Google.</p>`;
+const me=NET.me||myPub(),g=!FBU.isAnonymous;
+return bk+`<h2 class="sec">🌐 Jugar en línea</h2><div class="box onlme">${avatarHTML(48)}<div style="flex:1;min-width:0"><b>${nameHTML()}</b><br><span class="sub">${g?'Cuenta Google ✓':'Invitado'} · Tu código: <b class="code">${NET.me?NET.me.code:'…'}</b></span></div>${g?'':`<button class="sm" onclick="onlLogin('google')">Vincular Google</button>`}</div>
+${NET.roomId?`<button class="mb" onclick="showMenu('lobby')">↩ Volver a mi mesa</button>`:''}
+<h3 class="st">➕ Crear mesa</h3><div class="box"><div class="seg" id="oN">${[2,3,4].map(n=>`<button class="${(NET.cn||2)==n?'on':''}" onclick="NET.cn=${n};showMenu('online')">${n==2?'1 vs 1':n==3?'3 jugadores':'4 parejas'}</button>`).join('')}</div><div class="seg">${[24,30,40].map(m=>`<button class="${(NET.cm||30)==m?'on':''}" onclick="NET.cm=${m};showMenu('online')">a ${m}</button>`).join('')}</div><div class="seg"><button class="${NET.cp!==false?'on':''}" onclick="NET.cp=true;showMenu('online')">🌍 Pública</button><button class="${NET.cp===false?'on':''}" onclick="NET.cp=false;showMenu('online')">🔒 Privada (con código)</button></div><button class="mb" onclick="onlCreate()">Crear mesa</button></div>
+<h3 class="st">🔑 Unirme con código</h3><div class="box" style="display:flex;gap:8px"><input id="jC" maxlength="4" placeholder="Ej: K7QP" style="text-transform:uppercase;flex:1"><button class="sm" onclick="onlJoinCode()">Unirme</button></div>
+<h3 class="st">🌍 Mesas abiertas <button class="sm" style="float:right;font-size:12px" onclick="onlPub()">↻ Actualizar</button></h3>${NET.pub.length?NET.pub.map(r=>`<div class="box onlr"><div style="display:flex">${r.players.map(u=>onlAv((r.pinfo||{})[u]||{},32)).join('')}</div><div style="flex:1;min-width:0;margin-left:8px"><b>${(r.pinfo&&r.pinfo[r.host]||{}).name||'Mesa'}</b><br><span class="sub">${r.size==2?'1 vs 1':r.size==3?'3 jugadores':'4 parejas'} · a ${r.meta} · ${r.players.length}/${r.size}</span></div><button class="sm" onclick="onlJoin('${r.id}')">Entrar</button></div>`).join(''):'<p class="sub">No hay mesas abiertas ahora. ¡Crea una!</p>'}
+<button class="mb bk" onclick="showMenu('friends')">👥 Mis amigos</button><button class="sm off" style="width:100%;margin-top:8px" onclick="onlLogout()">Cerrar sesión</button>`}
+async function onlPub(){if(!fbOk()||!FBU)return;const {F,db}=FB;try{const q=F.query(F.collection(db,'rooms'),F.where('pub','==',true),F.where('state','==','lobby'),F.limit(25));const sn=await F.getDocs(q);NET.pub=sn.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.players.length<r.size&&!r.players.includes(FBU.uid)).sort((a,b)=>(b.t||0)-(a.t||0));if(curView=='online')showMenu('online')}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlCreate(){if(!fbOk()||!FBU)return;if(NET.roomId)await onlLeave(true);const {F,db}=FB;
+try{const r={host:FBU.uid,code:RC(),pub:NET.cp!==false,size:NET.cn||2,meta:NET.cm||30,state:'lobby',players:[FBU.uid],pinfo:{[FBU.uid]:myPub()},t:Date.now()};const d=await F.addDoc(F.collection(db,'rooms'),r);onlWatch(d.id);await F.updateDoc(F.doc(db,'users',FBU.uid),{room:r.code});showMenu('lobby')}catch(e){toast('No se pudo crear: '+(e.code||e.message))}}
+async function onlJoinCode(){const c=($('jC').value||'').trim().toUpperCase();if(c.length!=4){toast('El código tiene 4 letras');return}await onlJoinBy(c)}
+async function onlJoinBy(c){if(!fbOk()||!FBU)return;const {F,db}=FB;try{const sn=await F.getDocs(F.query(F.collection(db,'rooms'),F.where('code','==',c),F.where('state','==','lobby'),F.limit(1)));if(sn.empty){toast('No encontré una mesa abierta con ese código');return}await onlJoin(sn.docs[0].id)}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlJoin(id){if(!fbOk()||!FBU)return;const {F,db}=FB;if(NET.roomId&&NET.roomId!=id)await onlLeave(true);
+try{const ref=F.doc(db,'rooms',id),sn=await F.getDoc(ref);if(!sn.exists()){toast('Esa mesa ya no existe');onlPub();return}const r=sn.data();if(!r.players.includes(FBU.uid)){if(r.players.length>=r.size){toast('La mesa ya está llena');return}await F.updateDoc(ref,{players:F.arrayUnion(FBU.uid),['pinfo.'+FBU.uid]:myPub()})}
+onlWatch(id);await F.updateDoc(F.doc(db,'users',FBU.uid),{room:r.code});sfx.chime();showMenu('lobby')}catch(e){toast('No se pudo entrar: '+(e.code||e.message))}}
+function onlWatch(id){const {F,db}=FB;if(NET.unR)NET.unR();NET.roomId=id;NET.unR=F.onSnapshot(F.doc(db,'rooms',id),sn=>{if(!sn.exists()){const was=NET.roomId;NET.room=null;NET.roomId=null;if(NET.unR){NET.unR();NET.unR=null}if(was&&curView=='lobby'){toast('El anfitrión cerró la mesa');showMenu('online')}return}const old=NET.room;NET.room={id:sn.id,...sn.data()};if(old&&NET.room.players.length>old.players.length)sfx.chime();if(curView=='lobby')showMenu('lobby')})}
+async function onlLeave(quiet){if(!NET.roomId||!fbOk()||!FBU)return;const {F,db}=FB,id=NET.roomId,r=NET.room;if(NET.unR){NET.unR();NET.unR=null}NET.roomId=null;NET.room=null;
+try{if(r&&r.host==FBU.uid)await F.deleteDoc(F.doc(db,'rooms',id));else await F.updateDoc(F.doc(db,'rooms',id),{players:F.arrayRemove(FBU.uid),['pinfo.'+FBU.uid]:F.deleteField()});await F.updateDoc(F.doc(db,'users',FBU.uid),{room:null})}catch(e){}if(!quiet)showMenu('online')}
+function lobbyHTML(bk){const r=NET.room;if(!r)return bk+`<div class="box">Cargando la mesa…</div>`;const host=r.host==FBU.uid,full=r.players.length>=r.size;
+const seats=[...Array(r.size)].map((_,i)=>{const u=r.players[i],pi=u?(r.pinfo||{})[u]||{}:null;return `<div class="lseat${u?'':' empty'}">${u?onlAv(pi,56):'<span class="lq">?</span>'}<b>${u?nameHTML(pi.name||'Jugador',pi.ns):'Esperando…'}</b><small>${u?(u==r.host?'👑 Anfitrión':r.size==4?(i%2?'Equipo rojo':'Equipo azul'):'Listo'):''}</small></div>`}).join('');
+return bk+`<h2 class="sec">🃏 Mesa ${r.pub?'pública':'privada'}</h2><div class="box" style="text-align:center"><span class="sub">Código de la mesa</span><div class="bigcode">${r.code}</div><button class="sm" onclick="onlShare()">📤 Invitar amigos</button></div><p class="sb">${r.size==2?'1 vs 1':r.size==3?'3 jugadores':'4 por parejas'} · a ${r.meta} puntos · ${r.players.length}/${r.size}</p><div class="lseats s${r.size}">${seats}</div>
+${full?(host?`<button class="mb" onclick="onlStart()">▶ Empezar partida</button>`:'<p class="sb">Esperando a que el anfitrión empiece…</p>'):'<p class="sb">⏳ Esperando jugadores…</p>'}<button class="mb bk" onclick="onlLeave()">${host?'Cerrar la mesa':'Salir de la mesa'}</button>`}
+function onlShare(){const r=NET.room;if(!r)return;const t='🃏 ¡Juega Caída conmigo! Entra a «Jugar en línea» y únete con el código '+r.code+'\nhttps://play.google.com/store/apps/details?id=com.alfniut.caida';if(navigator.share)navigator.share({text:t}).catch(()=>{});else{try{navigator.clipboard.writeText(t);toast('📋 Copiado')}catch(e){}}}
+function onlStart(){toast('🚧 La partida en vivo llega en la próxima actualización. ¡La mesa ya funciona!')}
+/* amigos */
+async function onlFriendsLoad(){if(!fbOk()||!FBU||!NET.me)return;const {F,db}=FB,me=FBU.uid;
+try{const inc=await F.getDocs(F.query(F.collection(db,'friendReqs'),F.where('to','==',me),F.where('status','==','pending')));NET.reqs=inc.docs.map(d=>({id:d.id,...d.data()}));
+const acc=await F.getDocs(F.query(F.collection(db,'friendReqs'),F.where('from','==',me),F.where('status','==','accepted')));for(const d of acc.docs){await F.updateDoc(F.doc(db,'users',me),{friends:F.arrayUnion(d.data().to)});await F.deleteDoc(d.ref)}
+const meDoc=(await F.getDoc(F.doc(db,'users',me))).data();NET.me=meDoc;NET.friends=[];for(const f of (meDoc.friends||[]).slice(0,40)){const s2=await F.getDoc(F.doc(db,'users',f));if(s2.exists())NET.friends.push({uid:f,...s2.data()})}
+NET.fl=true;if(curView=='friends')showMenu('friends')}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlAddFriend(){const c=($('fC').value||'').trim().toUpperCase();if(c.length<4){toast('Escribe el código de tu amigo');return}const {F,db}=FB;
+try{const sn=await F.getDocs(F.query(F.collection(db,'users'),F.where('code','==',c),F.limit(1)));if(sn.empty){toast('No encontré a nadie con ese código');return}const to=sn.docs[0].id;if(to==FBU.uid){toast('Ese es tu propio código 😄');return}
+await F.addDoc(F.collection(db,'friendReqs'),{from:FBU.uid,to,fromName:store.name||'Jugador',fromAv:store.avatar||'oro',status:'pending',t:Date.now()});toast('✉️ Solicitud enviada a '+(sn.docs[0].data().name||'tu amigo'));$('fC').value=''}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlReq(id,from,ok){const {F,db}=FB;try{await F.updateDoc(F.doc(db,'friendReqs',id),{status:ok?'accepted':'rejected'});if(ok)await F.updateDoc(F.doc(db,'users',FBU.uid),{friends:F.arrayUnion(from)});toast(ok?'🤝 ¡Ahora son amigos!':'Solicitud rechazada');onlFriendsLoad()}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlDelFriend(uid){const {F,db}=FB;try{await F.updateDoc(F.doc(db,'users',FBU.uid),{friends:F.arrayRemove(uid)});onlFriendsLoad()}catch(e){}}
+function friendsOnlineHTML(bk){if(!fbOk()||!window.FBU)return bk+`<h2>👥 Amigos</h2><div class="box">Para agregar amigos de verdad, entra a <b>Jugar en línea</b>.</div><button class="mb" onclick="showMenu('online')">🌐 Entrar</button>`;
+if(!NET.fl)setTimeout(onlFriendsLoad,50);
+return bk+`<h2>👥 Amigos</h2><div class="box" style="text-align:center"><span class="sub">Tu código de amigo</span><div class="bigcode">${NET.me?NET.me.code:'…'}</div><span class="sub">Pásaselo a tus amigos para que te agreguen</span></div>
+<h3 class="st">➕ Agregar amigo</h3><div class="box" style="display:flex;gap:8px"><input id="fC" maxlength="6" placeholder="Código de tu amigo" style="text-transform:uppercase;flex:1"><button class="sm" onclick="onlAddFriend()">Enviar</button></div>
+${NET.reqs.length?`<h3 class="st">✉️ Solicitudes</h3>`+NET.reqs.map(r=>`<div class="box onlr">${onlAv({av:r.fromAv},36)}<b style="flex:1;margin-left:8px">${r.fromName}</b><button class="sm" onclick="onlReq('${r.id}','${r.from}',true)">Aceptar</button><button class="sm off" onclick="onlReq('${r.id}','${r.from}',false)">✕</button></div>`).join(''):''}
+<h3 class="st">Mis amigos (${NET.friends.length}) <button class="sm" style="float:right;font-size:12px" onclick="onlFriendsLoad()">↻</button></h3>${NET.friends.length?NET.friends.map(f=>{const on=onlineAgo(f.lastSeen);return `<div class="box onlr">${onlAv(f,40)}<div style="flex:1;min-width:0;margin-left:8px"><b>${nameHTML(f.name||'Jugador',f.ns)}</b><br><span class="sub"><span class="odot ${on?'on':''}"></span>${on?(f.room?'En una mesa':'En línea'):'Desconectado'} · Nivel ${f.lv||1}</span></div>${on&&f.room?`<button class="sm" onclick="onlJoinBy('${f.room}')">Unirme</button>`:''}<button class="sm off" onclick="onlDelFriend('${f.uid}')">✕</button></div>`}).join(''):'<p class="sub">Todavía no tienes amigos agregados.</p>'}`}
 function seatHTML(p){
 const side=N>=3&&!(N==4&&p==2);
 const bu=AIC[p]?backURI(AIC[p].back):'';const bs=hands[p].map(()=>`<div class="c back s${side?' v':''}"${bu?` style="--nb:url('${bu}')"`:''}></div>`).join('');
@@ -911,7 +987,7 @@ emoji:'<circle cx="24" cy="24" r="18" fill="url(#gG)"/><circle cx="18" cy="21" r
 let ICN=0;const I=(k,z)=>{const u='x'+(++ICN);return `<svg viewBox="0 0 48 48" width="${z||'100%'}" height="${z||'100%'}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GD.replace(/id="g(\w)"/g,'id="g$1'+u+'"')}${(ICO[k]||'').replace(/url\(#g(\w)\)/g,'url(#g$1'+u+')')}</svg>`};
 const mi=(ic,t,sub,f,badge)=>`<button class="mi" onclick="${f}"><span class="mic">${I(ic)}</span><span class="mtx"><b>${t}</b><small>${sub}</small></span>${badge?`<span class="badge2">${badge}</span>`:''}<span class="chev">›</span></button>`;
 const tile=(ic,t,f,badge)=>`<button class="tile" onclick="${f}">${badge?`<span class="badge">${badge}</span>`:''}<span class="tic">${I(ic)}</span><span>${t}</span></button>`;
-const PARENT={aventura:'jugar',practica:'jugar',salas:'jugar',torneo:'jugar',friends:'jugar',tutorial:'aprender',how:'aprender',rules:'aprender',cantos:'aprender',stats:'logrosm',logros:'logrosm',hist:'logrosm'};
+const PARENT={online:'jugar',lobby:'online',aventura:'jugar',practica:'jugar',salas:'jugar',torneo:'jugar',friends:'jugar',tutorial:'aprender',how:'aprender',rules:'aprender',cantos:'aprender',stats:'logrosm',logros:'logrosm',hist:'logrosm'};
 const PLBL={home:'Inicio',jugar:'Jugar',aprender:'Aprender',logrosm:'Logros'};
 const MIS=[['caidas',3,'Haz 3 caídas','Cualquier partida cuenta',300],['wins',1,'Gana 1 partida','Contra la IA o en salas',300],['games',2,'Juega 2 partidas','Termina dos partidas completas',200],['ml',1,'Haz una mesa limpia','Llévate todas las cartas de la mesa',300],['cantos',2,'Gana 2 cantos','Canta y que valga tu canto',300],['quem',1,'Di «se quemó» una vez','Pilla a un rival distraído',250]];
 function mission(){const d=dayStr(0);if(!store.mis||store.mis.day!=d){const n=Math.floor(Date.now()/864e5);const i=n%MIS.length;store.mis={day:d,i,base:ST()[MIS[i][0]]||0,done:false};save()}const m=MIS[store.mis.i];return{m,cur:Math.min(m[1],Math.max(0,(ST()[m[0]]||0)-store.mis.base)),done:store.mis.done}}
@@ -923,12 +999,12 @@ const q=(ic,t,sb,f)=>`<button class="qt" onclick="${f}"><span class="qi">${I(ic)
 return `<div class="htit"><div class="hbig">CAÍDA</div><div class="hsub">JUEGO DE CARTAS VENEZOLANO</div></div>`
 +(store.name?'':`<div class="box"><b>Crea tu nombre</b><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)
 +`<button class="hero2" onclick="showMenu('jugar')"><span class="h2i"><svg viewBox="0 0 24 24" width="40" height="40"><path d="M7 4l13 8-13 8z" fill="#fff"/></svg></span><span class="h2t"><b>JUGAR AHORA</b><small>IA · SALAS · TORNEOS · AMIGOS</small></span><span class="chev">›</span></button>`
-+sec('⚡','Acceso rápido','TODO A UN TOQUE')+`<div class="qgrid">${q('robot','IA','Practica',"showMenu('practica')")}${q('medal','Aventura','⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')")}${q('table','Salas','Entra',"showMenu('salas')")}${q('shop','Tienda','Comprar',"showMenu('tienda')")}</div>`
++sec('⚡','Acceso rápido','TODO A UN TOQUE')+`<div class="qgrid">${q('robot','IA','Practica',"showMenu('practica')")}${q('medal','Aventura','⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')")}${q('table','En línea','Personas reales',"showMenu('online')")}${q('shop','Tienda','Comprar',"showMenu('tienda')")}</div>`
 +sec('🎯','Misión diaria',x.cur+'/'+x.m[1])+`<div class="hcard"><div class="hcrow"><span class="hci">${I('medal')}</span><div style="flex:1;min-width:0"><b>${x.m[2]}</b><small>${x.m[3]}</small></div><span class="rew">+${x.m[4]} ${I('coin',16)}</span></div><div class="hbar"><i style="width:${Math.round(x.cur/x.m[1]*100)}%"></i></div>${x.done?'<p class="hdone">✓ Completada. Mañana hay una nueva misión.</p>':x.cur>=x.m[1]?`<button class="mb" onclick="claimMis()">Reclamar +${x.m[4]} de oro</button>`:''}</div>`
 +sec('⭐','Tu progreso','NIVEL '+lv)+`<div class="pgrid"><div class="pst"><b>${lv}</b><small>NIVEL</small></div><div class="pst"><b>${xp}/${XPN}</b><small>XP</small></div><div class="pst"><b>${ST().wins}</b><small>VICTORIAS</small></div></div><div class="hbar big"><i style="width:${Math.round(xp/XPN*100)}%"></i></div>`
 +sec('🎁','Recompensa',di.can?'HOY':'MAÑANA')+(di.can?`<div class="hcard glow"><div class="hcrow"><span class="hci">${I('gift')}</span><div style="flex:1"><b>Día ${di.k} de 7</b><small>Tu recompensa diaria te espera</small></div><span class="rew">+${di.r} ${I('coin',16)}</span></div><button class="mb" onclick="claimDaily()">Reclamar</button></div>`:`<div class="hcard" style="text-align:center"><b>🔥 Racha diaria en curso</b><small>Vuelve mañana para aumentarla (+${di.nextR} de oro).</small></div>`)
 +sec('🏆','Colección','PERSONALIZA')+`<div class="tiles">${tile('trophy','Logros',"showMenu('logrosm')",R?'¡'+R+'!':'')}${tile('learn','Aprender',"showMenu('aprender')",store.tutDone?'':'Nuevo')}${tile('friends','Amigos',"showMenu('friends')")}</div>`}
-function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('medal','Modo Aventura','De mesa en mesa hasta el Rey de la Caída · ⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')",advStars()?'':'Nuevo')+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas','Mesas abiertas de 100, 500, 1.000… únete',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Jugar con un amigo','Invita con un código (pronto)',"showMenu('friends')")}
+function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('table','🌐 Jugar en línea','Mesas reales con personas y amigos (beta)',"showMenu('online')",'Nuevo')+mi('medal','Modo Aventura','De mesa en mesa hasta el Rey de la Caída · ⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')",advStars()?'':'Nuevo')+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas','Mesas abiertas de 100, 500, 1.000… únete',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Amigos','Agrega amigos con tu código',"showMenu('friends')")}
 function aprenderHTML(bk){return bk+`<h2 class="sec">Aprender</h2>`+mi('tap','Tutorial jugable','Aprende jugando en 5 minutos',"tutLoad(0)",store.tutDone?'':'Nuevo')+mi('ask','Cómo jugar','Lo básico en pocas palabras',"showMenu('how')")+mi('note','Cantos','Todos los cantos y cuánto valen',"showMenu('cantos')")+mi('scroll','Reglas','Las reglas completas',"showMenu('rules')")+mi('learn','Guía escrita','Explicación paso a paso',"showMenu('tutorial')")}
 function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' reclamados',"showMenu('logros')",(store.achR||[]).length?(store.achR||[]).length+' por reclamar':'')+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
 function cantosHTML(bk){const L=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
@@ -951,7 +1027,7 @@ return bk+`<h2 class="sec">Tienda</h2><div class="box" style="display:flex;justi
 <h3 class="st">Oro ${I('coin',20)}</h3><p class="sub">Se gana jugando, con premios diarios, logros y videos.</p><div class="sg">${PACKS.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('coin')}</span><b>${g[0].toLocaleString('es')} de oro</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div>`
 +mi('video','Ver un video','+200 de oro gratis ahora',"watchVideo()")}
 function settingsHTML(){const r=(ic,l,on,f)=>`<div class="setr"><span style="width:30px;flex:none">${I(ic)}</span><span style="flex:1">${l}</span><button class="sm ${on?'':'off'}" onclick="${f}">${on?'Sí':'No'}</button></div>`;
-return `<div class="box"><b>Ajustes</b><div class="setr"><span style="width:30px;flex:none;font-size:24px;text-align:center">🌐</span><span style="flex:1">Idioma</span><select class="lsel" onchange="setLang(this.value)">${LANGS.map(l=>`<option value="${l[0]}" ${(store.lang||'es')==l[0]?'selected':''}>${l[1]}</option>`).join('')}</select></div>${r('note','Música (menú y partida)',store.music!==false,"togSet('music')")}${r('speaker','Sonidos del juego',sndOn,"togSet('snd')")}${r('mic','Voz de los cantos',vozOn,"togSet('voz')")}<div class="setr"><span style="width:30px;flex:none;font-size:22px;text-align:center">🗣️</span><span style="flex:1">Estilo de voz</span><select class="lsel" onchange="store.vstyle=this.value;save();speak('¡Caída!')">${[['normal','Normal'],['animada','Animada'],['grave','Grave']].map(v=>`<option value="${v[0]}" ${(store.vstyle||'normal')==v[0]?'selected':''}>${v[1]}</option>`).join('')}</select></div></div>`}
+return `<div class="box"><b>Ajustes</b><button class="sm" style="width:100%;margin:8px 0 4px" onclick="testSound()">🔊 Probar sonido y voz</button><div class="setr"><span style="width:30px;flex:none;font-size:24px;text-align:center">🌐</span><span style="flex:1">Idioma</span><select class="lsel" onchange="setLang(this.value)">${LANGS.map(l=>`<option value="${l[0]}" ${(store.lang||'es')==l[0]?'selected':''}>${l[1]}</option>`).join('')}</select></div>${r('note','Música (menú y partida)',store.music!==false,"togSet('music')")}${r('speaker','Sonidos del juego',sndOn,"togSet('snd')")}${r('mic','Voz de los cantos',vozOn,"togSet('voz')")}<div class="setr"><span style="width:30px;flex:none;font-size:22px;text-align:center">🗣️</span><span style="flex:1">Estilo de voz</span><select class="lsel" onchange="store.vstyle=this.value;save();speak('¡Caída!')">${[['normal','Normal'],['animada','Animada'],['grave','Grave']].map(v=>`<option value="${v[0]}" ${(store.vstyle||'normal')==v[0]?'selected':''}>${v[1]}</option>`).join('')}</select></div></div>`}
 function togSet(k){if(k=='music'){store.music=store.music===false;store.music?musStart():(musStop(),gmStop())}else if(k=='snd'){sndOn=!sndOn;store.snd=sndOn}else{vozOn=!vozOn;store.voz=vozOn;if(vozOn)speak('Voz activada')}save();applySet();showMenu('profile')}
 function applySet(){if(store.snd===false)sndOn=false;if(store.voz===false)vozOn=false;const a=$('vz'),b=$('snd'),c=$('mus');if(a)a.textContent=vozOn?'🔊 Voz':'🔇 Voz';if(b)b.textContent=sndOn?'🔔 Sonido':'🔕 Sonido';if(c)c.textContent=store.music!==false?'🎵 Música':'🔇 Música'}
 /* ---------- Música del menú (hecha con código, sin derechos) ---------- */
@@ -1210,6 +1286,21 @@ Estilo de voz|Voice style|Estilo de voz|Style de voix|Stimmstil|Stile voce|Ст�
 ¡A jugar!|Let's play!|Vamos jogar!|On joue !|Los geht's!|Giochiamo!|Играем!|开始吧！|プレイ！
 JEFE FINAL|FINAL BOSS|CHEFE FINAL|BOSS FINAL|ENDBOSS|BOSS FINALE|ФИНАЛЬНЫЙ БОСС|最终BOSS|ラスボス
 Mesa superada|Table cleared|Mesa superada|Table réussie|Tisch geschafft|Tavolo superato|Стол пройден|关卡通过|クリア
+Probar sonido y voz|Test sound and voice|Testar som e voz|Tester le son et la voix|Ton und Stimme testen|Prova suono e voce|Проверить звук и голос|测试声音和语音|音と声をテスト
+¡VICTORIA!|VICTORY!|VITÓRIA!|VICTOIRE !|SIEG!|VITTORIA!|ПОБЕДА!|胜利！|勝利！
+Derrota|Defeat|Derrota|Défaite|Niederlage|Sconfitta|Поражение|失败|敗北
+Ver la mesa|View table|Ver a mesa|Voir la table|Tisch ansehen|Vedi il tavolo|Смотреть стол|查看牌桌|テーブルを見る
+Jugar en línea|Play online|Jogar online|Jouer en ligne|Online spielen|Gioca online|Играть онлайн|在线游戏|オンライン対戦
+Entrar con Google|Sign in with Google|Entrar com Google|Se connecter avec Google|Mit Google anmelden|Accedi con Google|Войти через Google|使用Google登录|Googleでログイン
+Entrar como invitado|Play as guest|Entrar como convidado|Jouer en invité|Als Gast spielen|Entra come ospite|Войти как гость|游客登录|ゲストで遊ぶ
+Crear mesa|Create table|Criar mesa|Créer une table|Tisch erstellen|Crea tavolo|Создать стол|创建牌桌|テーブル作成
+Unirme con código|Join with code|Entrar com código|Rejoindre avec code|Mit Code beitreten|Entra con codice|Войти по коду|用代码加入|コードで参加
+Mesas abiertas|Open tables|Mesas abertas|Tables ouvertes|Offene Tische|Tavoli aperti|Открытые столы|开放的牌桌|募集中のテーブル
+Tu código de amigo|Your friend code|Seu código de amigo|Ton code ami|Dein Freundescode|Il tuo codice amico|Твой код друга|你的好友代码|フレンドコード
+Agregar amigo|Add friend|Adicionar amigo|Ajouter un ami|Freund hinzufügen|Aggiungi amico|Добавить друга|添加好友|フレンド追加
+Mis amigos|My friends|Meus amigos|Mes amis|Meine Freunde|I miei amici|Мои друзья|我的好友|フレンド
+Código de la mesa|Table code|Código da mesa|Code de la table|Tischcode|Codice tavolo|Код стола|牌桌代码|テーブルコード
+Invitar amigos|Invite friends|Convidar amigos|Inviter des amis|Freunde einladen|Invita amici|Пригласить друзей|邀请好友|フレンドを招待
 ¡Desbloqueado!|Unlocked!|Desbloqueado!|Débloqué !|Freigeschaltet!|Sbloccato!|Открыто!|已解锁！|解放！
 ¡Nuevo emoji desbloqueado!|New emoji unlocked!|Novo emoji desbloqueado!|Nouvel émoji débloqué !|Neues Emoji freigeschaltet!|Nuova emoji sbloccata!|Новый эмодзи открыт!|新表情已解锁！|新しい絵文字を解放！
 No te alcanza el oro. Mira un video o reclama tu premio diario|Not enough gold. Watch a video or claim your daily reward|Ouro insuficiente. Veja um vídeo ou resgate seu prêmio diário|Pas assez d'or. Regarde une vidéo ou récupère ta récompense|Nicht genug Gold. Sieh ein Video oder hol deine Belohnung|Oro insufficiente. Guarda un video o riscatta il premio|Не хватает золота. Посмотри видео или забери награду|金币不足。观看视频或领取每日奖励|ゴールド不足。動画を見るか報酬を受け取ろう
@@ -1227,7 +1318,14 @@ function setLang(l){store.lang=l;save();location.reload()}
 let LA=Date.now();setInterval(()=>{try{if($('app').style.display!='block'||over){LA=Date.now();return}
 if(Date.now()-LA>20000&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},3000);
 window.addEventListener('error',e=>{console.warn('Caída error:',e.message)});
-function speak(t){if(!vozOn)return;try{if(!VOZ)pickVoz();const u=new SpeechSynthesisUtterance(TR(t.replace(/<[^>]*>/g,'')));if(VOZ){u.voice=VOZ;u.lang=VOZ.lang}else u.lang=(store.lang&&store.lang!='es')?store.lang:'es-ES';const VS={normal:[.95,1.15],animada:[1.1,1.4],grave:[.9,.8]}[store.vstyle||'normal'];u.rate=VS[0];u.pitch=Math.min(2,VS[1]*(arguments[1]||1));speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+
+function audioUnlock(){try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
+if(AC.state!='running')AC.resume();const b=AC.createBuffer(1,1,22050),s=AC.createBufferSource();s.buffer=b;s.connect(AC.destination);s.start(0)}catch(e){}
+try{if(!window._spU&&'speechSynthesis' in window){window._spU=1;const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}}
+['pointerdown','touchstart','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,audioUnlock,{passive:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AC&&AC.state!='running'){try{AC.resume()}catch(e){}}});
+function testSound(){sndOn=true;vozOn=true;store.snd=true;store.voz=true;save();applySet();audioUnlock();setTimeout(()=>{sfx.chime();speak('¡Caída! El sonido funciona')},150);toast('🔊 Si no escuchas nada, sube el volumen multimedia del teléfono');showMenu(curView)}
+function speak(t){if(!vozOn)return;try{if(!VOZ)pickVoz();const u=new SpeechSynthesisUtterance(TR(t.replace(/<[^>]*>/g,'')));if(VOZ){u.voice=VOZ;u.lang=VOZ.lang}else u.lang=(store.lang&&store.lang!='es')?store.lang:'es-ES';const VS={normal:[.95,1.15],animada:[1.1,1.4],grave:[.9,.8]}[store.vstyle||'normal'];u.rate=VS[0];u.pitch=Math.min(2,VS[1]*(arguments[1]||1));if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();setTimeout(()=>{try{speechSynthesis.speak(u)}catch(e){}},speechSynthesis.speaking?60:0)}catch(e){}}
 function shout(call){
 flash('<div style="font-size:76px">¡'+(call==1?'UNOOO':'CUATROOO')+'!</div><div style="font-size:22px">'+nm(mano)+' va '+(call==1?'hacia arriba ↑':'hacia abajo ↓')+'</div>',3);
 speak(call==1?'¡Unooo!':'¡Cuatrooo!');sfx.drum()}
@@ -1378,9 +1476,14 @@ msg('Cartas: '+TT().map(t=>(t==0?'tú ':tn(t)+' ')+tcaps(t)).join(', ')+' (cada 
 mano=nxt(mano);render();
 if(over)return end();
 setAct('<button id="nx">Siguiente mano</button>');$('nx').onclick=newHand}
+
+let GS0=null;
+function endSummary(w,pay,xg){try{const s=ST(),d=k=>Math.max(0,(s[k]||0)-((GS0||{})[k]||0)),win=w==0;const m=document.createElement('div');m.id='esum';
+m.innerHTML=`<div class="esb ${win?'win':'lose'}"><div class="esi">${win?I('trophy'):'😤'}</div><div class="ttl" style="font-size:40px">${win?'¡VICTORIA!':'Derrota'}</div><div class="esc">${score.join(' — ')}</div><div class="esg"><div><b>${d('caidas')}</b><small>Caídas</small></div><div><b>${d('cantos')}</b><small>Cantos ganados</small></div><div><b>${d('ml')}</b><small>Mesas limpias</small></div><div><b>+${xg}</b><small>XP</small></div></div>${pay?`<div class="esp">${I('coin',22)} +${pay} de oro</div>`:''}<div class="esbt"><button class="mb" onclick="$('esum').remove()">Ver la mesa</button><button class="mb bk" onclick="$('esum').remove();showMenu('home')">Menú</button></div></div>`;
+document.body.appendChild(m)}catch(e){}}
 function end(){setRem('');gmStop();
 render();const w=forceW!=null?forceW:score.indexOf(Math.max(...score)),tg=TRN&&TRN.game;
-if(!settled){settled=true;store.pend=null;w==0?sfx.win():sfx.lose();const dbl=forceW!=null&&score.every((x,i)=>i==forceW||x==0),pay=Math.round(entry*(MULTI()?N:2)*(1-rake(entry)))*(dbl&&w==0?2:1);if(w==0)store.gold+=pay;else if(dbl&&entry)store.gold=Math.max(0,store.gold-entry);store.played=(store.played||0)+1;{const st=ST();const _xg=40+(w==0?60:0)+15*Math.max(0,st.caidas-(store._cg||st.caidas));setTimeout(()=>toast('⭐ +'+_xg+' XP'),1200);addXP(_xg);st.games++;if(w==0){st.wins++;st.streak++;st.maxStreak=Math.max(st.maxStreak,st.streak);st.gold+=pay}else st.streak=0}setTimeout(checkAch,1500);
+if(!settled){settled=true;store.pend=null;w==0?sfx.win():sfx.lose();const dbl=forceW!=null&&score.every((x,i)=>i==forceW||x==0),pay=Math.round(entry*(MULTI()?N:2)*(1-rake(entry)))*(dbl&&w==0?2:1);if(w==0)store.gold+=pay;else if(dbl&&entry)store.gold=Math.max(0,store.gold-entry);store.played=(store.played||0)+1;{const st=ST();const _xg=40+(w==0?60:0)+15*Math.max(0,st.caidas-(store._cg||st.caidas));addXP(_xg);if(!(TRN&&TRN.playing))setTimeout(()=>endSummary(w,w==0?pay:0,_xg),ADV!=null?4200:2600);st.games++;if(w==0){st.wins++;st.streak++;st.maxStreak=Math.max(st.maxStreak,st.streak);st.gold+=pay}else st.streak=0}setTimeout(checkAch,1500);
 store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':ADV!=null?'Aventura':entry==0?'Contra la IA':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry*(dbl?2:1))});store.hist=store.hist.slice(0,30);save();
 msg(w!=0?(N==2?'Ganó el rival':MULTI()?'Ganó '+nm(w):'Ganaron los rivales')+(entry?'. Perdiste '+(dbl?entry*2+' de oro (doble por trivilín)':entry+' de oro'):''):'¡Ganaste la partida!'+(pay?' +'+pay+' de oro':'')+(dbl?' (doble por trivilín)':''));
 if(TRN&&TRN.playing)torneoResult(w==0);if(ADV!=null)advResult(w);else if(w==0)setTimeout(()=>fxBurst(store.fxc&&store.fxc!='none'?store.fxc:'confeti'),900)}
@@ -1438,7 +1541,7 @@ const iv=setInterval(()=>{n--;if(n>0){$('vn').textContent=n;return}clearInterval
 function setName(){const v=esc($('nmI').value.trim());if(v){store.name=v;save();showMenu('home')}}
 function addFriend(){const v=esc($('fI').value.trim());if(v){store.friends.push(v);save();showMenu('friends')}}
 function delFriend(i){store.friends.splice(i,1);save();showMenu('friends')}
-function startGame(e){musStop();setTimeout(gmStart,400);applyTable();store._cg=ST().caidas;if(e!=null)opt.entry=e;e=opt.entry||0;
+function startGame(e){musStop();setTimeout(gmStart,400);applyTable();store._cg=ST().caidas;GS0={...ST(),gold:store.gold};if(e!=null)opt.entry=e;e=opt.entry||0;
 
 if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
 if(opt.mode=='practica'||e==0)RN=null;
@@ -1747,7 +1850,9 @@ else if(v=='tutorial')h+=(RULX[store.lang]?bk+`<h2>📖 Guía escrita</h2><div c
 else if(v=='profile')h+=profileHTML(bk);
 else if(v=='rules')h+=bk+`<h2>📜 Reglas</h2><div class="txt">${RULX[store.lang]||RUL}</div>`;
 else if(v=='how')h+=bk+`<h2>❓ Cómo jugar</h2><div class="txt">${HOWX[store.lang||'es']||HOWX.es}</div>`;
-else if(v=='friends')h+=bk+`<h2>👥 Amigos</h2><div class="box"><input id="fI" maxlength="14" placeholder="Nombre de tu amigo"><button class="sm" onclick="addFriend()">Agregar</button></div>`+store.friends.map((f,i)=>`<div class="box">${f} <button class="sm" onclick="delFriend(${i})">✕</button></div>`).join('')+`<p class="sb">Por ahora la lista es solo de este teléfono. Con cuentas (Google Play) se conectarán de verdad.</p>`;
+else if(v=='friends')h+=friendsOnlineHTML(bk);
+else if(v=='online'){h+=onlineHTML(bk);if(fbOk()&&window.FBU&&!NET.pubT){NET.pubT=1;setTimeout(onlPub,100)}}
+else if(v=='lobby')h+=lobbyHTML(bk);
 else h+=bk+`<h2>🕑 Historial</h2>`+(store.hist.length?store.hist.map(x=>`<div class="box">${x.d} · <b>${x.r}</b> · ${x.s} · ${x.m||'Normal'} · ${x.n||2} jugadores${x.g?' · '+(x.g>0?'+':'')+x.g+' 💰':''}</div>`).join(''):`<p class="sb">Aún no has jugado ninguna partida.</p>`);
 m.innerHTML=h;window.scrollTo(0,0);if(v=='espera')startWait();if(v=='guia')tutBind();if(AC&&AC.state!='suspended')musStart()}
 function put(id,k){const d=document.createElement('div');d.className='mini'+(deckStyle()!='clasico'?' m':'');d.style.bottom=(k*3)+'px';$(id).appendChild(d)}
@@ -1762,5 +1867,15 @@ else $('cx').textContent=n<B?(MULTI()?`No llega a ${B}. Sin puntos`:`No llega a 
 await sleep(900)}
 o.style.display='none'}
 load();if(store.pend&&store.pend.e>0){const g=store.pend.e;store.gold+=g;store.pend=null;save();setTimeout(()=>toast('💰 Te devolvimos '+g+' de oro de la partida que no terminó'),1500)}if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='🃏 '+((DECKS.find(x=>x[0]==(store.face||'clasico'))||DECKS[0])[1]);showMenu('home');setTimeout(dailyPopup,700);setTimeout(()=>{checkAch();if(curView=='home'&&$('app').style.display!='block')showMenu('home')},2500);
-</script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
+</script><script type="module">
+const V='10.12.2',B='https://www.gstatic.com/firebasejs/'+V+'/';
+try{
+const A=await import(B+'firebase-app.js'),U=await import(B+'firebase-auth.js'),F=await import(B+'firebase-firestore.js');
+const app=A.initializeApp({apiKey:"AIzaSyDn3VoGVnnCc2mPei8Z9bebxsFZNShkdKQ",authDomain:"caida-44657.firebaseapp.com",projectId:"caida-44657",storageBucket:"caida-44657.firebasestorage.app",messagingSenderId:"404277256569",appId:"1:404277256569:web:a765d963450d9860de8fa8"});
+const auth=U.getAuth(app),db=F.getFirestore(app);
+window.FB={auth,db,F,U};U.getRedirectResult(auth).catch(()=>{});
+U.onAuthStateChanged(auth,u=>{window.FBU=u||null;window.dispatchEvent(new Event('fbauth'))});
+}catch(e){window.FBERR=String(e);window.dispatchEvent(new Event('fbauth'))}
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
 </body></html>
