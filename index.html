@@ -1626,5 +1626,229 @@ else $('cx').textContent=n<B?(MULTI()?`No llega a ${B}. Sin puntos`:`No llega a 
 await sleep(900)}
 o.style.display='none'}
 load();if(store.pend&&store.pend.e>0){const g=store.pend.e;store.gold+=g;store.pend=null;save();setTimeout(()=>toast('💰 Te devolvimos '+g+' de oro de la partida que no terminó'),1500)}if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);setTimeout(()=>{checkAch();if(curView=='home')showMenu('home')},2500);
+</script>
+<style id="caida-v2-style">
+/* ===== CAÍDA 2.0 — Mobile game polish ===== */
+:root{
+  --v2-bg:#090513;--v2-panel:#171026;--v2-panel2:#211638;
+  --v2-pink:#ff4f8b;--v2-orange:#ffad4a;--v2-cyan:#42e8ff;
+  --v2-gold:#ffd85a;--v2-green:#67f5a5;
+}
+body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+#menu{padding:10px 10px 24px}
+#app{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+.v2-topline{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 10px}
+.v2-brand{font:400 25px/1 'Lilita One',sans-serif;letter-spacing:.3px}
+.v2-brand small{display:block;font:800 10px/1.2 'Nunito',sans-serif;opacity:.55;letter-spacing:1.2px;text-transform:uppercase;margin-top:3px}
+.v2-currencies{display:flex;gap:5px}
+.v2-currency{display:flex;align-items:center;gap:4px;background:#0006;border:1px solid #ffffff18;border-radius:999px;padding:4px 8px;font-weight:900;font-size:12px}
+.v2-homehero{position:relative;overflow:hidden;display:block;width:100%;text-align:left;padding:18px;border:1px solid #ffffff24;border-radius:24px;background:
+ radial-gradient(circle at 82% 18%,#fff7 0 2px,transparent 3px),
+ radial-gradient(circle at 72% 40%,#fff5 0 1px,transparent 2px),
+ linear-gradient(135deg,#ffb05a 0%,#ff4f8b 48%,#7c45ff 100%);
+ box-shadow:0 7px 0 #6c1640,0 16px 32px #ff3d7f33;margin-bottom:12px;
+}
+.v2-homehero:before{content:"";position:absolute;width:150px;height:150px;right:-45px;top:-60px;border-radius:50%;background:#fff2;filter:blur(2px)}
+.v2-homehero .vh-row{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.v2-playorb{width:66px;height:66px;display:grid;place-items:center;border-radius:20px;background:#fff2;border:1px solid #fff5;box-shadow:inset 0 0 20px #fff2;flex:none;font-size:34px}
+.v2-homehero b{font:400 34px/1 'Lilita One',sans-serif;text-shadow:0 3px 0 #7b1d48}
+.v2-homehero small{display:block;font-weight:800;font-size:12px;opacity:.9;margin-top:5px}
+.v2-homehero .vh-arrow{margin-left:auto;font-size:34px;opacity:.7}
+.v2-section{display:flex;align-items:center;justify-content:space-between;margin:16px 2px 8px}
+.v2-section h3{font:400 22px 'Lilita One',sans-serif;margin:0}
+.v2-section span{font-size:11px;font-weight:900;opacity:.55;text-transform:uppercase;letter-spacing:1px}
+.v2-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.v2-q{min-height:76px;border-radius:16px!important;padding:9px 3px!important;background:linear-gradient(180deg,#ffffff1b,#ffffff09)!important;border:1px solid #ffffff1d!important;box-shadow:0 3px 0 #0005!important;color:#fff!important;font-size:12px!important;text-shadow:none!important}
+.v2-q .qico{font-size:25px;display:block;margin-bottom:4px}.v2-q small{display:block;font-size:9px;opacity:.6;margin-top:2px}
+.v2-mission{position:relative;padding:12px 12px 10px;border-radius:18px;background:linear-gradient(135deg,#1e1435,#120c21);border:1px solid #ffffff18;box-shadow:0 4px 0 #0005}
+.v2-mission .mh{display:flex;align-items:center;gap:9px}.v2-mission .mi2{font-size:27px}.v2-mission b{font-size:14px}.v2-mission small{display:block;opacity:.62;font-weight:700;font-size:11px}
+.v2-progress{height:7px;border-radius:99px;background:#0008;overflow:hidden;margin-top:9px}.v2-progress i{display:block;height:100%;width:var(--p,0%);background:linear-gradient(90deg,var(--v2-orange),var(--v2-pink),#a56bff);border-radius:inherit;transition:width .5s}
+.v2-reward{position:absolute;right:10px;top:10px;font-size:11px;font-weight:900;background:#ffd85a;color:#3a1900;padding:4px 7px;border-radius:999px}
+.v2-collection{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v2-stat{padding:11px 8px;border-radius:16px;background:#ffffff0d;border:1px solid #ffffff16;text-align:center}
+.v2-stat strong{display:block;font:400 24px 'Lilita One',sans-serif;color:#fff}.v2-stat small{font-size:10px;opacity:.55;font-weight:800}
+.v2-shophero{padding:15px;border-radius:20px;background:linear-gradient(135deg,#24144a,#35114e);border:1px solid #ffffff20;margin-bottom:12px}
+.v2-shophero .shrow{display:flex;align-items:center;gap:10px}.v2-shophero .shicon{font-size:38px}.v2-shophero b{font:400 25px 'Lilita One',sans-serif}.v2-shophero small{display:block;opacity:.65;font-weight:700}
+.v2-featured{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.v2-feature{position:relative;min-height:128px;border-radius:18px;padding:11px;background:linear-gradient(145deg,#ffffff17,#ffffff06);border:1px solid #ffffff20;overflow:hidden}
+.v2-feature:after{content:"";position:absolute;width:90px;height:90px;right:-30px;bottom:-35px;border-radius:50%;background:var(--glow,#ff4f8b);filter:blur(22px);opacity:.3}
+.v2-feature .fp{height:65px;display:flex;align-items:center;justify-content:center}.v2-feature b{display:block;font-size:13px;position:relative;z-index:1}.v2-feature small{opacity:.6;font-size:10px;position:relative;z-index:1}
+.v2-rarity{display:inline-block;font-size:9px;font-weight:900;padding:2px 6px;border-radius:99px;background:#0005;margin-bottom:3px}
+.v2-tabs{display:flex;gap:6px;overflow:auto;margin:4px 0 12px;padding-bottom:2px}.v2-tabs button{white-space:nowrap;font-size:12px!important;padding:8px 11px!important;border-radius:999px!important;background:#ffffff0c!important;box-shadow:none!important;border:1px solid #ffffff15!important}.v2-tabs button.on{background:linear-gradient(180deg,#ff9f59,#ff4f8b)!important}
+.v2-shopnote{padding:9px 11px;border-radius:13px;background:#42e8ff0d;border:1px solid #42e8ff25;color:#b8f8ff;font-size:11px;font-weight:700;margin:8px 0 12px}
+.v2-itembadge{position:absolute;left:7px;top:7px;font-size:9px;font-weight:900;border-radius:999px;padding:3px 6px;background:#0008}
+.si{transition:transform .16s,box-shadow .16s,border-color .16s}.si:active{transform:scale(.97)}
+.v2-new{animation:v2pulse 2.2s infinite}@keyframes v2pulse{50%{box-shadow:0 0 0 2px #ff4f8b44,0 0 18px #ff4f8b22}}
+/* in-game HUD */
+#app .board{box-shadow:0 8px 0 #0007,0 18px 40px #0006,inset 0 0 40px #0006}
+#app .board:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(120deg,#fff2,transparent 22%,transparent 78%,#0003);mix-blend-mode:screen;opacity:.5}
+#app .board .seats{position:relative;z-index:1}
+.v2-gameglow{position:fixed;inset:0;pointer-events:none;z-index:10;opacity:0;background:radial-gradient(circle at 50% 48%,#fff4,transparent 36%);transition:opacity .15s}.v2-gameglow.on{opacity:1;animation:v2flash .5s ease-out}@keyframes v2flash{0%{opacity:1}100%{opacity:0}}
+.v2-rain{position:fixed;inset:0;pointer-events:none;z-index:75;overflow:hidden}.v2-rain i{position:absolute;top:-12vh;font-style:normal;font-size:24px;animation:v2fall var(--dur) linear forwards;left:var(--x)}@keyframes v2fall{to{transform:translate3d(var(--dx),115vh,0) rotate(620deg);opacity:.2}}
+.v2-combo{position:fixed;left:50%;top:25%;transform:translate(-50%,-50%) scale(.5);z-index:78;pointer-events:none;opacity:0;font:400 38px 'Lilita One',sans-serif;text-align:center;text-shadow:0 4px 0 #3a1d06,0 0 24px #ff8c3d}
+.v2-combo.on{animation:v2combo .9s cubic-bezier(.2,.9,.2,1)}@keyframes v2combo{0%{opacity:0;transform:translate(-50%,-50%) scale(.4) rotate(-5deg)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.18) rotate(2deg)}65%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-65%) scale(.9)}}
+.v2-cardhint{animation:v2cardhint 1s ease-in-out infinite alternate}@keyframes v2cardhint{to{transform:translateY(-8px) rotate(-1deg);filter:drop-shadow(0 8px 10px #ffd85a99)}}
+@media(max-width:380px){.v2-quick{gap:5px}.v2-q{font-size:10px!important}.v2-homehero b{font-size:30px}}
+</style>
+<script id="caida-v2-script">
+/* ===== CAÍDA 2.0 — progression, missions, cosmetics & game feedback ===== */
+(function(){
+  const V2KEY='caida_v2';
+  function v2init(){
+    store.v2=store.v2||{xp:0,level:1,claimed:[],quests:{day:'',q:0},combo:0};
+    store.v2.xp=Number(store.v2.xp)||0; store.v2.level=Number(store.v2.level)||1;
+    store.v2.claimed=Array.isArray(store.v2.claimed)?store.v2.claimed:[];
+    store.v2.quests=store.v2.quests||{day:'',q:0};
+    const today=new Date().toISOString().slice(0,10);
+    if(store.v2.quests.day!==today){store.v2.quests={day:today,q:0};save();}
+    if(store.gold==null)store.gold=500;
+  }
+  v2init();
+
+  /* Nuevos cosméticos: se integran al sistema de tienda existente. */
+  const pushOnce=(arr,row)=>{if(!arr.some(x=>x[0]===row[0]))arr.push(row)};
+  [
+    ['aurora','Aurora','g400'],['electrico','Eléctrico','g450'],['volcan','Volcán','g500'],['cosmico','Cósmico','x']
+  ].forEach(x=>pushOnce(FR,x));
+  [
+    ['aurora','Aurora', 'g300'],['volcan','Volcán','g350'],['cyber','Cyber','g400'],['cosmico','Cósmico','x']
+  ].forEach(x=>pushOnce(NS,x));
+  [
+    ['p_jaguar','','','g350','Jaguar'],['p_guardian','','','g500','Guardián'],['p_caiman','','','g300','Caimán'],['p_cardenal','','','g250','Cardenal'],['p_cometa','','','x','Cometa']
+  ].forEach(x=>pushOnce(AVP,x));
+  [
+    ['aurora','Aurora boreal','g350'],['volcan','Volcán nocturno','g400'],['cyber','Cyber arena','g450'],['lluvia','Lluvia de estrellas','g500']
+  ].forEach(x=>pushOnce(TBL,x));
+  [
+    ['aurora','Reverso aurora','g300'],['volcan','Reverso volcánico','g350'],['cyber','Reverso cyber','g400']
+  ].forEach(x=>pushOnce(BKS,x));
+
+  /* Visuales para nuevos cosméticos. */
+  const css=document.createElement('style');css.textContent=`
+    .av.f-aurora{box-shadow:0 0 10px #65f5ff!important}.av.f-electrico{box-shadow:0 0 12px #55eaff!important}
+    .av.f-volcan{box-shadow:0 0 12px #ff6a35!important}.av.f-cosmico{box-shadow:0 0 15px #a96cff!important}
+    .board[data-t=aurora]{background:radial-gradient(circle at 70% 25%,#bff 0 2%,transparent 3%),linear-gradient(145deg,#071d38,#164f65 50%,#6b2b75);border-color:#47e8ff}
+    .board[data-t=volcan]{background:radial-gradient(circle at 30% 65%,#ffcf5c 0 4%,transparent 5%),linear-gradient(145deg,#351018,#7b241f 55%,#1c0710);border-color:#ff7048}
+    .board[data-t=cyber]{background:linear-gradient(135deg,#07111f 25%,#122b40 25% 50%,#07111f 50% 75%,#162b48 75%);background-size:28px 28px;border-color:#36e0ff}
+    .board[data-t=lluvia]{background:radial-gradient(1px 1px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 20%,#fff,transparent),radial-gradient(2px 2px at 80% 70%,#fff,transparent),linear-gradient(#0a173d,#18275c);border-color:#758cff}
+    .av.f-aurora::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid #65f5ff;filter:blur(1px);animation:v2aur 1.8s linear infinite}@keyframes v2aur{to{transform:rotate(360deg);filter:hue-rotate(90deg)}}
+    .av.f-electrico::after{content:"⚡";position:absolute;inset:-13px;display:grid;place-items:center;font-size:17px;animation:v2bolt .55s infinite alternate}@keyframes v2bolt{to{transform:scale(1.2) rotate(7deg)}}
+    .av.f-volcan::after{content:"";position:absolute;inset:-9px;border-radius:50%;background:conic-gradient(#ff3d00,#ffd34e,#ff3d00);z-index:-1;filter:blur(3px);animation:fspin 1s linear infinite}
+    .av.f-cosmico::after{content:"✦ ✧ ✦";position:absolute;inset:-17px;display:grid;place-items:center;color:#d5b8ff;font-size:11px;letter-spacing:7px;animation:v2cos 3s linear infinite}@keyframes v2cos{to{transform:rotate(360deg)}}
+  `;document.head.appendChild(css);
+
+  /* XP/level */
+  window.v2XP=function(amount){
+    v2init();const old=store.v2.level;store.v2.xp+=Math.max(0,amount||0);
+    store.v2.level=1+Math.floor(store.v2.xp/1000);
+    save();if(store.v2.level>old){toast('✨ ¡Nivel '+store.v2.level+'! +100 💰');store.gold+=100;save();sfx.chime();v2Popup('NIVEL '+store.v2.level,'🎉');}
+  };
+  window.v2Quest=function(amount){
+    v2init();store.v2.quests.q=Math.min(3,(store.v2.quests.q||0)+(amount||0));save();
+    if(store.v2.quests.q>=3&&!store.v2.claimed.includes(store.v2.quests.day)){
+      store.v2.claimed.push(store.v2.quests.day);store.gold+=300;v2XP(150);save();toast('🎯 Misión diaria completada: +300 💰');
+    }
+  };
+  function v2Popup(title,icon){
+    const d=document.createElement('div');d.className='v2-combo on';d.innerHTML=icon+'<br>'+title;document.body.appendChild(d);setTimeout(()=>d.remove(),1000);
+  }
+  window.v2Celebrate=function(kind){
+    const glow=document.querySelector('.v2-gameglow');if(glow){glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on')}
+    const r=document.createElement('div');r.className='v2-rain';
+    const icons=kind==='rey'?['👑','✨','💎','🔥']:['🃏','✨','🎉','💰'];
+    for(let i=0;i<18;i++){const x=document.createElement('i');x.textContent=icons[i%icons.length];x.style.setProperty('--x',(Math.random()*100)+'%');x.style.setProperty('--dx',(Math.random()*140-70)+'px');x.style.setProperty('--dur',(1.3+Math.random()*1.5)+'s');x.style.animationDelay=(Math.random()*.25)+'s';r.appendChild(x)}
+    document.body.appendChild(r);setTimeout(()=>r.remove(),3300);
+  };
+
+  /* Envolvemos la celebración de caída sin tocar la lógica de puntuación. */
+  const oldFlashCaida=window.flashCaida;
+  if(typeof oldFlashCaida==='function'){
+    window.flashCaida=function(n,ml,p){
+      oldFlashCaida(n,ml,p);
+      v2Celebrate(n===12?'rey':'caida');
+      v2Quest(1);v2XP(n===12?80:35);
+    };
+  }
+
+  /* Feedback táctil universal + botones. */
+  document.addEventListener('pointerdown',e=>{
+    const b=e.target.closest('button,.c');if(!b)return;
+    if(navigator.vibrate)navigator.vibrate(b.classList.contains('c')?[8]:[5]);
+  },{passive:true});
+
+  /* Home 2.0 */
+  window.homeHTML=function(){
+    v2init();const st=ST(),q=store.v2.quests.q||0,lv=store.v2.level||1,xp=store.v2.xp%1000;
+    const di=dailyInfo();
+    return `<div class="v2-topline"><div class="v2-brand">CAÍDA<small>Juego de cartas venezolano</small></div><div class="v2-currencies"><span class="v2-currency">${I('coin',17)} ${store.gold.toLocaleString('es')}</span><span class="v2-currency">${I('gem',17)} ${(store.gems||0).toLocaleString('es')}</span></div></div>`
+    +(store.name?'':`<div class="box v2-new"><b>👋 Bienvenido a Caída</b><br><span class="sub">Elige tu nombre para empezar.</span><br><input id="nmI" maxlength="14" placeholder="Tu nombre"><button class="sm" onclick="setName()">Guardar</button></div>`)
+    +`<button class="v2-homehero" onclick="showMenu('jugar')"><span class="vh-row"><span class="v2-playorb">▶</span><span><b>JUGAR AHORA</b><small>IA · SALAS · TORNEOS · AMIGOS</small></span><span class="vh-arrow">›</span></span></button>
+      <div class="v2-section"><h3>⚡ Acceso rápido</h3><span>Todo a un toque</span></div>
+      <div class="v2-quick">
+       <button class="v2-q" onclick="showMenu('practica')"><span class="qico">🤖</span>IA<small>Practica</small></button>
+       <button class="v2-q" onclick="showMenu('salas')"><span class="qico">🌐</span>Salas<small>Entra</small></button>
+       <button class="v2-q" onclick="showMenu('tienda')"><span class="qico">🛍️</span>Tienda<small>Comprar</small></button>
+       <button class="v2-q" onclick="showMenu('profile')"><span class="qico">👤</span>Perfil<small>Personaliza</small></button>
+      </div>
+      <div class="v2-section"><h3>🎯 Misión diaria</h3><span>${q}/3</span></div>
+      <div class="v2-mission"><div class="mh"><span class="mi2">🎴</span><span><b>Haz 3 caídas</b><small>Cualquier partida cuenta</small></span></div><span class="v2-reward">+300 💰</span><div class="v2-progress" style="--p:${Math.min(100,q/3*100)}%"><i></i></div></div>
+      <div class="v2-section"><h3>⭐ Tu progreso</h3><span>Nivel ${lv}</span></div>
+      <div class="v2-collection"><div class="v2-stat"><strong>${lv}</strong><small>NIVEL</small></div><div class="v2-stat"><strong>${xp}/1000</strong><small>XP</small></div><div class="v2-stat"><strong>${st.wins||0}</strong><small>VICTORIAS</small></div></div>
+      <div class="v2-progress" style="height:8px;margin:7px 2px 13px;--p:${xp/10}%"><i></i></div>
+      <div class="v2-section"><h3>🎁 Recompensa</h3><span>${di.can?'Disponible':'Mañana'}</span></div>
+      ${di.can?`<button class="mi" onclick="showMenu('premios')"><span class="mic">🎁</span><span class="mtx"><b>Recompensa diaria</b><small>Tu premio de hoy está esperando</small></span><span class="badge2">+${di.r} 💰</span><span class="chev">›</span></button>`:`<div class="box" style="text-align:center"><b>🔥 Racha diaria en curso</b><br><span class="sub">Vuelve mañana para aumentarla.</span></div>`}
+      <div class="v2-section"><h3>🏆 Colección</h3><span>Personaliza</span></div>
+      <div class="tiles">${tile('trophy','Logros',"showMenu('logrosm')",(store.achR||[]).length?'¡'+(store.achR||[]).length+'!':'')}${tile('gift','Premios',"showMenu('premios')")}${tile('friends','Amigos',"showMenu('friends')")}${tile('learn','Aprender',"showMenu('aprender')")}</div>`;
+  };
+
+  /* Tienda 2.0: mantiene todas las compras existentes y las presenta por capas. */
+  window.tiendaHTML2=function(bk){
+    const ownedCount=(store.owned||[]).length;
+    const featured=[
+      ['frame','aurora','🌌','ÉPICO','var(--v2-cyan)'],
+      ['av','p_jaguar','🐆','RARO','var(--v2-orange)'],
+      ['table','cyber','⚡','ÉPICO','var(--v2-pink)'],
+      ['name','cosmico','✦','LEGENDARIO','#a56bff']
+    ];
+    const cards=featured.map(([t,id,icon,rar,gl])=>{
+      const it=itemList(t).find(x=>x.id===id);if(!it)return '';
+      return `<div class="v2-feature" style="--glow:${gl}"><span class="v2-rarity">${rar}</span><div class="fp">${prevHTML(t,id)||icon}</div><b>${it.name}</b><small>${priceHTML(it.price)}</small></div>`;
+    }).join('');
+    const tabs=`<div class="v2-tabs"><button class="on" onclick="document.getElementById('shopGrid').scrollIntoView({behavior:'smooth'})">🔥 Destacados</button><button onclick="document.getElementById('shopCos').scrollIntoView({behavior:'smooth'})">✨ Cosméticos</button><button onclick="document.getElementById('shopChest').scrollIntoView({behavior:'smooth'})">🎁 Cofres</button></div>`;
+    return bk+`<h2 class="sec">Tienda</h2>
+      <div class="v2-shophero"><div class="shrow"><span class="shicon">🛍️</span><span><b>Hazla tuya</b><small>Avatares, marcos, mesas, nombres y efectos.</small></span></div></div>
+      <div class="box" style="display:flex;justify-content:space-around;text-align:center"><div>${I('coin',28)}<br><b>${store.gold.toLocaleString('es')}</b><br><span class="sub">Oro</span></div><div>${I('gem',28)}<br><b>${(store.gems||0).toLocaleString('es')}</b><br><span class="sub">Gemas</span></div><div>${I('gift',28)}<br><b>${ownedCount}</b><br><span class="sub">Colección</span></div></div>
+      ${tabs}
+      <div class="v2-section"><h3>🔥 Destacados</h3><span>Rotación</span></div><div class="v2-featured">${cards}</div>
+      <div id="shopCos" class="v2-section"><h3>✨ Cosméticos</h3><span>Nuevos</span></div>
+      <div class="v2-shopnote">💡 Consejo: los cosméticos no cambian las reglas. Son para presumir en la mesa y hacer que cada partida se sienta tuya.</div>
+      <h3 class="st">Avatares</h3>${grid('av')}<h3 class="st">Marcos</h3>${grid('frame')}<h3 class="st">Estilos de nombre</h3>${grid('name')}<h3 class="st">Mesas</h3>${grid('table')}<h3 class="st">Reversos</h3>${grid('back')}
+      <div id="shopChest" class="v2-section"><h3>🎁 Cofres</h3><span>Probabilidades visibles</span></div>${chestsHTML()}
+      <h3 class="st">😎 Emojis</h3>${grid('emo')}<h3 class="st">🔊 Sonidos</h3>${grid('snd',x=>x.price!==0)}<h3 class="st">✨ Stickers animados</h3>${grid('stk')}
+      <h3 class="st">💎 Gemas</h3><p class="sub">Contenido premium para coleccionistas. Compras reales quedan preparadas para integrar con Google Play Billing.</p>
+      <div class="sg">${GEMP.map(g=>`<div class="si prem"><span class="sicx">${I('gem')}</span><b>${g[0].toLocaleString('es')} gemas</b><span class="spr">US$ ${g[1]}</span><small class="sub">Próximamente</small></div>`).join('')}</div>
+      <h3 class="st">💰 Oro</h3><p class="sub">El oro se gana jugando, con premios, logros y videos.</p>
+      <div class="sg">${PACKS.map(g=>`<div class="si"><span class="sicx">${I('coin')}</span><b>${g[0].toLocaleString('es')} de oro</b><span class="spr">US$ ${g[1]}</span><small class="sub">Próximamente</small></div>`).join('')}</div>`;
+  };
+
+  /* Hacer que la tienda destacada sea clicable cuando se use como escaparate. */
+  document.addEventListener('click',e=>{
+    const f=e.target.closest('.v2-feature');if(!f)return;
+    const text=f.querySelector('b')?.textContent||'';toast('✨ '+text+' — búscalo en la colección para comprarlo');
+  });
+
+  /* Compatibilidad: la nueva misión también avanza con cualquier caída detectada por estadísticas. */
+  let lastCaidas=0;setInterval(()=>{
+    try{const c=ST().caidas||0;if(c>lastCaidas){v2Quest(c-lastCaidas);v2XP((c-lastCaidas)*35);lastCaidas=c}}catch(e){}
+  },1200);
+
+  /* Capa visual durante partida */
+  function mountGameFx(){
+    if(document.querySelector('.v2-gameglow'))return;
+    const g=document.createElement('div');g.className='v2-gameglow';document.body.appendChild(g);
+  }
+  mountGameFx();
+})();
+</script>
 </script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
 </body></html>
