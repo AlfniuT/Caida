@@ -1851,4 +1851,177 @@ body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
 })();
 </script>
 </script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
+
+<style id="caida-v21-style">
+/* ===== CAÍDA 2.1 — móvil, cosméticos, cartas, animación y audio ===== */
+html,body{width:100%;min-height:100%;overflow-x:hidden;overflow-y:auto!important;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+body{overscroll-behavior-y:auto}
+#menu{width:100%;max-width:480px;margin:0 auto;padding:12px;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));min-height:100vh;height:auto;overflow:visible;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+#menu *{touch-action:pan-y}
+#menu button,#menu input,.v2-tabs{touch-action:manipulation}
+/* Evita que capas de celebración interfieran con el scroll del menú. */
+.v2-rain,.v2-gameglow,.v2-combo{touch-action:none}
+
+/* Cartas: más premium, legibles y con profundidad. */
+#app .c{position:relative;transform-origin:center bottom;transition:transform .18s cubic-bezier(.2,.8,.2,1),filter .18s,box-shadow .18s;filter:drop-shadow(0 3px 3px #0007)}
+#app .c::after{content:"";position:absolute;inset:2px;border-radius:9px;pointer-events:none;background:linear-gradient(125deg,#fff8,transparent 22%,transparent 72%,#0002);mix-blend-mode:screen;opacity:.7}
+#app .mine .c:active{transform:translateY(-8px) scale(1.035) rotate(-1deg);filter:drop-shadow(0 9px 8px #0009)}
+#tb .c{animation:v21cardIn .34s cubic-bezier(.2,.8,.2,1) both}
+#hd .c{animation:v21handIn .30s cubic-bezier(.2,.8,.2,1) both}
+#tb .c:nth-child(2){animation-delay:.025s}#tb .c:nth-child(3){animation-delay:.05s}#tb .c:nth-child(4){animation-delay:.075s}
+@keyframes v21cardIn{from{opacity:0;transform:translateY(-14px) scale(.88) rotate(-3deg)}to{opacity:1;transform:none}}
+@keyframes v21handIn{from{opacity:0;transform:translateY(18px) scale(.9) rotate(2deg)}to{opacity:1;transform:none}}
+#app .c.lastc{animation:v21last .72s cubic-bezier(.2,.9,.2,1) both!important;box-shadow:0 0 0 2px #fff,0 0 18px 4px #ffd84a,0 8px 18px #0009!important}
+@keyframes v21last{0%{transform:translateY(-10px) scale(.92) rotate(-3deg)}45%{transform:translateY(-7px) scale(1.08) rotate(2deg)}100%{transform:translateY(-3px) scale(1) rotate(0)}}
+
+/* Marcos: acabados más ricos para TODO el catálogo. */
+.av.f-bronce,.av.f-plata,.av.f-oro,.av.f-hielo,.av.f-neon,.av.f-fuego,.av.f-arcoiris,.av.f-venezuela,.av.f-real,.av.f-galaxia,.av.f-diamante,.av.f-aurora,.av.f-electrico,.av.f-volcan,.av.f-cosmico{position:relative;isolation:isolate;overflow:visible}
+.av.f-bronce::before,.av.f-plata::before,.av.f-oro::before{content:"";position:absolute;inset:-5px;border-radius:50%;z-index:-1}
+.av.f-bronce::before{background:conic-gradient(#6f351e,#e1a26b,#6f351e,#ffd0a0,#6f351e);box-shadow:0 0 9px #b96d43}
+.av.f-plata::before{background:conic-gradient(#69727d,#fff,#aeb7c2,#fff,#69727d);box-shadow:0 0 10px #dce8ff}
+.av.f-oro::before{background:conic-gradient(#8c5a00,#fff1a0,#ffd84a,#fff8c4,#8c5a00);box-shadow:0 0 13px #ffd84a}
+.av.f-bronce::after,.av.f-plata::after,.av.f-oro::after,.av.f-hielo::after{content:"";position:absolute;inset:-9px;border-radius:50%;pointer-events:none;z-index:-2;opacity:.7}
+.av.f-bronce::after{box-shadow:0 0 16px #b96d4366}.av.f-plata::after{box-shadow:0 0 18px #dce8ff66}.av.f-oro::after{box-shadow:0 0 22px #ffd84a77}.av.f-hielo::after{box-shadow:0 0 20px #9adfff88}
+.av.f-aurora::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#53f7ff,#6d7bff,#e16dff,#5affc5,#53f7ff);z-index:-1;animation:fspin 4s linear infinite;box-shadow:0 0 18px #53f7ff88}
+.av.f-electrico::before{content:"⚡";position:absolute;inset:-18px;display:grid;place-items:center;font-size:18px;z-index:-1;filter:drop-shadow(0 0 7px #52eaff);animation:v21bolt .5s infinite alternate}
+@keyframes v21bolt{to{transform:scale(1.22) rotate(8deg)}}
+.av.f-volcan::before{content:"";position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(#ff3d00,#ffd34e,#ff3d00,#ff7b00,#ff3d00);z-index:-1;animation:fspin 1.7s linear infinite;box-shadow:0 0 18px #ff4d2477}
+.av.f-cosmico::before{content:"✦  ·  ✧  ·  ✦";position:absolute;inset:-20px;display:grid;place-items:center;color:#e8d5ff;font-size:10px;letter-spacing:3px;z-index:-1;animation:v21cos 5s linear infinite;filter:drop-shadow(0 0 5px #b875ff)}
+@keyframes v21cos{to{transform:rotate(360deg)}}
+/* Nombres premium */
+.n-aurora{background:linear-gradient(90deg,#5affc5,#5aeaff,#a87cff,#ff7ad1,#5affc5);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;animation:rbw 3s linear infinite;filter:drop-shadow(0 0 3px #65f5ff)}
+.n-volcan{background:linear-gradient(90deg,#ff5b2e,#ffd34e,#ff7a30,#ff3b22);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;animation:rbw 2.2s linear infinite;filter:drop-shadow(0 0 3px #ff5b2e)}
+.n-cyber{color:#7ff6ff;text-shadow:0 0 5px #36e0ff,0 0 14px #36e0ff;font-weight:900;letter-spacing:.4px}
+.n-cosmico{background:linear-gradient(90deg,#9d7cff,#ff7ad1,#7ff6ff,#9d7cff);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;animation:rbw 2.6s linear infinite;filter:drop-shadow(0 0 4px #b875ff)}
+/* Mesas nuevas + acabados de las existentes */
+.board[data-t=aurora]{background:radial-gradient(circle at 75% 22%,#c8ffff 0 2%,transparent 3%),radial-gradient(circle at 20% 80%,#ff77e644,transparent 30%),linear-gradient(135deg,#061d35,#164e67 50%,#53245f);border-color:#54edff;box-shadow:0 0 0 2px #54edff55,0 8px 22px #0008,inset 0 0 50px #54edff22}
+.board[data-t=volcan]{background:radial-gradient(circle at 30% 70%,#ffd45b 0 3%,transparent 4%),radial-gradient(circle at 75% 25%,#ff4b2544,transparent 32%),linear-gradient(145deg,#240b12,#7b211c 55%,#19060d);border-color:#ff754d;box-shadow:0 0 0 2px #ff754d44,0 8px 22px #0008,inset 0 0 50px #ff4b2422}
+.board[data-t=cyber]{background:linear-gradient(135deg,#06101d 25%,#103047 25% 50%,#06101d 50% 75%,#173552 75%);background-size:30px 30px;border-color:#38e5ff;box-shadow:0 0 0 2px #38e5ff44,0 8px 22px #0008,inset 0 0 40px #38e5ff18}
+.board[data-t=lluvia]{background:radial-gradient(2px 2px at 20% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 60% 20%,#fff,transparent),radial-gradient(2px 2px at 80% 70%,#fff,transparent),linear-gradient(#07163d,#1b2b68);border-color:#8297ff;box-shadow:0 0 0 2px #8297ff44,0 8px 22px #0008}
+
+/* Tienda: previews más grandes y sensación de objeto coleccionable. */
+.si{transition:transform .18s,box-shadow .18s,border-color .18s;position:relative;overflow:hidden}
+.si:hover{transform:translateY(-2px);box-shadow:0 8px 18px #0005}
+.si .sicx{min-height:84px}
+.tprev{box-shadow:0 5px 14px #0008!important;transition:transform .25s,filter .25s}
+.v2-feature{box-shadow:0 7px 20px #0005,inset 0 1px 0 #fff1}
+.v2-feature .fp{filter:drop-shadow(0 6px 8px #0008);transform:scale(1.04)}
+
+/* Caída y captura: sensación de impacto. */
+.v21-impact{position:fixed;left:50%;top:48%;width:20px;height:20px;border-radius:50%;pointer-events:none;z-index:79;transform:translate(-50%,-50%);border:3px solid #fff;box-shadow:0 0 0 0 #fff,0 0 22px #ffd84a;animation:v21impact .55s ease-out forwards}
+@keyframes v21impact{to{width:210px;height:210px;opacity:0;border-width:1px;box-shadow:0 0 0 12px #ffd84a00,0 0 45px #ffd84a00}}
+.v21-spark{position:fixed;left:50%;top:48%;z-index:79;pointer-events:none;font-size:20px;animation:v21spark .65s ease-out forwards}
+@keyframes v21spark{from{opacity:1;transform:translate(-50%,-50%) scale(.4)}to{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(140deg)}}
+
+/* Audio: controles menos agresivos y feedback más orgánico. */
+#sndb button{transition:transform .15s,filter .15s}.sndp:active,#sndb button:active{transform:scale(.94)}
+@media(max-width:380px){#menu{padding-left:10px;padding-right:10px}.v2-featured{gap:7px}.v2-feature{padding:9px}.si .sicx{min-height:78px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+<script id="caida-v21-script">
+(function(){
+  /* Scroll móvil: fuerza un contenedor que no robe el gesto de un dedo. */
+  try{document.documentElement.style.touchAction='pan-y';document.body.style.touchAction='pan-y'}catch(e){}
+
+  /* Logros: reparación defensiva del estado y botones. */
+  window.claimAch=function(id){
+    try{
+      store.ach=Array.isArray(store.ach)?store.ach:[];store.achR=Array.isArray(store.achR)?store.achR:[];
+      const a=ACH.find(x=>x[0]===id);if(!a||store.ach.includes(id))return;
+      const idx=store.achR.indexOf(id);if(idx<0)return;
+      store.achR.splice(idx,1);store.ach.push(id);store.gold=(Number(store.gold)||0)+Number(a[4]||0);save();
+      if(window.sfx&&sfx.caida)sfx.caida(2);toast('🏆 +'+a[4]+' de oro por «'+a[1]+'»');showMenu('logros');
+    }catch(e){toast('No se pudo reclamar el logro. Inténtalo otra vez')}
+  };
+  window.claimAllAch=function(){
+    try{
+      store.ach=Array.isArray(store.ach)?store.ach:[];store.achR=Array.isArray(store.achR)?store.achR:[];
+      const ready=[...store.achR],done=[];let gold=0;
+      ready.forEach(id=>{const a=ACH.find(x=>x[0]===id);if(a&&!store.ach.includes(id)){store.ach.push(id);gold+=Number(a[4]||0);done.push(id)}});
+      store.achR=[];store.gold=(Number(store.gold)||0)+gold;save();
+      if(done.length){if(window.sfx&&sfx.caida)sfx.caida(3);toast('🏆 +'+gold+' de oro por '+done.length+' logros');}
+      showMenu('logros');
+    }catch(e){toast('No se pudieron reclamar los logros')}
+  };
+
+  /* Cartas clásicas: rediseño sin cambiar valores ni reglas. */
+  window.svgCard=function(c){
+    const k=NCOL[c.s],n=c.n,F="Lilita One,Arial Rounded MT Bold,sans-serif";
+    const id='c21'+c.id+'_'+c.s+'_'+c.n;
+    const pip=n>=10?nFig(n,c.s,k):'';
+    const center=n>=10?pip:`<g fill="${k}">${Array.from({length:n},(_,i)=>{const cols=n<=3?1:2,rows=Math.ceil(n/cols),col=i%cols,row=Math.floor(i/cols),x=50+(col-(cols-1)/2)*27,y=62+(row-(rows-1)/2)*24;return `<circle cx="${x}" cy="${y}" r="${n<=4?7.2:6.2}" fill="${k}"/><circle cx="${x-2}" cy="${y-2}" r="1.8" fill="#fff" opacity=".35"/>`}).join('')}</g>`;
+    return `<div class="c nw" data-id="${c.id}" aria-label="${n} de ${SU[c.s][1]}"><svg viewBox="0 0 100 142" preserveAspectRatio="none">
+      <defs><linearGradient id="${id}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".48" stop-color="#fffaf0"/><stop offset="1" stop-color="#efe3ca"/></linearGradient><filter id="${id}sh"><feDropShadow dx="0" dy="2" stdDeviation="1.5" flood-opacity=".35"/></filter></defs>
+      <rect x="1" y="1" width="98" height="140" rx="12" fill="#fff" filter="url(#${id}sh)"/>
+      <rect x="3.5" y="3.5" width="93" height="135" rx="10" fill="url(#${id}g)" stroke="${k}" stroke-width="5"/>
+      <rect x="9" y="9" width="82" height="124" rx="7" fill="none" stroke="${k}" stroke-opacity=".22" stroke-width="1.5"/>
+      <path d="M14 15H35" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      <circle cx="15" cy="26" r="5.5" fill="${k}" opacity=".13"/><text x="15" y="29" font-family="${F}" font-size="17" fill="${k}" text-anchor="middle">${n}</text>
+      <circle cx="85" cy="116" r="5.5" fill="${k}" opacity=".13"/><text x="85" y="120" font-family="${F}" font-size="17" fill="${k}" text-anchor="middle" transform="rotate(180 85 121)">${n}</text>
+      ${center}
+      <path d="M18 126Q50 134 82 126" fill="none" stroke="${k}" stroke-opacity=".12" stroke-width="2"/>
+    </svg></div>`;
+  };
+
+  /* Animación de vuelo más suave: curva, giro, escala e impacto. */
+  window.fly=async function(e,to,ms,fade){
+    try{
+      if(window.sfx&&sfx.swish)sfx.swish();
+      const r=e.getBoundingClientRect(),dx=to.left-r.left,dy=to.top-r.top;
+      const rot=(Math.random()*10-5).toFixed(1),lift=Math.max(24,Math.min(80,Math.abs(dy)*.18));
+      const a=e.animate([
+        {transform:'translate3d(0,0,0) rotate(0deg) scale(1)',opacity:1,offset:0},
+        {transform:`translate3d(${dx*.38}px,${dy*.38-lift}px,0) rotate(${rot}deg) scale(1.08)`,opacity:1,offset:.42},
+        {transform:`translate3d(${dx}px,${dy}px,0) rotate(${-rot}deg) scale(.94)`,opacity:fade?0:1,offset:1}
+      ],{duration:ms,easing:'cubic-bezier(.2,.72,.18,1)',fill:'forwards'});
+      await a.finished;e.style.left=to.left+'px';e.style.top=to.top+'px';e.style.opacity=fade?'0':'1';e.style.transform='';
+      return e;
+    }catch(err){e.style.left=to.left+'px';e.style.top=to.top+'px';return e}
+  };
+
+  /* Impacto visual cada vez que se dispara una caída. */
+  const oldFlash=window.flashCaida;
+  if(typeof oldFlash==='function'){
+    window.flashCaida=function(n,ml,p){
+      oldFlash(n,ml,p);
+      try{
+        const q=document.createElement('div');q.className='v21-impact';document.body.appendChild(q);setTimeout(()=>q.remove(),650);
+        const icons=n===12?['👑','✨','💎','🔥','⭐']:['✨','🃏','💫','💰'];
+        for(let i=0;i<8;i++){const x=document.createElement('span');x.className='v21-spark';x.textContent=icons[i%icons.length];x.style.setProperty('--dx',(Math.random()*180-90)+'px');x.style.setProperty('--dy',(Math.random()*180-90)+'px');document.body.appendChild(x);setTimeout(()=>x.remove(),700)}
+      }catch(e){}
+    };
+  }
+
+  /* SFX más cálidos: sustituye tonos cuadrados/sierra por armónicos filtrados. */
+  try{
+    const tone=(f,t,d,v,type='triangle')=>{const a=au();if(!a)return;const o=a.createOscillator(),g=a.createGain(),lp=a.createBiquadFilter();o.type=type;o.frequency.setValueAtTime(f,t);lp.type='lowpass';lp.frequency.setValueAtTime(Math.min(5200,f*4),t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.018);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(lp).connect(g).connect(a.destination);o.start(t);o.stop(t+d+.03)};
+    window.sfx={
+      swish(){nz(NOW(),.12,'bandpass',850,2800,.13)},
+      flip(){const t=NOW();nz(t,.06,'highpass',1800,4200,.18);tone(880,t,.06,.06,'sine')},
+      capture(){const t=NOW();nz(t,.11,'lowpass',900,260,.35);tone(196,t,.18,.08,'sine');tone(294,t+.06,.16,.06,'triangle')},
+      hit(){const t=NOW();tone(523,t,.12,.10);tone(659,t+.045,.16,.08);nz(t,.08,'bandpass',1200,500,.13)},
+      chime(){const t=NOW();[523,659,784,1047].forEach((f,i)=>tone(f,t+i*.075,.28,.095,'sine'))},
+      tick(){tone(880,NOW(),.045,.035,'sine')},
+      drum(){const t=NOW();nz(t,.16,'lowpass',180,70,.38);tone(392,t+.14,.34,.08);tone(523,t+.31,.38,.09)},
+      caida(lv){const t=NOW(),N=[523,659,784,988,1175,1397];if(lv>=4){[523,659,784,988].forEach((f,i)=>tone(f,t+i*.09,.65,.12,'sine'));[1047,1319,1568].forEach((f,i)=>tone(f,t+.42+i*.08,.55,.09,'triangle'));nz(t,.35,'bandpass',3500,800,.12);return}N.slice(0,2+lv).forEach((f,i)=>tone(f,t+i*.075,.28,.095,'triangle'));nz(t,.11,'lowpass',520,140,.25)},
+      canto(lv){const t=NOW(),N=[440,554,659,784,988];N.slice(0,1+lv).forEach((f,i)=>tone(f,t+i*.07,.27,.085,'sine'))},
+      win(){const t=NOW();[523,659,784,1047,1319,1568].forEach((f,i)=>tone(f,t+i*.10,.34,.10,'sine'))},
+      lose(){const t=NOW();[392,349,330,294].forEach((f,i)=>tone(f,t+i*.18,.34,.075,'triangle'))}
+    };
+  }catch(e){}
+
+  /* Voz: selecciona la mejor voz española disponible y habla con ritmo menos mecánico. */
+  window.pickVoz=function(){try{const v=speechSynthesis.getVoices(),L=(store&&store.lang)||'es';if(L!=='es'){VOZ=v.find(x=>x.lang.toLowerCase().startsWith(L))||null;return}const pref=['es-VE','es-MX','es-CO','es-US','es-419','es-ES'];VOZ=pref.map(l=>v.find(x=>x.lang.replace('_','-').toLowerCase()===l.toLowerCase())).find(Boolean)||v.find(x=>/^es(-|_)/i.test(x.lang))||null}catch(e){VOZ=null}};
+  window.speak=function(t){if(!vozOn)return;try{pickVoz();const raw=String(t).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();if(!raw)return;const u=new SpeechSynthesisUtterance(TR(raw));if(VOZ){u.voice=VOZ;u.lang=VOZ.lang}else u.lang='es-419';u.rate=raw.length>22?.88:.92;u.pitch=.98;u.volume=.92;speechSynthesis.cancel();setTimeout(()=>{try{speechSynthesis.speak(u)}catch(e){}},35)}catch(e){}};
+
+  /* Música: reemplazo del motor más áspero por una base cálida y dinámica. */
+  try{
+    window.musTick=function(){if(!MU.on||!AC)return;const E=.30;while(MU.nx<AC.currentTime+.38){const i=MU.i,bar=Math.floor(i/8)%8,sub=i%8,t=MU.nx,prog=PROG[bar],root=NF(prog[0]-12);if(sub===0){mnote(root,t,1.7,'sine',.26,1100);mnote(NF(prog[0]),t,1.25,'triangle',.06,2600)}if(sub===2||sub===6){mnote(NF(prog[sub===2?1:2]+12),t,.42,'sine',.065,3000)}if(sub===4){mnote(NF(prog[0]+12),t,.34,'triangle',.055,2800)}if(sub===7){mnote(NF(prog[2]+24),t,.22,'sine',.035,4200)}MU.nx+=E;MU.i++}}
+    window.gmTick=function(){if(!GM.on||!AC)return;const E=.30;while(GM.nx<AC.currentTime+.38){const i=GM.i,bar=Math.floor(i/8)%4,sub=i%8,t=GM.nx,prog=GPROG[bar],root=NF(prog[0]-12);mnote(root,t,.42,'sine',GM.lvl===2?.20:.13,900);if(sub===0||sub===4)mnote(NF(prog[0]),t,.24,'triangle',.06,2600);if(sub===2||sub===6)mnote(NF(prog[1]+12),t,.22,'sine',.05,3200);if(GM.lvl===2&&(sub===1||sub===5))mnote(NF(prog[2]+24),t,.16,'triangle',.035,3600);GM.nx+=E;GM.i++}}
+  }catch(e){}
+
+  /* Respetar preferencias de movimiento. */
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){try{gmStop();musStop()}catch(e){}}});
+})();
+</script>
 </body></html>
