@@ -480,7 +480,7 @@ const g=gBack(r0);hands[p].push(deck.pop());
 const dst=p==0?document.querySelector('#hd'):document.querySelector('#seats [data-p="'+p+'"] .gb'),r1=dst?dst.getBoundingClientRect():r0;
 await fly(g,{left:r1.left+r1.width/2-15,top:r1.top+r1.height/2-22},170);g.remove();render()}
 dealt=hands.map(h=>[...h]);missPen=F()}
-function render(){
+function render(){LA=Date.now();
 $('p0').innerHTML=avatarHTML(30)+ccHTML(0)+(holderOf(0)==0?pile(score[0],teamLbl(0))+stackHTML('cap0',tcaps(0)):'')+(mano==0?stackHTML('dp',deck.length,5)+'<div class="dl">Mazo</div>':'');$('p1').innerHTML='';
 $('meta').textContent='a '+META+' · mano: '+nm(mano)+' · tus cartas '+TT().map(tcaps).join(' / ');
 $('seats').className='seats n'+N;
@@ -1077,6 +1077,10 @@ function trNode(n){const v=n.nodeValue;if(!v||!v.trim()||TDONE.get(n)===v)return
 function trWalk(r){if(!TRX||!r)return;if(r.nodeType==3)return trNode(r);if(r.nodeType!=1||/^(SCRIPT|STYLE|svg|text)$/i.test(r.nodeName))return;const w=document.createTreeWalker(r,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const p=n.parentNode&&n.parentNode.nodeName;if(p=='SCRIPT'||p=='STYLE')continue;trNode(n)}r.querySelectorAll&&r.querySelectorAll('[placeholder]').forEach(e=>{const t=TR(e.placeholder);if(t!==e.placeholder)e.placeholder=t})}
 function startTR(){buildTR();if(!TRX)return;trWalk(document.body);new MutationObserver(ms=>{for(const m of ms){if(m.type=='characterData')trNode(m.target);else m.addedNodes.forEach(trWalk)}}).observe(document.body,{subtree:true,childList:true,characterData:true})}
 function setLang(l){store.lang=l;save();location.reload()}
+
+let LA=Date.now();setInterval(()=>{try{if($('app').style.display!='block'||over){LA=Date.now();return}
+if(Date.now()-LA>20000&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},3000);
+window.addEventListener('error',e=>{console.warn('Caída error:',e.message)});
 function speak(t){if(!vozOn)return;try{if(!VOZ)pickVoz();const u=new SpeechSynthesisUtterance(TR(t.replace(/<[^>]*>/g,'')));if(VOZ){u.voice=VOZ;u.lang=VOZ.lang}else u.lang=(store.lang&&store.lang!='es')?store.lang:'es-ES';u.rate=.95;u.pitch=1.15;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
 function shout(call){
 flash('<div style="font-size:76px">¡'+(call==1?'UNOOO':'CUATROOO')+'!</div><div style="font-size:22px">'+nm(mano)+' va '+(call==1?'hacia arriba ↑':'hacia abajo ↓')+'</div>',3);
@@ -1181,15 +1185,15 @@ if(p==0){stopTimer();setRem('');for(const d of dec[0])if(!d.void&&!d.auto&&!d.mi
 if(p!=0)bubble(p,'🃏 Tira '+lbl(card),2600);
 if(p==0&&hands[0].length==3&&!dec[0].length&&info(hands[0]).has.length)msg('Se quemó tu canto: no lo cantaste');
 const src=p==0?document.querySelector('#hd [data-id="'+card.id+'"]'):document.querySelector('#seats [data-p="'+p+'"] .back');
-const g=ghost(card,src.getBoundingClientRect());src.style.visibility='hidden';
+const g=ghost(card,src?src.getBoundingClientRect():{left:innerWidth/2-29,top:innerHeight/2-43,width:58,height:86});if(src)src.style.visibility='hidden';
 const m=table.find(c=>c.n==card.n);
 if(!m){playLogic(p,card);const el=document.querySelector('#tb [data-id="'+card.id+'"]');
 if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),p?1000:550);el.style.visibility='';sfx.flip()}g.remove();return}
 const grp=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;grp.push(x);k++}
-await fly(g,document.querySelector('#tb [data-id="'+m.id+'"]').getBoundingClientRect(),p?1000:550);
+{const te=document.querySelector('#tb [data-id="'+m.id+'"]');await fly(g,te?te.getBoundingClientRect():{left:innerWidth/2-29,top:innerHeight/2-43,width:58,height:86},p?1000:550)}
 const gs=[g];
-for(const x of grp){const el=document.querySelector('#tb [data-id="'+x.id+'"]');gs.push(ghost(x,el.getBoundingClientRect()));el.style.visibility='hidden'}
+for(const x of grp){const el=document.querySelector('#tb [data-id="'+x.id+'"]');if(!el)continue;gs.push(ghost(x,el.getBoundingClientRect()));el.style.visibility='hidden'}
 sfx.capture();await sleep(p?700:350);
 const cpe=document.querySelector('#cap'+holderOf(tm(p))),cr=cpe&&cpe.getBoundingClientRect(),dest=cr?{left:cr.left,top:cr.top}:{left:innerWidth/2-29,top:tm(p)?-120:innerHeight+20};
 await Promise.all(gs.map(e=>fly(e,dest,600,true)));
@@ -1201,8 +1205,9 @@ const m=table.find(c=>c.n==card.n);
 if(m){const g=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;g.push(x);k++}
 table=table.filter(c=>!g.includes(c));caps[p]+=g.length+1;lastCap=p;
-let t=nm(p)+' tira '+lbl(card)+' y se lleva '+(g.length+1);if(p&&ca&&Math.random()<.35)setTimeout(()=>{Math.random()<.5?sendSnd(p,pk(['risas','bocina','badum','aplausos','pato'])):emote(p,'stk:'+pk(['risa','rey','caida','brincos']))},900);if(p)bubble(p,'Se lleva '+(g.length+1)+' cartas',2000);
+let t=nm(p)+' tira '+lbl(card)+' y se lleva '+(g.length+1);if(p)bubble(p,'Se lleva '+(g.length+1)+' cartas',2000);
 const ca=last&&last.id==m.id&&last.by!=p,ml=!table.length&&deck.length>0;
+if(p&&ca&&Math.random()<.35)setTimeout(()=>{try{Math.random()<.5?sendSnd(p,pk(['risas','bocina','badum','aplausos','pato'])):emote(p,'stk:'+pk(['risa','rey','caida','brincos']))}catch(e){}},900);
 if(ca&&(tm(p)==1||Math.random()<.5))setTimeout(()=>emote(tm(p)==1?p:1,tm(p)==1?'😏 ¡Caída!':'😡'),900);
 if(ca&&p==0){ST().caidas++;if(card.n==12)ST().rey++}if(ml&&p==0)ST().ml++;if(ca){add(tm(p),P(card.n));t+=' · ¡CAÍDA! +'+P(card.n)}
 msg(t);last=null;
@@ -1228,7 +1233,7 @@ if(over)return end();
 setAct('<button id="nx">Siguiente mano</button>');$('nx').onclick=newHand}
 function end(){setRem('');gmStop();
 render();const w=forceW!=null?forceW:score.indexOf(Math.max(...score)),tg=TRN&&TRN.game;
-if(!settled){settled=true;w==0?sfx.win():sfx.lose();const dbl=forceW!=null&&score.every((x,i)=>i==forceW||x==0),pay=Math.round(entry*(MULTI()?N:2)*(1-rake(entry)))*(dbl&&w==0?2:1);if(w==0)store.gold+=pay;else if(dbl&&entry)store.gold=Math.max(0,store.gold-entry);store.played=(store.played||0)+1;{const st=ST();st.games++;if(w==0){st.wins++;st.streak++;st.maxStreak=Math.max(st.maxStreak,st.streak);st.gold+=pay}else st.streak=0}setTimeout(checkAch,1500);
+if(!settled){settled=true;store.pend=null;w==0?sfx.win():sfx.lose();const dbl=forceW!=null&&score.every((x,i)=>i==forceW||x==0),pay=Math.round(entry*(MULTI()?N:2)*(1-rake(entry)))*(dbl&&w==0?2:1);if(w==0)store.gold+=pay;else if(dbl&&entry)store.gold=Math.max(0,store.gold-entry);store.played=(store.played||0)+1;{const st=ST();st.games++;if(w==0){st.wins++;st.streak++;st.maxStreak=Math.max(st.maxStreak,st.streak);st.gold+=pay}else st.streak=0}setTimeout(checkAch,1500);
 store.hist.unshift({d:new Date().toLocaleDateString('es'),r:w==0?'Ganaste':'Perdiste',s:score.join(' - '),m:(TRN&&TRN.playing?'Torneo':entry==0?'Contra la IA':opt.mode=='locura'?'Locura':opt.mode=='practica'?'Práctica':'Normal'),n:N,g:(w==0?pay-entry:-entry*(dbl?2:1))});store.hist=store.hist.slice(0,30);save();
 msg(w!=0?(N==2?'Ganó el rival':MULTI()?'Ganó '+nm(w):'Ganaron los rivales')+(entry?'. Perdiste '+(dbl?entry*2+' de oro (doble por trivilín)':entry+' de oro'):''):'¡Ganaste la partida!'+(pay?' +'+pay+' de oro':'')+(dbl?' (doble por trivilín)':''));
 if(TRN&&TRN.playing)torneoResult(w==0)}
@@ -1289,7 +1294,7 @@ function startGame(e){musStop();setTimeout(gmStart,400);applyTable();if(e!=null)
 
 if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
 if(opt.mode=='practica'||e==0)RN=null;
-N=opt.mode=='practica'?2:opt.players;IND=N==4&&opt.team=='solo';entry=e;META=opt.meta;store.gold-=e;save();settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
+N=opt.mode=='practica'?2:opt.players;IND=N==4&&opt.team=='solo';entry=e;META=opt.meta;store.gold-=e;store.pend=e>0?{e:e,t:Date.now()}:null;save();settled=false;$('menu').style.display='none';$('app').style.display='block';renderEm();newGame()}
 const LES=[['Ronda','2 cartas iguales y una cualquiera. Del 1 al 7 vale 1 punto; el 10 vale 2; el 11, 3; el 12, 4.',[204,104,7]],
 ['Vigía · 7 puntos','Una ronda más una carta que le sigue o le antecede. Aquí 4, 4 y 5.',[204,104,305]],
 ['Patrulla · 6 puntos','3 cartas seguidas. Después del 7 sigue el 10.',[203,204,205]],
@@ -1605,6 +1610,6 @@ if(n>B){$('cx').innerHTML='Cartas de más: ';for(let k=1;k<=n-B;k++){$('cx').inn
 else $('cx').textContent=n<B?(MULTI()?`No llega a ${B}. Sin puntos`:`No llega a ${B}. ${t==0?(N==2?'El rival suma ':'Los rivales suman '):(N==2?'Tú sumas ':'Tu equipo suma ')}${Math.max(0,tcaps(1-t)-base(1-t))} puntos`):`Justo ${B}: sin puntos`;
 await sleep(900)}
 o.style.display='none'}
-load();if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);
+load();if(store.pend&&store.pend.e>0){const g=store.pend.e;store.gold+=g;store.pend=null;save();setTimeout(()=>toast('💰 Te devolvimos '+g+' de oro de la partida que no terminó'),1500)}if(store.avatar=='p_foto'||(store.avatar&&store.avatar.startsWith('p_')&&!AVP.some(x=>x[0]==store.avatar))){store.avatar='oro'}if(store.photo){delete store.photo;save()}if(!store.lang){const nl=(navigator.language||'es').slice(0,2).toLowerCase();store.lang=LANGS.some(x=>x[0]==nl)?nl:'es';save()}applySet();applyBack();applyTable();startTR();$('mus').onclick=()=>{store.music=store.music===false;save();store.music?gmStart():gmStop();applySet()};$('dk').textContent='Mazo: '+(store.deck=='clasico'?'Clásico':'Dorado');showMenu('home');setTimeout(dailyPopup,700);
 </script><script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}</script>
 </body></html>
