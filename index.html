@@ -581,6 +581,10 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 @keyframes aur{from{transform:translateX(-12%) skewX(-10deg)}to{transform:translateX(12%) skewX(10deg)}}
 #tfx .fcard{position:absolute;bottom:-50px;width:22px;height:32px;border-radius:4px;border:1.5px solid #ffd84a;background:#071a2ecc;color:#3dffb0;font:900 13px sans-serif;display:flex;align-items:center;justify-content:center;animation:fcard 9s linear infinite}
 @keyframes fcard{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.8}90%{opacity:.8}100%{transform:translateY(-480px) rotate(200deg);opacity:0}}
+
+.chi2{font-size:11px!important;padding:4px 6px!important;margin-top:4px;background:#ffffff14!important;box-shadow:none}
+.cinf{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.cii{background:#ffffff10;border-radius:12px;padding:6px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}.cii.own{opacity:.55}.cii small{font-size:10px;line-height:1.1}.cii b{font-size:11px;color:#ffd84a}
+.ciip{transform:scale(.7);height:44px;display:flex;align-items:center;justify-content:center}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -845,13 +849,13 @@ const BETAV={beta:1200,pionero:900,'🧪 ¡Pionero de Caída!':400};const BETA=t
 function betaCheck(){if(BETA&&!store.betaG){store.betaG=1;store.gems=(store.gems||0)+2000;save()}if(BETA&&!store.betaG2){store.betaG2=1;store.gems=(store.gems||0)+3000;store.gold=(store.gold||0)+5000;save();setTimeout(()=>{toast('🧪 Regalo de beta: +3.000 gemas y +5.000 de oro para probar la tienda');sfx.chime()},3500)}if(BETA&&!store.betaMsg){store.betaMsg=1;save();setTimeout(betaModal,2400)}
 if(!BETA&&store.betaG&&!store.betaEnd){store.betaEnd=1;store.gems=0;['f:beta','n:pionero','pionero','t:pionero'].forEach(k=>{if(!store.owned.includes(k))store.owned.push(k)});if(!store.ownedEmo.includes('🧪 ¡Pionero de Caída!'))store.ownedEmo.push('🧪 ¡Pionero de Caída!');save();setTimeout(()=>toast('🧪 ¡Gracias por ser beta tester! Recibiste el mazo, el nombre y el emoji exclusivos de Pionero'),2200)}}
 
-const GEX={ronda:[[5,0],[5,1],[2,2]],'vigía':[[5,0],[5,1],[6,3]],patrulla:[[3,0],[4,2],[5,1]],registro:[[1,0],[11,1],[12,3]],'casa grande':[[12,0],[12,1],[1,2]],'casa chica':[[1,0],[1,1],[12,2]],flor:[[2,1],[6,1],[11,1]],'flor patrulla':[[5,0],[6,0],[7,0]],'flor registro':[[1,3],[11,3],[12,3]],'trivilín':[[7,0],[7,1],[7,2]]};
+const GEX={ronda:[[5,0],[5,1],[2,2]],patrulla:[[3,0],[4,2],[5,1]],'vigía':[[5,0],[5,1],[6,3]],registro:[[1,0],[11,1],[12,3]],'casa grande':[[12,0],[12,1],[1,2]],'casa chica':[[1,0],[1,1],[12,2]],flor:[[2,1],[6,1],[11,1]],'flor patrulla':[[5,0],[6,0],[7,0]],'flor registro':[[1,3],[11,3],[12,3]],'trivilín':[[7,0],[7,1],[7,2]]};
 function guiaCantos(){if($('gmod'))return $('gmod').remove();const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};
 const sung=hands&&dec?[...Array(N).keys()].map(q=>{const L=(dec[q]||[]);return L.length?`<div class="gsg"><b>${q==0?'Tú':nm(q)}:</b> ${L.map(x=>`<span class="cc">${x.name}${x.void?' ✕':''}</span>`).join(' ')}</div>`:''}).join(''):'';
 const ex=k=>(EXPT[store.lang]&&EXPT[store.lang][k])||EXP[k]||'';
 d.innerHTML=`<div class="gbox"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:20px">📖 Guía de cantos</b><button class="sm" onclick="$('gmod').remove()">✕</button></div>
 <div class="gsec">🎵 Cantados en esta mano</div>${sung||'<p class="sub">Nadie ha cantado todavía.</p>'}
-<div class="gsec">📋 Todos los cantos</div>${Object.keys(GEX).map(k=>`<div class="grw"><div class="gex">${GEX[k].map(([n,s0],i)=>svgCard({id:'g'+k+i,n,s:s0,_f:'clasico'})).join('')}</div><div style="flex:1;min-width:0"><b>${k}</b> <span class="gpt">${k=='ronda'?'1-4':k=='trivilín'?'¡gana!':PTS[k]}</span><br><span class="sub">${ex(k)}</span></div></div>`).join('')}</div>`;
+<div class="gsec">📋 Todos los cantos</div>${Object.keys(GEX).map(k=>`<div class="grw"><div class="gex">${GEX[k].map(([n,s0],i)=>svgCard({id:'g'+k+i,n,s:s0,_f:'clasico'})).join('')}</div><div style="flex:1;min-width:0"><b>${k}</b> <span class="gpt">${k=='ronda'?'1-4':k=='trivilín'?(opt.triv===false?5:'¡gana!'):PTS[k]}</span><br><span class="sub">${ex(k)}</span></div></div>`).join('')}</div>`;
 document.body.appendChild(d)}
 
 function betaModal(){if($('bmod'))return;const d=document.createElement('div');d.id='bmod';d.innerHTML=`<div class="bmb"><div style="font-size:54px">🧪</div><div class="ttl" style="font-size:30px">¡Gracias por ser beta tester!</div><p>Te otorgamos <b style="color:#ffd84a">${I('gem',18)} 2.000 gemas</b> para que pruebes los cosméticos de la tienda: marcos, mesas animadas, cartas, efectos, stickers y sonidos.</p><p class="sub">⏳ Las gemas son solo para estos <b>primeros 14 días de prueba</b>. Cuando el juego salga para todos se retiran, y a cambio recibirás el <b>marco, las cartas, la mesa animada, el nombre y el emoji exclusivos de Pionero</b>, que nadie más podrá tener.</p><p>🐞 Si ves algún error, avísanos con una captura. ¡Nos ayudas muchísimo!</p><button class="mb" onclick="$('bmod').remove();showMenu('tienda')">Ir a la tienda</button><button class="mb bk" onclick="$('bmod').remove()">Entendido</button></div>`;document.body.appendChild(d);sfx.chime()}
@@ -866,7 +870,7 @@ async function lvPush(){if(LV.mode!='host'||!LV.room)return;try{await FB.F.updat
 async function lvSend(m){if(LV.mode!='guest')return;try{await FB.F.addDoc(FB.F.collection(FB.db,'rooms',LV.room,'moves'),{by:FBU.uid,seat:LV.me,...m,t0:Date.now()})}catch(e){toast('Sin conexión: '+(e.code||e.message))}}
 /* --- anfitrión --- */
 function lvStartHost(r){const same=LV.room==r.id&&LV.done;LV.mode='host';LV.room=r.id;LV.seats=r.players.slice();LV.REM={};LV.ev=[];LV.evq=0;LV.raw=[];LV.done=same?LV.done:{};LV.need=null;
-Object.assign(opt,{players:r.size,team:'parejas',mode:'normal',meta:r.meta,dif:'dificil',casa:true,flor:true,noCheat:false});
+Object.assign(opt,{players:r.size,team:'parejas',mode:'normal',meta:r.meta,dif:'dificil',casa:true,flor:true,noCheat:false,triv:!r.ranked});
 RN=[null];for(let q=1;q<r.size;q++){const u=LV.seats[q],pi=u?(r.pinfo||{})[u]||{}:null;RN[q]=pi?pi.name||'Jugador':['','Rafa','Marta','Luis'][q]}window._keepRN=1;ADV=null;startGame(0);for(let q=1;q<r.size;q++){const u=LV.seats[q],pi=u?(r.pinfo||{})[u]||{}:null;if(u){LV.REM[q]=u;AIC[q]={av:pi.av||'oro',fr:pi.fr||'none',ns:pi.ns||'none',deck:pi.face||'clasico',back:pi.back||'clasico',table:pi.table||'madera',fxc:pi.fxc||'none',fxk:pi.fxk||'none',vp:1,human:1}}}
 const {F,db}=FB;if(LV.unM)LV.unM();LV.unM=F.onSnapshot(F.collection(db,'rooms',r.id,'moves'),sn=>{sn.docChanges().forEach(ch=>{if(ch.type=='added'&&!LV.done[ch.doc.id]){LV.done[ch.doc.id]=1;try{lvMove(ch.doc.data())}catch(e){console.warn(e)}}})});
 betPay(r);rkFeePay(r);render();lvPush();setTimeout(vcUI,500)}
@@ -1034,13 +1038,13 @@ LV.dl=g.tl?Date.now()+g.tl*1000:0;const preR={};document.querySelectorAll('#tb .
 let E=[];try{E=JSON.parse(r.ev||'[]')}catch(e){}for(const e of E){if(e.q<=LV.seen)continue;LV.seen=e.q;try{
 if(e.k=='flash'){LV.fq=LV.fq||[];LV.fq.push([fix(e.t),e.lv]);lvFlashQ()}else if(e.k=='bub')bubble(rot(e.p),fix(e.t),e.ms);else if(e.k=='spk')speak(fix(e.t));else if(e.k=='sfx'&&sfx[e.f])sfx[e.f](...(e.a||[]));else if(e.k=='emo')emote(rot(e.p),e.v);else if(e.k=='fx')fxBurst(e.v);else if(e.k=='snd')playSnd(e.v);else if(e.k=='fxk')fxCanto(e.v,rot(e.p),e.n);else if(e.k=='tfx')tfxEvent(e.v,e.n)}catch(x){}}
 if(over&&g.fin&&!LV.endShown){LV.endShown=1;const win=rt(g.fin.w)==0;betWin(win,n==4&&!g.IND?2:1);lvHist(win,g,r);if(r.ranked)rkApply(r.ranked,win);setTimeout(()=>{win?sfx.win():sfx.lose();endSummary(win?0:1,0,0)},1500)}}
-function lvStartGuest(r){LV.mode='guest';LV.gameN=r.gameN||0;LV.room=r.id;LV.me=(r.seats||r.players).indexOf(FBU.uid);LV.seen=0;LV.endShown=0;LV.hostName=((r.pinfo||{})[r.host]||{}).name||'Anfitrión';LV.myName=store.name||'';musStop();$('menu').style.display='none';$('app').style.display='block';renderEm();toast('🃏 ¡La partida empezó!');setTimeout(vcUI,500)}
+function lvStartGuest(r){opt.triv=!r.ranked;PTS['trivilín']=opt.triv?99:5;LV.mode='guest';LV.gameN=r.gameN||0;LV.room=r.id;LV.me=(r.seats||r.players).indexOf(FBU.uid);LV.seen=0;LV.endShown=0;LV.hostName=((r.pinfo||{})[r.host]||{}).name||'Anfitrión';LV.myName=store.name||'';musStop();$('menu').style.display='none';$('app').style.display='block';renderEm();toast('🃏 ¡La partida empezó!');setTimeout(vcUI,500)}
 
 async function lvRestart(shuffle){const r=NET.room;if(!r||LV.mode!='host')return;let seats=(r.seats||r.players).filter(u=>r.players.includes(u));if(shuffle){const o=seats.slice(1);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}seats=[seats[0],...o]}
 const gn=(r.gameN||0)+1;$('esum')&&$('esum').remove();try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',r.id),{state:'playing',seats,gameN:gn,gs:null,ev:null})}catch(e){toast('Error: '+(e.code||e.message));return}
 lvStartHost({...r,players:seats,seats,gameN:gn});LV.gameN=gn}
 async function lvBackLobby(){const id=LV.room;lvLeave();try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',id),{state:'lobby',gs:null,ev:null})}catch(e){}$('app').style.display='none';showMenu('lobby')}
-function lvLeave(){try{vcStop();const b=$('vcbar');b&&b.remove()}catch(e){}if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
+function lvLeave(){opt.triv=true;PTS['trivilín']=99;try{vcStop();const b=$('vcbar');b&&b.remove()}catch(e){}if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
 
 setTimeout(()=>{try{Object.keys(sfx).forEach(k=>{const o=sfx[k];if(typeof o!='function')return;sfx[k]=(...a)=>{lvEv({k:'sfx',f:k,a});return o(...a)}})}catch(e){}},0);
 const _render0=render;render=function(){_render0.apply(this,arguments);if(LV.mode=='host')lvPushSoon()};
@@ -1111,7 +1115,7 @@ if(pair==1&&o==12)cand.push(['casa chica',12]);
 if(Math.abs(ORD.indexOf(o)-ORD.indexOf(pair))==1)cand.push(['vigía',7]);else cand.push(['ronda',P(pair)]);}
 if(!cand.length)return null;
 cand.sort((a,b)=>b[1]-a[1]);return{nm:cand[0][0],pts:cand[0][1],hi}}
-const NAMES=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro'];
+const NAMES=['ronda','patrulla','vigía','registro','casa grande','casa chica','flor','flor patrulla','flor registro'];
 const PTS={'trivilín':99,'vigía':7,'patrulla':6,'registro':8,'casa grande':12,'casa chica':12,'flor':10,'flor patrulla':16,'flor registro':18};
 function info(h){
 const ns=h.map(c=>c.n),ix=ns.map(n=>ORD.indexOf(n)).sort((a,b)=>a-b),fl=h.every(c=>c.s==h[0].s);
@@ -1135,7 +1139,7 @@ if(p==0){const e=dec[0].find(d=>(name=='flor'&&(d.name=='patrulla'||d.name=='reg
 if(e){name='flor '+(name=='flor'?e.name:name);dec[0]=dec[0].filter(d=>d!==e)}}
 if(dec[p].some(d=>d.name==name))return;
 const d={name,h:[...h],t:seq++,ch:false,void:false,say:h.length,p};dec[p].push(d);
-msg(nm(p)+' canta '+name+'!');render();flashCanto(p,name,d.h);bubble(p,'🎵 ¡'+name+'!');if(p==0&&isLearn()&&name!='trivilín')toast('🔔 Recuerda: cada vez que tires una carta tienes que repetir el canto');if(name=='trivilín'){trivilin(p,d);return}if(opt.mode=='practica'&&p!=0)msg('🎓 '+nm(p)+' canta '+name+': '+(EXP[name]||''))}
+msg(nm(p)+' canta '+name+'!');render();flashCanto(p,name,d.h);bubble(p,'🎵 ¡'+name+'!');if(p==0&&isLearn()&&name!='trivilín')toast('🔔 Recuerda: cada vez que tires una carta tienes que repetir el canto');if(name=='trivilín'&&opt.triv){trivilin(p,d);return}if(opt.mode=='practica'&&p!=0)msg('🎓 '+nm(p)+' canta '+name+': '+(EXP[name]||''))}
 function challenge(p,only){
 const R=rivalsOf(p),L=only?[only]:R.flatMap(q=>dec[q].filter(d=>!d.ch));let any=false;
 for(const d of L){const q=d.p;d.ch=true;any=true;
@@ -1145,9 +1149,10 @@ if(!only)for(const q of R)if(!missPen[q]){const mn=missName(q);if(mn){missPen[q]
 if(!any)return;render();if(over)end()}
 function resolve(){
 if(tcan){add(tm(mano),tcan.pts);msg(nm(mano)+' suma '+tcan.name+' de la mesa +'+tcan.pts);tcan=null}
-const RK={ronda:0,patrulla:1,'vigía':2,registro:3,flor:4,'casa chica':5,'casa grande':5,'flor patrulla':6,'flor registro':7},C=[];
+const RK={'trivilín':.5,ronda:0,patrulla:1,'vigía':2,registro:3,flor:4,'casa chica':5,'casa grande':5,'flor patrulla':6,'flor registro':7},C=[];
+for(let p=0;p<N;p++){const ok=n=>dec[p].find(d=>d.name==n&&!d.void);const fl=ok('flor');for(const [b,cmb] of [['patrulla','flor patrulla'],['registro','flor registro']]){const o=ok(b);if(fl&&o&&info(fl.h).has.includes(cmb)&&!ok(cmb)){dec[p]=dec[p].filter(d=>d!==fl&&d!==o);dec[p].push({...fl,name:cmb});msg((p==0?'Cantaste':nm(p)+' cantó')+' flor y '+b+': ¡cuenta como '+cmb+'!');break}}}
 for(let p=0;p<N;p++)for(const d of dec[p]){if(d.void||lost[p])continue;
-if(d.name=='trivilín'){if(forceW==null)forceW=tm(p);over=true;msg(nm(p)+' tiene TRIVILÍN: ¡mata partida!');continue}
+if(d.name=='trivilín'&&opt.triv){if(forceW==null)forceW=tm(p);over=true;msg(nm(p)+' tiene TRIVILÍN: ¡mata partida!');continue}
 const f=info(d.h);C.push({p,d,k:[RK[d.name]??0,(d.name=='ronda'&&f.pair!==undefined)?ORD.indexOf(f.pair):f.hi]})}
 for(const c of C)msg(nm(c.p)+' enseña '+c.d.name+' ('+c.d.h.map(x=>x.n+SU[x.s][1]).join(' ')+')');
 if(C.length){C.sort((a,b)=>b.k[0]-a.k[0]||b.k[1]-a.k[1]||(((a.p-mano-1+N*2)%N)-((b.p-mano-1+N*2)%N)));
@@ -1418,7 +1423,7 @@ const PLBL={home:'Inicio',jugar:'Jugar',aprender:'Aprender',logrosm:'Logros'};
 const MIS=[['caidas',3,'Haz 3 caídas','Cualquier partida cuenta',150],['wins',1,'Gana 1 partida','Contra la IA o en salas',150],['games',2,'Juega 2 partidas','Termina dos partidas completas',100],['ml',1,'Haz una mesa limpia','Llévate todas las cartas de la mesa',150],['cantos',2,'Gana 2 cantos','Canta y que valga tu canto',150],['quem',1,'Di «se quemó» una vez','Pilla a un rival distraído',120]];
 function mission(){const d=dayStr(0);if(!store.mis||store.mis.day!=d){const n=Math.floor(Date.now()/864e5);const i=n%MIS.length;store.mis={day:d,i,base:ST()[MIS[i][0]]||0,done:false};save()}const m=MIS[store.mis.i];return{m,cur:Math.min(m[1],Math.max(0,(ST()[m[0]]||0)-store.mis.base)),done:store.mis.done}}
 function claimMis(){const x=mission();if(x.done||x.cur<x.m[1])return;store.mis.done=true;store.gold+=x.m[4];save();sfx.caida(2);toast('🎯 ¡Misión cumplida! +'+x.m[4]+' de oro');showMenu('home')}
-const XPN=1000;function addXP(g){store.lv=store.lv||1;store.xp=(store.xp||0)+g;let up=0;while(store.xp>=XPN){store.xp-=XPN;store.lv++;up++;const r=50+store.lv*15;store.gold+=r;setTimeout(()=>{toast('⭐ ¡Subiste a nivel '+store.lv+'! +'+r+' de oro');sfx.caida(3)},1800+up*2200)}save()}
+const XPN=1000;function addXP(g){store.lv=store.lv||1;store.xp=(store.xp||0)+g;let up=0;while(store.xp>=XPN){store.xp-=XPN;store.lv++;up++;const r=200+store.lv*50,L2=store.lv;store.gold+=r;setTimeout(()=>{flash(`<div style="font-size:46px">⭐ ¡NIVEL ${L2}!</div><div style="font-size:24px;color:#ffd84a">+${r} de oro</div>`,3);sfx.caida(3);fxBurst('oro')},2600+up*2600)}save()}
 function homeHTML(){const di=dailyInfo(),x=mission(),lv=store.lv||1,xp=store.xp||0,R=(store.achR||[]).length;
 const sec=(ic,t,r)=>`<div class="hsec"><span class="hst">${ic} ${t}</span><span class="hsr">${r||''}</span></div>`;
 const q=(ic,t,sb,f)=>`<button class="qt" onclick="${f}"><span class="qi">${I(ic)}</span><b>${t}</b><small>${sb}</small></button>`;
@@ -1433,7 +1438,7 @@ return `<div class="htit"><div class="hbig">CAÍDA</div><div class="hsub">JUEGO 
 function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2><div class="mgh">👥 Con personas</div>`+mi('trophy','🏆 Rankeds','Sube de rango · '+rkTxt(rkGet('solo')),"showMenu('ranked')")+mi('table','🌐 Mesas con amigos','Crea una mesa o únete con código',"showMenu('online')")+`<div class="mgh">🤖 Contra la IA</div>`+mi('medal','🗺️ Modo Aventura','⭐ '+advStars()+'/'+ADVS.length*3+' · gana avatares de cada personaje',"showMenu('aventura')")+mi('robot','⚡ Partida rápida','Gratis para practicar · fácil o difícil',"showMenu('practica')")+mi('medal','🏟️ Torneo','Eliminatorias contra la IA',"showMenu('torneo')")}
 function aprenderHTML(bk){return bk+`<h2 class="sec">Aprender</h2>`+mi('tap','Tutorial jugable','Aprende jugando en 5 minutos',"tutLoad(0)",store.tutDone?'':'Nuevo')+mi('ask','Cómo jugar','Lo básico en pocas palabras',"showMenu('how')")+mi('note','Cantos','Todos los cantos y cuánto valen',"showMenu('cantos')")+mi('scroll','Reglas','Las reglas completas',"showMenu('rules')")+mi('learn','Guía escrita','Explicación paso a paso',"showMenu('tutorial')")}
 function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' reclamados',"showMenu('logros')",(store.achR||[]).length?(store.achR||[]).length+' por reclamar':'')+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
-function cantosHTML(bk){const L=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
+function cantosHTML(bk){const L=['ronda','patrulla','vigía','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
 return bk+`<h2 class="sec">Cantos</h2><p class="sb">Se cantan antes de tirar la primera carta y se repiten en cada carta.</p>`+L.map(n=>`<div class="box" style="display:flex;gap:12px;align-items:center;margin:8px 0"><span style="width:38px;flex:none">${I('note')}</span><div style="flex:1"><b style="font-size:17px;text-transform:capitalize">${n}</b><br><span class="sub">${(EXPT[store.lang]&&EXPT[store.lang][n])||EXP[n]||''}</span></div><span class="ptsb">${n=='ronda'?'1–4':n=='trivilín'?'Gana':PTS[n]}</span></div>`).join('')}
 function premiosHTML(bk){return bk+`<h2 class="sec">Premios</h2>`+dailyHTML()+mi('video','Ver un video','Gana 200 de oro al instante',"watchVideo()")+mi('trophy','Logros','Cada logro te da oro',"showMenu('logros')")}
 function dailyHTML(){const i=dailyInfo();
@@ -1453,7 +1458,7 @@ function tiendaHTML2(bk){const F=[['emo','✌️ ¡2 brincos!'],['frame','fuego'
 let body='';
 if(C[0]=='dest')body=`<div class="sg">${F.map(([t,id])=>{const it=itemList(t).find(x=>x.id==id);return it?itemCard(t,it):''}).join('')}</div><h3 class="st">🎁 Cofres</h3>${chestsHTML()}`+mi('video','Ver un video','+200 de oro gratis ahora',"watchVideo()");
 else if(C[0]=='cofres')body=chestsHTML();
-else if(C[0]=='monedas')body=`<p class="sub">Las gemas son para lo más exclusivo: se compran con dinero real o se ganan en torneos.</p><div class="sg">${GEMP.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('gem')}</span><b>${g[0].toLocaleString('es')} gemas</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div><h3 class="st">Oro</h3><div class="sg">${PACKS.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('coin')}</span><b>${g[0].toLocaleString('es')} de oro</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div>`+mi('video','Ver un video','+200 de oro gratis ahora',"watchVideo()");
+else if(C[0]=='monedas')body=`<p class="sub">Las gemas son para lo más exclusivo: se compran con dinero real o se ganan en torneos.</p><div class="sg">${GEMP.map(g=>`<div class="si"><span class="soon">Pronto</span><span class="sic">${I('gem')}</span><b>${g[0].toLocaleString('es')} gemas</b><span class="spr">US$ ${g[1]}</span></div>`).join('')}</div><h3 class="st">Oro (se compra con gemas)</h3><p class="sub">El oro solo se consigue jugando o cambiándolo por gemas.</p><div class="sg">${GOLDX.map((g,i)=>`<div class="si${i==GOLDX.length-1?' r-leg':''}"><span class="sic">${I('coin')}</span><b>${g[1].toLocaleString('es')} de oro</b>${g[2]?`<span class="soon gem">${g[2]}</span>`:''}<button class="sm" onclick="buyGold(${i})">${I('gem',16)} ${g[0]}</button></div>`).join('')}</div>`+mi('video','Ver un video','+200 de oro gratis ahora',"watchVideo()");
 else{const T=C[3],all=T.flatMap(t=>itemList(t).filter(it=>it.price!==0).map(it=>[t,it]));const cnt=r=>r=='all'?all.length:all.filter(([t,it])=>rarity(it.price)[0]==r).length;
 const L=all.filter(([t,it])=>SHOP.rar=='all'||rarity(it.price)[0]==SHOP.rar);
 body=`<div class="srar">${RARS.map(r=>`<button class="${SHOP.rar==r[0]?'on':''} r-${r[0]}" onclick="shopGo(null,'${r[0]}')">${r[1]} <small>${cnt(r[0])}</small></button>`).join('')}</div>${SHOP.rar=='leg'?'<p class="sub">🎁 Aquí están también los que <b>solo salen en cofres</b>, los que se ganan en la <b>Aventura</b> y los exclusivos de beta.</p>':''}${C[0]=='fx'||C[0]=='snd'?'<p class="sub">Toca el ícono ▶ para verlo o escucharlo antes de comprar.</p>':''}${L.length?`<div class="sg">${L.map(([t,it])=>itemCard(t,it)).join('')}</div>`:'<p class="sub">No hay objetos de esta rareza aquí.</p>'}`}
@@ -1970,6 +1975,10 @@ Gánalo en la Aventura|Win it in Adventure|Ganhe na Aventura|Gagne-le en Aventur
 ¡CUATROOO!|FOUR!|QUATRO!|QUATRE !|VIER!|QUATTRO!|ЧЕТЫРЕ!|四！|ヨン！
 ¡Reparte el rival!|The rival deals!|O rival dá as cartas!|L'adversaire distribue !|Der Gegner gibt!|Distribuisce l'avversario!|Раздаёт соперник!|对手发牌！|相手が配る！
 Primera caída|First caída|Primeira caída|Première caída|Erste Caída|Prima caída|Первая каида|第一次落牌|初カイーダ
+Ver contenido|View contents|Ver conteúdo|Voir le contenu|Inhalt ansehen|Vedi contenuto|Содержимое|查看内容|中身を見る
+qué puede salir|what can drop|o que pode sair|ce qu'on peut obtenir|was drin sein kann|cosa può uscire|что может выпасть|可能获得|出るもの
+Oro (se compra con gemas)|Gold (bought with gems)|Ouro (comprado com gemas)|Or (acheté avec des gemmes)|Gold (mit Edelsteinen)|Oro (si compra con gemme)|Золото (за самоцветы)|金币（用宝石购买）|ゴールド（ジェムで購入）
+El oro solo se consigue jugando o cambiándolo por gemas.|Gold is earned by playing or by exchanging gems.|Ouro só se ganha jogando ou trocando gemas.|L'or se gagne en jouant ou contre des gemmes.|Gold gibt es durch Spielen oder Edelsteine.|L'oro si ottiene giocando o con le gemme.|Золото — за игру или обмен самоцветов.|金币只能通过游戏或宝石兑换获得。|ゴールドはプレイかジェム交換で入手。
 ¡Desbloqueado!|Unlocked!|Desbloqueado!|Débloqué !|Freigeschaltet!|Sbloccato!|Открыто!|已解锁！|解放！
 ¡Nuevo emoji desbloqueado!|New emoji unlocked!|Novo emoji desbloqueado!|Nouvel émoji débloqué !|Neues Emoji freigeschaltet!|Nuova emoji sbloccata!|Новый эмодзи открыт!|新表情已解锁！|新しい絵文字を解放！
 No te alcanza el oro. Mira un video o reclama tu premio diario|Not enough gold. Watch a video or claim your daily reward|Ouro insuficiente. Veja um vídeo ou resgate seu prêmio diário|Pas assez d'or. Regarde une vidéo ou récupère ta récompense|Nicht genug Gold. Sieh ein Video oder hol deine Belohnung|Oro insufficiente. Guarda un video o riscatta il premio|Не хватает золота. Посмотри видео или забери награду|金币不足。观看视频或领取每日奖励|ゴールド不足。動画を見るか報酬を受け取ろう
@@ -2189,8 +2198,8 @@ const store={name:'',gold:500,hist:[],friends:[],deck:'dorado',avatar:'oro',fram
 let settled=true,curView='home';
 const opt={dif:'facil',entry:100,mode:'normal',players:2,team:'parejas',meta:30,casa:true,flor:true,triv:true,noCheat:false,priv:false,code:''};
 let forceW=null;
-const BASE=['ronda','vigía','patrulla','registro'];
-function allowedName(n){return BASE.includes(n)||(n.startsWith('casa')&&opt.casa)||(n.startsWith('flor')&&opt.flor)||(n=='trivilín'&&opt.triv)}
+const BASE=['ronda','patrulla','vigía','registro'];
+function allowedName(n){return BASE.includes(n)||(n.startsWith('casa')&&opt.casa)||(n.startsWith('flor')&&opt.flor)||n=='trivilín'}
 function btns(){return[...BASE,...(opt.casa?['casa grande','casa chica']:[]),...(opt.flor?['flor']:[]),...(opt.triv?['trivilín']:[])]}
 function btnValid(n,h){const x=info(h).has;return x.includes(n)||(n=='flor'&&x.some(y=>y.startsWith('flor ')))||(n=='patrulla'&&x.includes('flor patrulla'))||(n=='registro'&&x.includes('flor registro'))}
 function setOpt(k,v){if(k=='entry'&&opt.mode=='locura'&&v<500){toast('Locura es de 500 💰 en adelante');return}opt[k]=v;if(k=='mode'&&v=='locura'&&opt.entry<500)opt.entry=500;if(k=='priv'&&v&&!opt.code)opt.code=Math.random().toString(36).slice(2,7).toUpperCase();showMenu(curView)}
@@ -2212,7 +2221,7 @@ const iv=setInterval(()=>{n--;if(n>0){$('vn').textContent=n;return}clearInterval
 function setName(){const v=esc($('nmI').value.trim());if(v){store.name=v;save();showMenu('home')}}
 function addFriend(){const v=esc($('fI').value.trim());if(v){store.friends.push(v);save();showMenu('friends')}}
 function delFriend(i){store.friends.splice(i,1);save();showMenu('friends')}
-function startGame(e){navPush('game');musStop();setTimeout(gmStart,400);applyTable();store._cg=ST().caidas;GS0={...ST(),gold:store.gold};if(e!=null)opt.entry=e;e=opt.entry||0;
+function startGame(e){navPush('game');PTS['trivilín']=opt.triv===false?5:99;musStop();setTimeout(gmStart,400);applyTable();store._cg=ST().caidas;GS0={...ST(),gold:store.gold};if(e!=null)opt.entry=e;e=opt.entry||0;
 
 if(store.gold<e){toast('Necesitas '+e+' de oro. Mira un video 🎬');return}
 if((opt.mode=='practica'||e==0)&&!window._keepRN)RN=null;window._keepRN=0;
@@ -2319,7 +2328,13 @@ const L=T.flatMap(all);if(k=='rareG')return L.filter(x=>['frame','name','back','
 if(k=='epicG')return L.filter(x=>['table','av','fxc','face'].includes(x[0])&&typeof x[1].price=='number'&&x[1].price>0);
 if(k=='epicP')return L.filter(x=>isG(x[1].price));return L.filter(x=>x[1].price==='x')}
 function chestSVG(c){return `<svg viewBox="0 0 120 100" width="100%" height="100%"><defs><linearGradient id="cg${c.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.col[1]}"/><stop offset="1" stop-color="${c.col[0]}"/></linearGradient></defs><rect x="14" y="44" width="92" height="48" rx="8" fill="url(#cg${c.id})" stroke="#2a0d1a" stroke-width="3"/><path d="M14 46Q14 16 60 16Q106 16 106 46Z" fill="${c.col[0]}" stroke="#2a0d1a" stroke-width="3"/><rect x="10" y="40" width="100" height="10" rx="4" fill="#ffd84a" stroke="#2a0d1a" stroke-width="2.5"/><rect x="51" y="40" width="18" height="24" rx="4" fill="#ffe27a" stroke="#2a0d1a" stroke-width="2.5"/><circle cx="60" cy="54" r="3.5" fill="#2a0d1a"/><path d="M30 22l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z" fill="#fff" opacity=".8"/></svg>`}
-function chestsHTML(){return `<div class="chs">${CHESTS.map(c=>`<div class="ch"><div class="chi">${chestSVG(c)}</div><b>${c.name}</b><div class="odds">${c.odds.map(o=>`<span style="color:${RCOL[o[0]]}">${o[0]} ${o[1]}%</span>`).join('')}</div><button class="sm" onclick="openChest('${c.id}')">${priceHTML(c.price)}</button></div>`).join('')}</div><p class="sub">Probabilidades mostradas antes de comprar. Si sale algo repetido recibes oro (la mitad de su valor). Los emojis repetidos suben de nivel: ★★ Dorado y ★★★ Brillante.</p>`}
+
+function chestInfo(id){const c=CHESTS.find(x=>x.id==id);const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};
+d.innerHTML=`<div class="gbox"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:20px">${c.name}: qué puede salir</b><button class="sm" onclick="$('gmod').remove()">✕</button></div>`+c.odds.map(o=>{const pool=chestPool(o[2]);const each=(o[1]/Math.max(1,pool.length)).toFixed(2);return `<div class="gsec" style="color:${RCOL[o[0]]}">${o[0]} · ${o[1]}% en total</div><p class="sub">${pool.length} objetos · cada uno ${each}%</p><div class="cinf">${pool.map(([t,it])=>`<div class="cii${owns(t,it)?' own':''}"><span class="ciip">${prevHTML(t,it.id)}</span><small>${t=='emo'?it.id:it.name}</small><b>${each}%</b></div>`).join('')}</div>`}).join('')+`<p class="sub">Si te sale algo que ya tienes, recibes oro (la mitad de su valor). Los emojis repetidos suben de nivel.</p></div>`;document.body.appendChild(d)}
+
+const GOLDX=[[100,1500,''],[300,4800,'+7%'],[550,9500,'+15%'],[1200,22000,'+22%'],[2500,48000,'¡El mejor!']];
+function buyGold(i){const g=GOLDX[i];if((store.gems||0)<g[0]){toast('💎 No te alcanzan las gemas');return}store.gems-=g[0];store.gold+=g[1];save();sfx.caida(2);fxBurst('oro');toast('💰 +'+g[1].toLocaleString('es')+' de oro');showMenu(curView)}
+function chestsHTML(){return `<div class="chs">${CHESTS.map(c=>`<div class="ch"><div class="chi">${chestSVG(c)}</div><b>${c.name}</b><div class="odds">${c.odds.map(o=>`<span style="color:${RCOL[o[0]]}">${o[0]} ${o[1]}%</span>`).join('')}</div><button class="sm" onclick="openChest('${c.id}')">${priceHTML(c.price)}</button><button class="sm off chi2" onclick="chestInfo('${c.id}')">🔍 Ver contenido</button></div>`).join('')}</div><p class="sub">Probabilidades mostradas antes de comprar. Si sale algo repetido recibes oro (la mitad de su valor). Los emojis repetidos suben de nivel: ★★ Dorado y ★★★ Brillante.</p>`}
 function openChest(id,free){const c=CHESTS.find(x=>x.id==id);if(!free&&!pay(c.price))return;
 let r=Math.random()*100,o=c.odds[0];for(const x of c.odds){if((r-=x[1])<0){o=x;break}}
 const pool=chestPool(o[2]),[t,it]=pool[Math.floor(Math.random()*pool.length)];let note='',val=isG(c.price)?amt(c.price)*10:amt(c.price);
