@@ -146,7 +146,7 @@ button:disabled{opacity:.4}
 .fc.lose{opacity:.4;transition:opacity .3s}
 @keyframes drawIn{from{transform:translateY(-90px) scale(.4);opacity:0}}
 .sres{font-family:'Lilita One',Georgia,serif;font-size:42px;color:#ffd84a;-webkit-text-stroke:1.5px #3a1d06;text-shadow:0 4px 0 #3a1d06;animation:pop .5s ease-out}
-@media (prefers-reduced-motion: reduce){#ov.l3::before,#ov.l4::before{animation:none}}
+@media (prefers-reduced-motion: reduce){#ov.l3::before,#ov.l4::before{animation:none}#ov{animation:none!important;opacity:1!important}}
 
 #app{padding:8px;gap:6px}
 .board{padding:6px;border-width:6px;gap:4px}
@@ -487,6 +487,17 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 .ptb{display:inline-block;margin-left:5px;background:#ffd84a;color:#3a1a00;font:900 12px 'Nunito',system-ui;border-radius:999px;padding:1px 7px;vertical-align:middle;box-shadow:0 2px 0 #0005}
 .mysc{margin-left:auto;display:flex;align-items:center;gap:4px;transform:scale(.92);transform-origin:right center}.mysc .pl{background:#36d6ff44;font-size:12px}
 #p0{display:flex;align-items:center;gap:6px}
+
+#app{max-width:640px;margin:0 auto}
+.board{height:clamp(240px,calc(100dvh - 470px),460px)!important}
+#app .sel{flex-wrap:nowrap!important;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;-webkit-overflow-scrolling:touch}#app .sel::-webkit-scrollbar{display:none}
+#app .sel button{flex:none}
+@media (max-height:760px){#hd .c{width:50px!important;height:73px!important}.cg button{padding:6px 4px!important;font-size:13px!important;min-height:0}.log,#lg{max-height:2.9em;overflow:hidden}#app .sel button{padding:6px 10px;font-size:14px}#tm{min-height:16px!important;font-size:13px}#app{gap:3px!important;padding:5px!important}}
+@media (max-height:640px){.board{height:clamp(220px,calc(100dvh - 400px),360px)!important}#hd .c{width:44px!important;height:64px!important}.cg{gap:3px!important}.cg button{padding:4px 2px!important;font-size:12px!important}#sndb{display:none}}
+@media (min-width:700px){.board{height:clamp(320px,calc(100dvh - 470px),560px)!important}#hd .c{width:70px!important;height:103px!important}}
+#lg{max-height:5.6em;overflow-y:auto}
+
+#vcbar{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;margin:2px 0}#vcbar button{padding:5px 10px;font-size:13px;background:#36d6ff26!important;box-shadow:none}#vcbar .vcgo{background:linear-gradient(180deg,#3dffb0,#1fae74)!important;color:#05271a}.vcn{font-size:12px;opacity:.8}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -632,7 +643,7 @@ function advData(){store.adv=store.adv||{st:[]};if(!store.adv.v2){const o=store.
 function advStars(){return advData().st.reduce((a,b)=>a+(b||0),0)}
 function advHTML(bk){const A=advData();
 return bk+`<h2 class="sec">🗺️ Modo Aventura</h2><p class="sb">De mesa en mesa por Venezuela hasta vencer al viejo Hermes en La Sabana. Cada mesa es más difícil. ¡Compite con tus amigos por las estrellas!</p><div class="box" style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:20px">⭐ ${advStars()} / ${ADVS.length*3}</b><button class="sm" onclick="advShare()">📤 Compartir</button></div><div class="advmap">`
-+ADVS.map((x,i)=>{const st=A.st[i]||0,open=i==0||(A.st[i-1]||0)>0||st>0;return `<button class="advn${open?'':' lock'}${x.boss?' boss':''}${st?' done':''}" style="margin-${i%2?'left':'right'}:18%" ${open?`onclick="showAdv(${i})"`:`onclick="toast('🔒 Gana la mesa anterior para desbloquear a '+${JSON.stringify(x.nm.replace('👑 ','')).replace(/"/g,'&quot;')})"`}><span class="advi">${avatarHTML(46,x.cos[0].av,x.cos[0].fr)}${open?'':'<span class="lkb">🔒</span>'}</span><span class="advt"><small>${x.boss?'🔥 JEFE FINAL':'Mesa '+(i+1)}</small><b>${x.pl}</b><span class="advc">vs ${x.nm.replace('👑 ','')}</span><span class="advs">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></span></span></button>`}).join('')+`</div>`}
++ADVS.map((x,i)=>{const st=A.st[i]||0,mx=A.st.reduce((m,v,k)=>v>0?k:m,-1),open=i<=mx+1;return `<button class="advn${open?'':' lock'}${x.boss?' boss':''}${st?' done':''}" style="margin-${i%2?'left':'right'}:18%" ${open?`onclick="showAdv(${i})"`:`onclick="toast('🔒 Gana la mesa anterior para desbloquear a '+${JSON.stringify(x.nm.replace('👑 ','')).replace(/"/g,'&quot;')})"`}><span class="advi">${avatarHTML(46,x.cos[0].av,x.cos[0].fr)}${open?'':'<span class="lkb">🔒</span>'}</span><span class="advt"><small>${x.boss?'🔥 JEFE FINAL':'Mesa '+(i+1)}</small><b>${x.pl}</b><span class="advc">vs ${x.nm.replace('👑 ','')}</span><span class="advs">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></span></span></button>`}).join('')+`</div>`}
 let ADVSEL=0;function showAdv(i){ADVSEL=i;showMenu('advst')}
 function advStHTML(){const i=ADVSEL,x=ADVS[i],c=x.cos[0],st=advData().st[i]||0;
 return `<button class="bk" onclick="showMenu('aventura')">‹ Mapa</button><div class="advcard${x.boss?' boss':''}"><small>${x.boss?'👑 JEFE FINAL':'Mesa '+(i+1)+' de '+ADVS.length}</small><h2 class="sec" style="margin:4px 0">${x.pl}</h2><div style="margin:14px auto;width:110px">${avatarHTML(110,c.av,c.fr)}</div><div style="font-size:22px;font-weight:900">${nameHTML(x.nm.replace('👑 ',''),c.ns)}</div><div class="advchips"><span>👥 ${x.n==2?'1 vs 1':x.n==3?'3 jugadores':x.team=='solo'?'4 individual':'4 por parejas'}</span>${x.cheat?'<span>🃏 ¡Tramposos de manual!</span>':''}<span>🎯 a ${x.meta} puntos</span><span>${x.mode=='locura'?'🔥 Locura (5 s)':'⏱ Normal'}</span><span>${x.dif=='facil'?'😊 Fácil':'😈 Difícil'}</span></div><p class="sub">Sus cartas, su mesa y sus efectos son de su colección.</p><div class="box">🏆 Premio: <b>${x.rw} de oro</b>${x.boss?' + avatares <b>El viejo Hermes</b> y <b>Corona de diamante</b>, y marco <b>Diamante</b>':''}<br>🎁 Con ⭐⭐⭐: <b>cofre de oro gratis</b><br><span class="sub">⭐ Gana · ⭐⭐ Gana por 10 o más · ⭐⭐⭐ Que no pase de ${Math.floor(x.meta/3)} puntos</span></div><div class="advs big">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></div><button class="mb" onclick="advPlay(${i})">¡A jugar!</button></div>`}
@@ -678,13 +689,13 @@ async function onlJoinBy(c){if(!fbOk()||!FBU)return;const {F,db}=FB;try{const sn
 async function onlJoin(id){if(!fbOk()||!FBU)return;const {F,db}=FB;if(NET.roomId&&NET.roomId!=id)await onlLeave(true);
 try{const ref=F.doc(db,'rooms',id),sn=await F.getDoc(ref);if(!sn.exists()){toast('Esa mesa ya no existe');onlPub();return}const r=sn.data();if(!r.players.includes(FBU.uid)){if(r.players.length>=r.size){toast('La mesa ya está llena');return}await F.updateDoc(ref,{players:F.arrayUnion(FBU.uid),['pinfo.'+FBU.uid]:myPub()})}
 onlWatch(id);await F.updateDoc(F.doc(db,'users',FBU.uid),{room:r.code});sfx.chime();showMenu('lobby')}catch(e){toast('No se pudo entrar: '+(e.code||e.message))}}
-function onlWatch(id){const {F,db}=FB;if(NET.unR)NET.unR();NET.roomId=id;NET.unR=F.onSnapshot(F.doc(db,'rooms',id),sn=>{if(!sn.exists()){const was=NET.roomId;NET.room=null;NET.roomId=null;if(NET.unR){NET.unR();NET.unR=null}if(LV.mode=='guest'){lvLeave();toast('El anfitrión cerró la mesa');showMenu('online')}else if(was&&curView=='lobby'){toast('El anfitrión cerró la mesa');showMenu('online')}return}const old=NET.room;NET.room={id:sn.id,...sn.data()};if(NET.room.state=='lobby'&&LV.mode=='guest'){lvLeave();showMenu('lobby');return}if(NET.room.state=='playing'&&NET.room.host!=FBU.uid){if(LV.mode!='guest')lvStartGuest(NET.room);if(NET.room.gs)lvApply(NET.room);return}if(LV.mode=='host'){const gone=Object.keys(LV.REM).filter(q=>!NET.room.players.includes(LV.REM[q]));gone.forEach(q=>{delete LV.REM[q];AIC[q]&&(AIC[q].human=0);msg(nm(+q)+' salió: ahora juega la IA')});if(gone.length){render();if(LV.REM[turn]===undefined&&turn!=0&&!busy&&!over)setTimeout(botPlay,800)}return}if(old&&NET.room.players.length>old.players.length)sfx.chime();if(curView=='lobby')showMenu('lobby')})}
-async function onlLeave(quiet){if(!NET.roomId||!fbOk()||!FBU)return;const {F,db}=FB,id=NET.roomId,r=NET.room;if(NET.unR){NET.unR();NET.unR=null}NET.roomId=null;NET.room=null;
+function onlWatch(id){const {F,db}=FB;if(NET.unR)NET.unR();NET.roomId=id;NET.unR=F.onSnapshot(F.doc(db,'rooms',id),sn=>{if(!sn.exists()){const was=NET.roomId;NET.room=null;NET.roomId=null;if(NET.unR){NET.unR();NET.unR=null}if(LV.mode=='guest'){lvLeave();toast('El anfitrión cerró la mesa');showMenu('online')}else if(was&&curView=='lobby'){toast('El anfitrión cerró la mesa');showMenu('online')}return}const old=NET.room;NET.room={id:sn.id,...sn.data()};if(NET.room.state=='lobby'&&LV.mode=='guest'){lvLeave();showMenu('lobby');return}if(NET.room.state=='playing'&&NET.room.host!=FBU.uid){if(LV.mode!='guest')lvStartGuest(NET.room);if(NET.room.gs)lvApply(NET.room);return}if(LV.mode=='host'){const gone=Object.keys(LV.REM).filter(q=>!NET.room.players.includes(LV.REM[q]));gone.forEach(q=>{delete LV.REM[q];AIC[q]&&(AIC[q].human=0);msg(nm(+q)+' salió: ahora juega la IA por él');if(RN&&RN[q]&&!/\(IA\)/.test(RN[q]))RN[q]+=' (IA)'});if(gone.length){render();if(LV.REM[turn]===undefined&&turn!=0&&!busy&&!over)setTimeout(botPlay,800)}return}if(old&&NET.room.players.length>old.players.length)sfx.chime();if(curView=='lobby')showMenu('lobby')})}
+async function onlLeave(quiet){try{await vcStop()}catch(e){}if(!NET.roomId||!fbOk()||!FBU)return;const {F,db}=FB,id=NET.roomId,r=NET.room;if(NET.unR){NET.unR();NET.unR=null}NET.roomId=null;NET.room=null;
 try{if(r&&r.host==FBU.uid)await F.deleteDoc(F.doc(db,'rooms',id));else await F.updateDoc(F.doc(db,'rooms',id),{players:F.arrayRemove(FBU.uid),['pinfo.'+FBU.uid]:F.deleteField()});await F.updateDoc(F.doc(db,'users',FBU.uid),{room:null})}catch(e){}if(!quiet)showMenu('online')}
 function lobbyHTML(bk){const r=NET.room;if(!r)return bk+`<div class="box">Cargando la mesa…</div>`;const host=r.host==FBU.uid,full=r.players.length>=r.size;
 const seats=[...Array(r.size)].map((_,i)=>{const u=r.players[i],pi=u?(r.pinfo||{})[u]||{}:null;return `<div class="lseat${u?'':' empty'}">${u?onlAv(pi,56):'<span class="lq">?</span>'}<b>${u?nameHTML(pi.name||'Jugador',pi.ns):'Esperando…'}</b><small>${u?(u==r.host?'👑 Anfitrión':r.size==4?(i%2?'Equipo rojo':'Equipo azul'):'Listo'):''}</small></div>`}).join('');
 return bk+`<h2 class="sec">🃏 Mesa ${r.pub?'pública':'privada'}</h2><div class="box" style="text-align:center"><span class="sub">Código de la mesa</span><div class="bigcode">${r.code}</div><button class="sm" onclick="onlShare()">📤 Invitar amigos</button></div><p class="sb">${r.size==2?'1 vs 1':r.size==3?'3 jugadores':'4 por parejas'} · a ${r.meta} puntos · ${r.players.length}/${r.size}</p><div class="lseats s${r.size}">${seats}</div>
-${full?(host?`<button class="mb" onclick="onlStart()">▶ Empezar partida</button>`:'<p class="sb">Esperando a que el anfitrión empiece…</p>'):'<p class="sb">⏳ Esperando jugadores…</p>'}<button class="mb bk" onclick="onlLeave()">${host?'Cerrar la mesa':'Salir de la mesa'}</button>`}
+${full?(host?`<button class="mb" onclick="onlStart()">▶ Empezar partida</button>`:'<p class="sb">Esperando a que el anfitrión empiece…</p>'):'<p class="sb">⏳ Esperando jugadores…</p>'}<div class="box" style="text-align:center">${VC.on?`🎙️ Chat de voz activo · <button class="sm" onclick="vcMic();showMenu('lobby')">${VC.mic?'Silenciar mic':'Encender mic'}</button> <button class="sm off" onclick="vcStop().then(()=>showMenu('lobby'))">Salir de la voz</button>`:`<button class="sm" onclick="vcStart().then(()=>showMenu('lobby'))">🎙️ Activar chat de voz</button><br><span class="sub">Habla con tu familia mientras esperan y durante la partida</span>`}</div><button class="mb bk" onclick="onlLeave()">${host?'Cerrar la mesa':'Salir de la mesa'}</button>`}
 function onlShare(){const r=NET.room;if(!r)return;const t='🃏 ¡Juega Caída conmigo! Entra a «Jugar en línea» y únete con el código '+r.code+'\nhttps://play.google.com/store/apps/details?id=com.alfniut.caida';if(navigator.share)navigator.share({text:t}).catch(()=>{});else{try{navigator.clipboard.writeText(t);toast('📋 Copiado')}catch(e){}}}
 async function onlStart(){const r=NET.room;if(!r||r.host!=FBU.uid)return;try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',r.id),{state:'playing',seats:r.players});lvStartHost(r)}catch(e){toast('No se pudo empezar: '+(e.code||e.message))}}
 /* amigos */
@@ -753,7 +764,7 @@ const LV={mode:null,room:null,me:0,REM:{},seats:[],ev:[],evq:0,seen:0,raw:[],pT:
 function lvOn(){return LV.mode=='host'||LV.mode=='guest'}
 function lvEv(e){if(LV.mode!='host')return;e.q=++LV.evq;LV.ev.push(e);if(LV.ev.length>40)LV.ev.shift();lvPushSoon()}
 function lvPushSoon(){if(LV.mode!='host')return;clearTimeout(LV.pT);LV.pT=setTimeout(lvPush,300)}
-function lvState(){return{N,IND,META,mano,turn,over,hands,table,dec,score,caps,dk:deck?deck.length:0,last,lastCap,lost,playedBy,pileAt,asked,raw:LV.raw.slice(-6),need:LV.need,fin:over?{w:score.indexOf(Math.max(...score))}:null}}
+function lvState(){return{N,IND,META,mano,turn,over,hands,table,dec,score,caps,dk:deck?deck.length:0,last,lastCap,lost,playedBy,pileAt,asked,raw:LV.raw.slice(-6),need:LV.need,tl:LV.tL?Math.max(0,Math.round(LV.tL-(Date.now()-LV.tS)/1000)):0,fin:over?{w:score.indexOf(Math.max(...score))}:null}}
 async function lvPush(){if(LV.mode!='host'||!LV.room)return;try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',LV.room),{gs:JSON.stringify(lvState()),ev:JSON.stringify(LV.ev),gq:Date.now()})}catch(e){console.warn('lvPush',e)}}
 async function lvSend(m){if(LV.mode!='guest')return;try{await FB.F.addDoc(FB.F.collection(FB.db,'rooms',LV.room,'moves'),{by:FBU.uid,seat:LV.me,...m,t0:Date.now()})}catch(e){toast('Sin conexión: '+(e.code||e.message))}}
 /* --- anfitrión --- */
@@ -761,7 +772,7 @@ function lvStartHost(r){LV.mode='host';LV.room=r.id;LV.seats=r.players.slice();L
 Object.assign(opt,{players:r.size,team:'parejas',mode:'normal',meta:r.meta,dif:'dificil',casa:true,flor:true,noCheat:false});
 startGame(0);ADV=null;RN=[null];for(let q=1;q<r.size;q++){const u=LV.seats[q],pi=u?(r.pinfo||{})[u]||{}:null;RN[q]=pi?pi.name||'Jugador':['','Rafa','Marta','Luis'][q];if(u){LV.REM[q]=u;AIC[q]={av:pi.av||'oro',fr:pi.fr||'none',ns:pi.ns||'none',deck:pi.face||'clasico',back:pi.back||'clasico',table:pi.table||'madera',fxc:pi.fxc||'none',fxk:pi.fxk||'none',vp:1,human:1}}}
 const {F,db}=FB;if(LV.unM)LV.unM();LV.unM=F.onSnapshot(F.collection(db,'rooms',r.id,'moves'),sn=>{sn.docChanges().forEach(ch=>{if(ch.type=='added'&&!LV.done[ch.doc.id]){LV.done[ch.doc.id]=1;try{lvMove(ch.doc.data())}catch(e){console.warn(e)}}})});
-render();lvPush()}
+render();lvPush();setTimeout(vcUI,500)}
 function lvMove(m){const p=m.seat;if(!p||LV.REM[p]!=m.by||over&&m.t!='emo')return;const h=hands[p]||[];
 if(m.t=='play'){if(turn!=p||busy)return;const c=h.find(x=>x.id==m.id);if(!c)return;clearTimeout(LV.wait);busy=true;play(p,c)}
 else if(m.t=='canto'){const d=dec[p].find(x=>x.name==m.n&&!x.void);if(d){if(d.say!=h.length){d.say=h.length;d.missed=false;const tx=h.length==1?vista(d.name):d.name;msg(nm(p)+' dice: '+tx);bubble(p,'🔔 '+tx);speak(tx);render()}}else if(h.length==3)declare(p,m.n)}
@@ -773,26 +784,60 @@ else if(m.t=='emo')emote(p,m.v);
 else if(m.t=='snd')sendSnd(p,m.v)}
 function lvBurn(p){let any=false;for(const q of rivalsOf(p))for(const d of dec[q])if(d.missed&&!d.void){d.void=true;d.burnt=true;any=true;add(tm(p),1);msg('¡'+nm(p)+' dice que se quemó '+art(d.name)+' '+d.name+' '+(q==0?'tuya':deN(q))+'! +1 para '+tn(tm(p)));bubble(p,'🔥 ¡Se quemó!');burnFlash((q==0?'No lo repetiste':nm(q)+' no lo repitió'),d,1,tm(p))}if(any){render();if(over)end()}}
 function lvAskCall(p){return new Promise(res=>{LV.need={seat:p,t:'open'};LV.openR=res;msg(nm(p)+' está eligiendo 1 o 4…');render();setTimeout(()=>{if(LV.openR===res){LV.openR=null;LV.need=null;res(Math.random()<.5?1:4)}},20000)})}
-function lvRemoteTurn(p){clearTimeout(LV.wait);LV.wait=setTimeout(()=>{if(LV.mode=='host'&&turn==p&&!busy&&!over){msg(nm(p)+' tardó mucho: la IA jugó por él');botPlay()}},40000)}
+function lvRemoteTurn(p){clearTimeout(LV.wait);const L=opt.mode=='locura'?10:25;LV.tS=Date.now();LV.tL=L;LV.wait=setTimeout(()=>{if(LV.mode=='host'&&turn==p&&!busy&&!over){msg(nm(p)+' tardó mucho: la IA jugó por él');botPlay()}},L*1000)}
 /* --- invitado --- */
+
+function lvTick(){if(!lvOn())return;const e=$('tm');if(!e)return;if(over||isNaN(turn)||turn==null){e.textContent='';return}const r=LV.mode=='guest'?(LV.dl?Math.max(0,Math.ceil((LV.dl-Date.now())/1000)):0):(LV.tL?Math.max(0,Math.ceil(LV.tL-(Date.now()-LV.tS)/1000)):0);
+if(LV.mode=='host'&&turn==0)return;const who=turn==0?'¡Tu turno!':'Turno de '+nm(turn);e.textContent=(r?'⏱ '+r+' · ':'')+(turn==0?'👉 ':'⏳ ')+who;e.className=r&&r<=5?'tmr':''}
+setInterval(lvTick,500);
+function lvFlashQ(){if(LV.fqB||!LV.fq||!LV.fq.length)return;const [t,lv]=LV.fq.shift();LV.fqB=1;flash(t,lv);setTimeout(()=>{LV.fqB=0;lvFlashQ()},[1300,1400,1800,2300,3000][lv||0])}
+
+/* ===== CHAT DE VOZ (WebRTC, señal por Firebase) ===== */
+const VC={on:false,mic:true,st:null,pcs:{},aud:{},mute:{},un:null,room:null};
+const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']}]};
+function vcRoom(){return LV.room||(NET.room&&NET.room.id)}
+async function vcSig(to,type,data){const {F,db}=FB;await F.addDoc(F.collection(db,'rooms',VC.room,'rtc'),{from:FBU.uid,to,type,data:JSON.stringify(data),t:Date.now()})}
+function vcPC(u){if(VC.pcs[u])return VC.pcs[u];const pc=new RTCPeerConnection(ICE);VC.pcs[u]=pc;if(VC.st)VC.st.getTracks().forEach(t=>pc.addTrack(t,VC.st));
+pc.onicecandidate=e=>{if(e.candidate)vcSig(u,'ice',e.candidate.toJSON()).catch(()=>{})};
+pc.ontrack=e=>{let a=VC.aud[u];if(!a){a=document.createElement('audio');a.autoplay=true;a.playsInline=true;document.body.appendChild(a);VC.aud[u]=a}a.srcObject=e.streams[0];a.muted=!!VC.mute[u];a.play&&a.play().catch(()=>{})};
+pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState)){vcDrop(u)}vcUI()};return pc}
+function vcDrop(u){try{VC.pcs[u]&&VC.pcs[u].close()}catch(e){}delete VC.pcs[u];if(VC.aud[u]){VC.aud[u].remove();delete VC.aud[u]}}
+async function vcStart(){if(VC.on)return;const id=vcRoom();if(!id||!fbOk()||!FBU){toast('El chat de voz funciona dentro de una mesa en línea');return}
+try{VC.st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}catch(e){toast('🎙️ Necesito permiso del micrófono para el chat de voz');return}
+VC.on=true;VC.mic=true;VC.room=id;const {F,db}=FB;const t0=Date.now()-2000;
+VC.un=F.onSnapshot(F.query(F.collection(db,'rooms',id,'rtc'),F.where('to','==',FBU.uid)),sn=>{sn.docChanges().forEach(async ch=>{if(ch.type!='added')return;const m=ch.doc.data();if(m.t<t0)return;const d=JSON.parse(m.data);try{
+if(m.type=='offer'){vcDrop(m.from);const pc=vcPC(m.from);await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);await vcSig(m.from,'answer',a)}
+else if(m.type=='answer'){const pc=VC.pcs[m.from];if(pc&&pc.signalingState=='have-local-offer')await pc.setRemoteDescription(d)}
+else if(m.type=='ice'){const pc=VC.pcs[m.from];if(pc)await pc.addIceCandidate(d).catch(()=>{})}}catch(e){console.warn('vc',e)}vcUI()})});
+await F.updateDoc(F.doc(db,'rooms',id),{['vc.'+FBU.uid]:true}).catch(()=>{});
+const r=NET.room||{};const others=Object.keys(r.vc||{}).filter(u=>u!=FBU.uid&&r.vc[u]&&(r.players||[]).includes(u));
+for(const u of others){const pc=vcPC(u);const o=await pc.createOffer();await pc.setLocalDescription(o);await vcSig(u,'offer',o)}
+toast('🎙️ Chat de voz activado');vcUI()}
+async function vcStop(){if(!VC.on)return;VC.on=false;Object.keys(VC.pcs).forEach(vcDrop);if(VC.st)VC.st.getTracks().forEach(t=>t.stop());VC.st=null;if(VC.un){VC.un();VC.un=null}
+try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',VC.room),{['vc.'+FBU.uid]:false})}catch(e){}vcUI()}
+function vcMic(){if(!VC.st)return;VC.mic=!VC.mic;VC.st.getTracks().forEach(t=>t.enabled=VC.mic);vcUI();toast(VC.mic?'🎙️ Micrófono encendido':'🔇 Micrófono silenciado')}
+function vcMuteAll(){const any=Object.keys(VC.aud).some(u=>!VC.mute[u]);Object.keys(VC.aud).forEach(u=>{VC.mute[u]=any;VC.aud[u].muted=any});vcUI();toast(any?'🔈 Silenciaste a los demás':'🔊 Vuelves a escuchar a todos')}
+function vcUI(){let b=$('vcbar');if(!lvOn()&&!(curView=='lobby')){if(b)b.remove();return}const host=$('app').style.display=='block'?$('app'):null;if(!host){if(b)b.remove();return}
+if(!b){b=document.createElement('div');b.id='vcbar';host.insertBefore(b,$('act'))}const n=Object.values(VC.pcs).filter(pc=>pc.connectionState=='connected').length;
+b.innerHTML=VC.on?`<button onclick="vcMic()">${VC.mic?'🎙️ Hablando':'🔇 Mic apagado'}</button><button onclick="vcMuteAll()">${Object.keys(VC.aud).some(u=>!VC.mute[u])?'🔊 Escuchando':'🔈 Silenciados'}</button><span class="vcn">👥 ${n} conectado${n==1?'':'s'}</span><button onclick="vcStop()">✕</button>`:`<button class="vcgo" onclick="vcStart()">🎙️ Activar chat de voz</button>`}
 function lvRot(s,N2,me){return (s-me+N2)%N2}
 function lvApply(r){const g=JSON.parse(r.gs),me=LV.me,n=g.N,rot=s=>lvRot(s,n,me),multi=n==3||(n==4&&g.IND),rt=t=>multi?rot(t):(t-me%2+2)%2,RA=a=>{const o=[];(a||[]).forEach((v,i)=>o[rot(i)]=v);return o};
 N=n;IND=g.IND;META=g.META;opt.players=n;opt.mode='normal';mano=rot(g.mano);turn=rot(g.turn);over=g.over;hands=RA(g.hands);table=g.table;caps=RA(g.caps);deck={length:g.dk};deck=Array(g.dk).fill(0);
 dec=RA(g.dec).map(L=>(L||[]).map(d=>({...d,p:rot(d.p)})));const sc=[];g.score.forEach((v,t)=>sc[rt(t)]=v);score=sc;last=g.last?{...g.last,by:rot(g.last.by)}:null;lastCap=g.lastCap&&typeof g.lastCap=='object'&&g.lastCap.by!=null?{...g.lastCap,by:rot(g.lastCap.by)}:g.lastCap;lost=RA(g.lost);playedBy=RA(g.playedBy);const pa=[];(g.pileAt||[]).forEach((v,t)=>pa[rt(t)]=rot(v));pileAt=pa;asked=g.asked;
-const pin=r.pinfo||{};RN=[null];AIC=[];for(let s0=0;s0<n;s0++){const q=rot(s0);if(q==0)continue;const u=r.players[s0],pi=u?pin[u]||{}:null;RN[q]=pi?pi.name||'Jugador':(s0==0?LV.hostName:['','Rafa','Marta','Luis'][s0]);AIC[q]=pi?{av:pi.av,fr:pi.fr,ns:pi.ns,deck:pi.face||'clasico',back:pi.back||'clasico',table:pi.table||'madera',fxc:pi.fxc,fxk:pi.fxk,vp:1,human:1}:{av:'oro',fr:'none',ns:'none',deck:'clasico',back:'clasico',table:'madera'}}
+const pin=r.pinfo||{};RN=[null];AIC=[];for(let s0=0;s0<n;s0++){const q=rot(s0);if(q==0)continue;const SE=r.seats||r.players,u=SE[s0],pi=u?pin[u]||(LV.pcache&&LV.pcache[u])||null:null;if(u&&pin[u]){LV.pcache=LV.pcache||{};LV.pcache[u]=pin[u]}RN[q]=pi?pi.name||'Jugador':(s0==0?LV.hostName:['','Rafa','Marta','Luis'][s0]);AIC[q]=pi?{av:pi.av,fr:pi.fr,ns:pi.ns,deck:pi.face||'clasico',back:pi.back||'clasico',table:pi.table||'madera',fxc:pi.fxc,fxk:pi.fxk,vp:1,human:1}:{av:'oro',fr:'none',ns:'none',deck:'clasico',back:'clasico',table:'madera'}}
 const fix=t=>{t=String(t);const hn=LV.hostName||'Anfitrión',my=LV.myName,same=n==4&&!g.IND&&me%2==0;
 if(!same&&n==4&&!g.IND){t=t.replace(/tu equipo/gi,'§R§').replace(/los rivales/gi,'tu equipo').replace(/§R§/g,'los rivales')}
 t=t.replace(/(^|[^\p{L}])para ti(?![\p{L}])/gu,(m,a)=>a+'para '+hn).replace(/te llevas/g,'se lleva').replace(/(^|[^\p{L}])Tú(?![\p{L}])/gu,(m,a)=>a+hn).replace(/(^|[^\p{L}])tuya(?![\p{L}])/gu,(m,a)=>a+'de '+hn);
 if(my){t=t.split('para '+my).join('para ti').split('de '+my).join('tuya').split(my).join('Tú')}return t};
 log=(g.raw||[]).map(x=>T(fix(x)));busy=turn!=0;
 if(g.need&&rot(g.need.seat)==0)setAct('<span class="sub">Eres mano: ¿cuál dices?</span><button id="b1">1 ↑</button><button id="b4">4 ↓</button>'),$('b1').onclick=()=>{setAct('');lvSend({t:'open',v:1})},$('b4').onclick=()=>{setAct('');lvSend({t:'open',v:4})};else setAct('');
-render();$('tm').textContent=over?'':turn==0?'👉 ¡Tu turno!':'⏳ Turno de '+nm(turn);
+LV.dl=g.tl?Date.now()+g.tl*1000:0;render();lvTick();
 let E=[];try{E=JSON.parse(r.ev||'[]')}catch(e){}for(const e of E){if(e.q<=LV.seen)continue;LV.seen=e.q;try{
-if(e.k=='flash')flash(fix(e.t),e.lv);else if(e.k=='bub')bubble(rot(e.p),fix(e.t),e.ms);else if(e.k=='spk')speak(fix(e.t));else if(e.k=='sfx'&&sfx[e.f])sfx[e.f](...(e.a||[]));else if(e.k=='emo')emote(rot(e.p),e.v);else if(e.k=='fx')fxBurst(e.v);else if(e.k=='tfx')tfxEvent(e.v,e.n)}catch(x){}}
+if(e.k=='flash'){LV.fq=LV.fq||[];LV.fq.push([fix(e.t),e.lv]);lvFlashQ()}else if(e.k=='bub')bubble(rot(e.p),fix(e.t),e.ms);else if(e.k=='spk')speak(fix(e.t));else if(e.k=='sfx'&&sfx[e.f])sfx[e.f](...(e.a||[]));else if(e.k=='emo')emote(rot(e.p),e.v);else if(e.k=='fx')fxBurst(e.v);else if(e.k=='tfx')tfxEvent(e.v,e.n)}catch(x){}}
 if(over&&g.fin&&!LV.endShown){LV.endShown=1;const win=rt(g.fin.w)==0;setTimeout(()=>{win?sfx.win():sfx.lose();endSummary(win?0:1,0,0)},1500)}}
-function lvStartGuest(r){LV.mode='guest';LV.room=r.id;LV.me=r.players.indexOf(FBU.uid);LV.seen=0;LV.endShown=0;LV.hostName=((r.pinfo||{})[r.host]||{}).name||'Anfitrión';LV.myName=store.name||'';musStop();$('menu').style.display='none';$('app').style.display='block';renderEm();toast('🃏 ¡La partida empezó!')}
+function lvStartGuest(r){LV.mode='guest';LV.room=r.id;LV.me=(r.seats||r.players).indexOf(FBU.uid);LV.seen=0;LV.endShown=0;LV.hostName=((r.pinfo||{})[r.host]||{}).name||'Anfitrión';LV.myName=store.name||'';musStop();$('menu').style.display='none';$('app').style.display='block';renderEm();toast('🃏 ¡La partida empezó!');setTimeout(vcUI,500)}
 async function lvBackLobby(){const id=LV.room;lvLeave();try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',id),{state:'lobby',gs:null,ev:null})}catch(e){}$('app').style.display='none';showMenu('lobby')}
-function lvLeave(){if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
+function lvLeave(){try{vcStop();const b=$('vcbar');b&&b.remove()}catch(e){}if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
 
 setTimeout(()=>{try{Object.keys(sfx).forEach(k=>{const o=sfx[k];if(typeof o!='function')return;sfx[k]=(...a)=>{lvEv({k:'sfx',f:k,a});return o(...a)}})}catch(e){}},0);
 const _render0=render;render=function(){_render0.apply(this,arguments);if(LV.mode=='host')lvPushSoon()};
@@ -1157,7 +1202,7 @@ return `<div class="htit"><div class="hbig">CAÍDA</div><div class="hsub">JUEGO 
 +sec('⭐','Tu progreso','NIVEL '+lv)+`<div class="pgrid"><div class="pst"><b>${lv}</b><small>NIVEL</small></div><div class="pst"><b>${xp}/${XPN}</b><small>XP</small></div><div class="pst"><b>${ST().wins}</b><small>VICTORIAS</small></div></div><div class="hbar big"><i style="width:${Math.round(xp/XPN*100)}%"></i></div>`
 +sec('🎁','Recompensa',di.can?'HOY':'MAÑANA')+(di.can?`<div class="hcard glow"><div class="hcrow"><span class="hci">${I('gift')}</span><div style="flex:1"><b>Día ${di.k} de 7</b><small>Tu recompensa diaria te espera</small></div><span class="rew">+${di.r} ${I('coin',16)}</span></div><button class="mb" onclick="claimDaily()">Reclamar</button></div>`:`<div class="hcard" style="text-align:center"><b>🔥 Racha diaria en curso</b><small>Vuelve mañana para aumentarla (+${di.nextR} de oro).</small></div>`)
 +sec('🏆','Colección','PERSONALIZA')+`<div class="tiles">${tile('trophy','Logros',"showMenu('logrosm')",R?'¡'+R+'!':'')}${tile('learn','Aprender',"showMenu('aprender')",store.tutDone?'':'Nuevo')}${tile('friends','Amigos',"showMenu('friends')")}</div>`}
-function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('table','🌐 Jugar en línea','Mesas reales con personas y amigos (beta)',"showMenu('online')",'Nuevo')+mi('medal','Modo Aventura','De mesa en mesa hasta el viejo Hermes · ⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')",advStars()?'':'Nuevo')+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas','Mesas abiertas de 100, 500, 1.000… únete',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Amigos','Agrega amigos con tu código',"showMenu('friends')")}
+function jugarHTML(bk){return bk+`<h2 class="sec">Jugar</h2>`+mi('table','🌐 Jugar en línea','Mesas reales con personas y amigos (beta)',"showMenu('online')",'Nuevo')+mi('medal','Modo Aventura','De mesa en mesa hasta el viejo Hermes · ⭐ '+advStars()+'/'+ADVS.length*3,"showMenu('aventura')",advStars()?'':'Nuevo')+mi('robot','Contra la IA','Gratis, para practicar. Fácil o difícil',"showMenu('practica')")+mi('table','Salas con IA (práctica)','Mesas simuladas con la IA: 100, 500, 1.000…',"showMenu('salas')")+mi('plus','Crear mi mesa','Elige entrada, jugadores y reglas',"showMenu('play')")+mi('medal','Torneo','Eliminatorias por premios (prueba)',"showMenu('torneo')")+mi('friends','Amigos','Agrega amigos con tu código',"showMenu('friends')")}
 function aprenderHTML(bk){return bk+`<h2 class="sec">Aprender</h2>`+mi('tap','Tutorial jugable','Aprende jugando en 5 minutos',"tutLoad(0)",store.tutDone?'':'Nuevo')+mi('ask','Cómo jugar','Lo básico en pocas palabras',"showMenu('how')")+mi('note','Cantos','Todos los cantos y cuánto valen',"showMenu('cantos')")+mi('scroll','Reglas','Las reglas completas',"showMenu('rules')")+mi('learn','Guía escrita','Explicación paso a paso',"showMenu('tutorial')")}
 function logrosmHTML(bk){const got=(store.ach||[]).length;return bk+`<h2 class="sec">Logros</h2>`+mi('trophy','Logros',got+' de '+ACH.length+' reclamados',"showMenu('logros')",(store.achR||[]).length?(store.achR||[]).length+' por reclamar':'')+mi('stats','Estadísticas','Tus partidas, caídas y cantos',"showMenu('stats')")+mi('clock','Historial','Tus últimas partidas',"showMenu('hist')")}
 function cantosHTML(bk){const L=['ronda','vigía','patrulla','registro','casa grande','casa chica','flor','flor patrulla','flor registro','trivilín'];
@@ -1459,6 +1504,73 @@ Cantados en esta mano|Called this hand|Cantados nesta mão|Annoncés cette main|
 Todos los cantos|All calls|Todos os cantos|Toutes les annonces|Alle Ansagen|Tutte le dichiarazioni|Все объявления|所有叫牌|すべての役
 Nadie ha cantado todavía.|Nobody has called yet.|Ninguém cantou ainda.|Personne n'a annoncé.|Noch keine Ansage.|Nessuno ha dichiarato.|Пока никто не объявлял.|还没有人叫牌。|まだ誰も宣言していません。
 No disponible|Not available|Indisponível|Indisponible|Nicht verfügbar|Non disponibile|Недоступно|不可用|入手不可
+TODO A UN TOQUE|ALL IN ONE TAP|TUDO NUM TOQUE|EN UN CLIC|ALLES MIT EINEM TIPP|TUTTO A PORTATA|ВСЁ В ОДНО КАСАНИЕ|一键直达|ワンタップで
+Personas reales|Real people|Pessoas reais|Vrais joueurs|Echte Spieler|Persone reali|Живые игроки|真人玩家|リアルな相手
+Practica|Practice|Treine|Entraîne-toi|Üben|Allenati|Тренировка|练习|練習
+Comprar|Buy|Comprar|Acheter|Kaufen|Compra|Купить|购买|購入
+Personaliza|Customize|Personalize|Personnalise|Anpassen|Personalizza|Настрой|个性化|カスタマイズ
+PERSONALIZA|CUSTOMIZE|PERSONALIZE|PERSONNALISE|ANPASSEN|PERSONALIZZA|НАСТРОЙ|个性化|カスタマイズ
+NIVEL|LEVEL|NÍVEL|NIVEAU|STUFE|LIVELLO|УРОВЕНЬ|等级|レベル
+VICTORIAS|WINS|VITÓRIAS|VICTOIRES|SIEGE|VITTORIE|ПОБЕДЫ|胜场|勝利
+HOY|TODAY|HOJE|AUJOURD'HUI|HEUTE|OGGI|СЕГОДНЯ|今天|今日
+MAÑANA|TOMORROW|AMANHÃ|DEMAIN|MORGEN|DOMANI|ЗАВТРА|明天|明日
+Cualquier partida cuenta|Any game counts|Qualquer partida conta|Toute partie compte|Jede Partie zählt|Ogni partita conta|Любая партия засчитывается|任何对局都算|どの対戦でもOK
+Contra la IA o en salas|Vs AI or in rooms|Contra a IA ou em salas|Contre l'IA ou en salon|Gegen KI oder in Räumen|Contro l'IA o in sala|Против ИИ или в комнатах|对战AI或房间|AI対戦かルームで
+Termina dos partidas completas|Finish two full games|Termine duas partidas|Termine deux parties|Beende zwei Partien|Finisci due partite|Сыграй две партии до конца|完成两局|2回最後まで遊ぶ
+Llévate todas las cartas de la mesa|Take every card on the table|Leve todas as cartas da mesa|Prends toutes les cartes|Nimm alle Karten vom Tisch|Prendi tutte le carte|Забери все карты со стола|拿走桌上所有牌|場のカードを全部取る
+Canta y que valga tu canto|Call and make it count|Cante e faça valer|Annonce et fais-la compter|Sag an und punkte|Dichiara e fai punti|Объяви и получи очки|叫牌并得分|役を宣言して得点
+Pilla a un rival distraído|Catch a distracted rival|Pegue um rival distraído|Attrape un adversaire distrait|Erwische einen Gegner|Becca un avversario distratto|Поймай невнимательного соперника|抓住分心的对手|うっかり相手を捕まえよう
+Gana 2 cantos|Win 2 calls|Ganhe 2 cantos|Gagne 2 annonces|Gewinne 2 Ansagen|Vinci 2 dichiarazioni|Выиграй 2 объявления|赢2次叫牌|役を2回取る
+Haz una mesa limpia|Make a clean table|Faça uma mesa limpa|Fais une table nette|Mach den Tisch leer|Fai tavolo pulito|Сделай чистый стол|清一次桌|テーブルクリアする
+Completada. Mañana hay una nueva misión.|Completed. New mission tomorrow.|Concluída. Amanhã tem nova missão.|Terminée. Nouvelle mission demain.|Erledigt. Morgen gibt es eine neue.|Completata. Domani nuova missione.|Выполнено. Завтра новое задание.|已完成。明天有新任务。|達成！明日は新ミッション。
+Tu recompensa diaria te espera|Your daily reward is waiting|Sua recompensa diária te espera|Ta récompense t'attend|Deine Belohnung wartet|La ricompensa ti aspetta|Награда ждёт тебя|每日奖励等你领取|報酬が待ってるよ
+Vuelve mañana para aumentarla|Come back tomorrow to raise it|Volte amanhã para aumentar|Reviens demain pour l'augmenter|Komm morgen wieder|Torna domani per aumentarla|Возвращайся завтра|明天回来提升|明日また来てね
+Mesa pública|Public table|Mesa pública|Table publique|Öffentlicher Tisch|Tavolo pubblico|Открытый стол|公开牌桌|公開テーブル
+Mesa privada|Private table|Mesa privada|Table privée|Privater Tisch|Tavolo privato|Закрытый стол|私人牌桌|非公開テーブル
+Esperando a que el anfitrión empiece…|Waiting for the host to start…|Aguardando o anfitrião…|En attente de l'hôte…|Warte auf den Gastgeber…|In attesa dell'host…|Ждём хозяина стола…|等待房主开始…|ホストの開始待ち…
+Empezar partida|Start game|Começar partida|Lancer la partie|Partie starten|Inizia partita|Начать партию|开始游戏|ゲーム開始
+Cerrar la mesa|Close table|Fechar a mesa|Fermer la table|Tisch schließen|Chiudi il tavolo|Закрыть стол|关闭牌桌|テーブルを閉じる
+Salir de la mesa|Leave table|Sair da mesa|Quitter la table|Tisch verlassen|Lascia il tavolo|Покинуть стол|离开牌桌|退席
+Anfitrión|Host|Anfitrião|Hôte|Gastgeber|Host|Хозяин|房主|ホスト
+Equipo azul|Blue team|Time azul|Équipe bleue|Team Blau|Squadra blu|Синяя команда|蓝队|青チーム
+Equipo rojo|Red team|Time vermelho|Équipe rouge|Team Rot|Squadra rossa|Красная команда|红队|赤チーム
+Esperando…|Waiting…|Aguardando…|En attente…|Warten…|In attesa…|Ожидание…|等待中…|待機中…
+Turno de|Turn of|Vez de|Tour de|Am Zug:|Turno di|Ход:|轮到|の番：
+¡Tu turno!|Your turn!|Sua vez!|À toi !|Du bist dran!|Tocca a te!|Твой ход!|轮到你！|あなたの番！
+Volver a la sala|Back to the room|Voltar à sala|Retour au salon|Zurück zum Raum|Torna alla sala|Назад в комнату|返回房间|ルームに戻る
+Volver al mapa|Back to map|Voltar ao mapa|Retour à la carte|Zurück zur Karte|Torna alla mappa|Назад к карте|返回地图|マップに戻る
+¡Tramposos de manual!|Textbook cheaters!|Trapaceiros de manual!|Tricheurs de manuel !|Lehrbuch-Schummler!|Imbroglioni da manuale!|Отъявленные жулики!|作弊高手！|ズルの達人！
+Sus cartas, su mesa y sus efectos son de su colección.|Their cards, table and effects come from their collection.|As cartas, mesa e efeitos são da coleção dele.|Ses cartes, sa table et ses effets viennent de sa collection.|Karten, Tisch und Effekte stammen aus seiner Sammlung.|Carte, tavolo ed effetti sono della sua collezione.|Карты, стол и эффекты — из его коллекции.|牌、牌桌和特效都来自他的收藏。|カード・テーブル・演出は彼のコレクション。
+1 vs 1|1 vs 1|1 vs 1|1 contre 1|1 gegen 1|1 contro 1|1 на 1|1对1|1対1
+3 jugadores|3 players|3 jogadores|3 joueurs|3 Spieler|3 giocatori|3 игрока|3人|3人
+4 por parejas|4 in pairs|4 em duplas|4 en équipes|4 als Paare|4 a coppie|4 парами|4人组队|4人ペア
+4 individual|4 solo|4 individual|4 individuel|4 einzeln|4 individuale|4 каждый за себя|4人个人|4人個人戦
+4 parejas|4 pairs|4 duplas|4 équipes|4 Paare|4 coppie|4 пары|4人组队|4人ペア
+Cerrar sesión|Sign out|Sair|Se déconnecter|Abmelden|Esci|Выйти|退出登录|ログアウト
+Vincular Google|Link Google|Vincular Google|Lier Google|Google verknüpfen|Collega Google|Привязать Google|绑定Google|Google連携
+Invitado|Guest|Convidado|Invité|Gast|Ospite|Гость|游客|ゲスト
+Tu código|Your code|Seu código|Ton code|Dein Code|Il tuo codice|Твой код|你的代码|あなたのコード
+Privada (con código)|Private (with code)|Privada (com código)|Privée (avec code)|Privat (mit Code)|Privata (con codice)|Закрытая (по коду)|私人（凭代码）|非公開（コード）
+Pública|Public|Pública|Publique|Öffentlich|Pubblica|Открытая|公开|公開
+Unirme|Join|Entrar|Rejoindre|Beitreten|Entra|Войти|加入|参加
+Entrar|Enter|Entrar|Entrer|Betreten|Entra|Войти|进入|入る
+Actualizar|Refresh|Atualizar|Actualiser|Aktualisieren|Aggiorna|Обновить|刷新|更新
+No hay mesas abiertas ahora. ¡Crea una!|No open tables now. Create one!|Não há mesas abertas. Crie uma!|Aucune table ouverte. Crées-en une !|Keine offenen Tische. Erstelle einen!|Nessun tavolo aperto. Creane uno!|Открытых столов нет. Создай свой!|现在没有开放牌桌，创建一个吧！|募集中のテーブルなし。作ろう！
+Solicitudes|Requests|Solicitações|Demandes|Anfragen|Richieste|Заявки|请求|リクエスト
+Aceptar|Accept|Aceitar|Accepter|Annehmen|Accetta|Принять|接受|承認
+Desconectado|Offline|Desconectado|Hors ligne|Offline|Offline|Не в сети|离线|オフライン
+En una mesa|At a table|Numa mesa|À une table|An einem Tisch|A un tavolo|За столом|在牌桌中|テーブル中
+Todavía no tienes amigos agregados.|You haven't added friends yet.|Você ainda não tem amigos.|Tu n'as pas encore d'amis.|Noch keine Freunde.|Non hai ancora amici.|У тебя пока нет друзей.|你还没有好友。|まだフレンドがいません。
+Caídas|Caídas|Caídas|Caídas|Caídas|Caídas|Каиды|落牌|カイーダ
+Ir a la tienda|Go to shop|Ir à loja|Aller à la boutique|Zum Shop|Vai al negozio|В магазин|去商店|ショップへ
+Entendido|Got it|Entendi|Compris|Verstanden|Capito|Понятно|明白了|了解
+Activar chat de voz|Turn on voice chat|Ativar chat de voz|Activer le chat vocal|Sprachchat aktivieren|Attiva chat vocale|Включить голосовой чат|开启语音聊天|ボイスチャットON
+Hablando|Talking|Falando|Micro ouvert|Mikro an|Microfono attivo|Микрофон вкл.|正在说话|話し中
+Mic apagado|Mic off|Mic desligado|Micro coupé|Mikro aus|Microfono spento|Микрофон выкл.|麦克风关|マイクOFF
+Escuchando|Listening|Ouvindo|Écoute|Hören|In ascolto|Слушаю|收听中|聞いている
+Silenciados|Muted|Silenciados|Muets|Stumm|Silenziati|Без звука|已静音|ミュート中
+conectados|connected|conectados|connectés|verbunden|connessi|подключено|已连接|接続中
+conectado|connected|conectado|connecté|verbunden|connesso|подключён|已连接|接続中
 ¡Desbloqueado!|Unlocked!|Desbloqueado!|Débloqué !|Freigeschaltet!|Sbloccato!|Открыто!|已解锁！|解放！
 ¡Nuevo emoji desbloqueado!|New emoji unlocked!|Novo emoji desbloqueado!|Nouvel émoji débloqué !|Neues Emoji freigeschaltet!|Nuova emoji sbloccata!|Новый эмодзи открыт!|新表情已解锁！|新しい絵文字を解放！
 No te alcanza el oro. Mira un video o reclama tu premio diario|Not enough gold. Watch a video or claim your daily reward|Ouro insuficiente. Veja um vídeo ou resgate seu prêmio diário|Pas assez d'or. Regarde une vidéo ou récupère ta récompense|Nicht genug Gold. Sieh ein Video oder hol deine Belohnung|Oro insufficiente. Guarda un video o riscatta il premio|Не хватает золота. Посмотри видео или забери награду|金币不足。观看视频或领取每日奖励|ゴールド不足。動画を見るか報酬を受け取ろう
@@ -1552,7 +1664,7 @@ const tc=tableCanto();if(tc){const pt=PTS[tc],lv=pt>=16?4:pt>=10?3:pt>=6?2:1;add
 flash((lv>=2?'<div style="font-size:30px">✨🎊✨</div>':'')+'<div style="font-size:'+[40,50,58,64][lv-1]+'px">¡'+tc.toUpperCase()+' EN MESA!</div><div style="font-size:22px">+'+pt+' para '+tn(tm(mano))+'</div>',lv);speak(tc+' en mesa');render();await sleep(1700)}
 turn=nxt(mano);last={id:table[3].id,by:mano};
 next()}
-function next(){busy=turn!=0;render();hintUpdate();if(over){stopTimer();return end()}autoSee(turn);if(turn!=0){stopTimer();setRem('');if(LV.mode=='host'&&LV.REM[turn]){busy=false;lvRemoteTurn(turn);return}setTimeout(()=>{if(!over)botPlay()},opt.mode=='locura'?1300:2000)}else{startTimer();remind()}}
+function next(){busy=turn!=0;if(LV.mode=='host'){LV.tS=Date.now();LV.tL=turn==0?(opt.mode=='locura'?5:25):(LV.REM[turn]?(opt.mode=='locura'?10:25):0)}render();hintUpdate();if(over){stopTimer();return end()}autoSee(turn);if(turn!=0){stopTimer();setRem('');if(LV.mode=='host'&&LV.REM[turn]){busy=false;lvRemoteTurn(turn);return}setTimeout(()=>{if(!over)botPlay()},opt.mode=='locura'?1300:2000)}else{startTimer();remind()}}
 function capSize(c){const m=table.find(x=>x.n==c.n);if(!m)return 0;let k=ORD.indexOf(m.n)+1,s=2;
 while(k<10&&table.find(x=>x.n==ORD[k])){s++;k++}return s}
 function botBurn(bp){for(const q of rivalsOf(bp))for(const d of dec[q])if(d.missed&&!d.void&&Math.random()<.6*SK()){d.void=true;d.burnt=true;add(tm(bp),1);
@@ -1976,7 +2088,7 @@ function launchRoom(){const r=CUR;Object.assign(opt,{players:r.n,mode:r.mode,met
 RN=[null,...r.pl.slice(0,r.n-1)];if(ROOMS&&!r.mine)ROOMS=ROOMS.filter(x=>x!==r);startGame(r.e)}
 
 function showMenu(v){
-if(LV.mode&&v!='lobby'&&v!='online'){const m=LV.mode;lvLeave();if(typeof onlLeave=='function')onlLeave(true)}
+if(LV.mode&&v!='lobby'&&v!='online'){if(!LV.exitOK&&$('app').style.display=='block'&&!over&&!confirm(LV.mode=='host'?'¿Salir? Se cerrará la mesa para todos.':'¿Salir de la partida? Tu lugar lo tomará la IA.'))return;LV.exitOK=0;lvLeave();if(typeof onlLeave=='function')onlLeave(true)}
 try{if($('app').style.display!='block'){$('app').style.removeProperty('--nb');applyTable()}}catch(e){}
 if(v!='advst'&&$('app').style.display!='block')ADV=null;if(WT){clearInterval(WT);WT=null}stopTimer();gmStop();if(TRN)TRN.game=false;
 if($('app').style.display!='none'){settled=true;over=true}
