@@ -1235,7 +1235,7 @@ function lvFlashQ(){if(LV.fqB||!LV.fq||!LV.fq.length)return;const [t,lv]=LV.fq.s
 const VC={on:false,mic:true,st:null,pcs:{},aud:{},mute:{},un:null,room:null};
 const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},{urls:'stun:openrelay.metered.ca:80'},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
 function vcRoom(){return LV.room||(NET.room&&NET.room.id)}
-async function vcSig(to,type,data){const {F,db}=FB;await F.addDoc(F.collection(db,'rooms',VC.room,'rtc'),{from:FBU.uid,to,type,data:JSON.stringify(data),t:Date.now()})}
+async function vcSig(to,type,data){const m={from:FBU.uid,to,type,data:JSON.stringify(data),t:Date.now(),sid:VC.sid||0};if(RT.on()){await FB.D.push(RT.ref(VC.room+'/rtc/'+to),m);return}const {F,db}=FB;await F.addDoc(F.collection(db,'rooms',VC.room,'rtc'),m)}
 
 
 const CH={msgs:[],un:null,room:null,unread:0,open:false};
@@ -1332,20 +1332,27 @@ setInterval(()=>{if(VC.on)vcTick()},180);
 function vcPC(u){if(VC.pcs[u])return VC.pcs[u];const pc=new RTCPeerConnection(ICE);VC.pcs[u]=pc;if(VC.st)VC.st.getTracks().forEach(t=>pc.addTrack(t,VC.st));
 pc.onicecandidate=e=>{if(e.candidate)vcSig(u,'ice',e.candidate.toJSON()).catch(()=>{})};
 pc.ontrack=e=>{vcMeter(u,e.streams[0]);let a=VC.aud[u];if(!a){a=document.createElement('audio');a.autoplay=true;a.playsInline=true;document.body.appendChild(a);VC.aud[u]=a}a.srcObject=e.streams[0];a.muted=!!VC.mute[u];a.play&&a.play().catch(()=>{})};
-pc.onconnectionstatechange=()=>{if(['failed','closed'].includes(pc.connectionState)){vcDrop(u);if(VC.on&&FBU&&FBU.uid<u)setTimeout(async()=>{try{if(!VC.on||VC.pcs[u])return;const p2=vcPC(u);const o=await p2.createOffer();await p2.setLocalDescription(o);await vcSig(u,'offer',o)}catch(e){}},1500)}vcUI()};return pc}
+pc.onconnectionstatechange=()=>{const st=pc.connectionState;if(st=='disconnected'){setTimeout(()=>{if(VC.pcs[u]===pc&&pc.connectionState=='disconnected'&&FBU.uid<u)vcCall(u,false)},3000)}if(st=='failed'){if(FBU.uid<u)setTimeout(()=>vcCall(u,true),800)}vcUI()};return pc}
+document.addEventListener('click',()=>{try{Object.values(VC.aud||{}).forEach(a=>{if(a.paused)a.play().catch(()=>{})})}catch(e){}},true);
 function vcDrop(u){delete VA.an[u];try{VC.pcs[u]&&VC.pcs[u].close()}catch(e){}delete VC.pcs[u];if(VC.aud[u]){VC.aud[u].remove();delete VC.aud[u]}}
+async function vcHandle(m){if(!VC.on)return;const d=JSON.parse(m.data);try{
+if(m.type=='offer'){let pc=VC.pcs[m.from];if(pc&&pc.signalingState!='stable'&&FBU.uid<m.from)return;if(!pc||pc.connectionState=='failed'||pc.connectionState=='closed'){vcDrop(m.from);pc=vcPC(m.from)}await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);await vcSig(m.from,'answer',a);(VC.qi[m.from]||[]).forEach(c=>pc.addIceCandidate(c).catch(()=>{}));VC.qi[m.from]=[]}
+else if(m.type=='answer'){const pc=VC.pcs[m.from];if(pc&&pc.signalingState=='have-local-offer'){await pc.setRemoteDescription(d);(VC.qi[m.from]||[]).forEach(c=>pc.addIceCandidate(c).catch(()=>{}));VC.qi[m.from]=[]}}
+else if(m.type=='ice'){const pc=VC.pcs[m.from];if(pc&&pc.remoteDescription)await pc.addIceCandidate(d).catch(()=>{});else{(VC.qi[m.from]=VC.qi[m.from]||[]).push(d)}}
+else if(m.type=='hello'&&FBU.uid<m.from){vcCall(m.from,true)}}catch(e){console.warn('vc',e)}vcUI()}
+async function vcCall(u,fresh){if(!VC.on)return;try{let pc=VC.pcs[u];if(fresh||!pc||['failed','closed'].includes(pc.connectionState)){vcDrop(u);pc=vcPC(u)}if(pc.signalingState!='stable')return;const o=await pc.createOffer({iceRestart:!!VC.pcs[u]});await pc.setLocalDescription(o);await vcSig(u,'offer',o)}catch(e){console.warn('vc call',e)}}
+function vcPeers(){const r=NET.room||{};return Object.keys(r.vc||{}).filter(u=>u!=FBU.uid&&r.vc[u]&&(r.players||[]).includes(u))}
+function vcHealth(){if(!VC.on||!FBU)return;for(const u of vcPeers()){const pc=VC.pcs[u],st=pc?pc.connectionState:'none';if(st=='connected')continue;if(FBU.uid<u){if(!pc||st=='failed'||st=='closed'||(st!='connecting'&&st!='new')||(Date.now()-(VC.tc[u]||0)>9000&&st!='connected')){VC.tc[u]=Date.now();vcCall(u,true)}}else if(!pc&&Date.now()-(VC.th[u]||0)>8000){VC.th[u]=Date.now();vcSig(u,'hello',{}).catch(()=>{})}}
+Object.keys(VC.pcs).forEach(u=>{if(!vcPeers().includes(u))vcDrop(u)});vcUI()}
+setInterval(()=>{try{vcHealth()}catch(e){}},4000);
 async function vcStart(force){if(VC.on&&!force)return;if(VC.on){try{await vcStop()}catch(e){}}Object.keys(VC.pcs).forEach(vcDrop);const id=vcRoom();if(!id||!fbOk()||!FBU){toast('El chat de voz funciona dentro de una mesa en línea');return}
 try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw{name:'NotSupported'};VC.st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}})}catch(e){vcMicHelp(e);return}
-VC.on=true;VC.mic=true;VC.room=id;vcMeter(FBU.uid,VC.st);const {F,db}=FB;const t0=Date.now()-2000;
-VC.un=F.onSnapshot(F.query(F.collection(db,'rooms',id,'rtc'),F.where('to','==',FBU.uid)),sn=>{sn.docChanges().forEach(async ch=>{if(ch.type!='added')return;const m=ch.doc.data();if(m.t<t0)return;const d=JSON.parse(m.data);try{
-if(m.type=='offer'){vcDrop(m.from);const pc=vcPC(m.from);await pc.setRemoteDescription(d);const a=await pc.createAnswer();await pc.setLocalDescription(a);await vcSig(m.from,'answer',a)}
-else if(m.type=='answer'){const pc=VC.pcs[m.from];if(pc&&pc.signalingState=='have-local-offer')await pc.setRemoteDescription(d)}
-else if(m.type=='ice'){const pc=VC.pcs[m.from];if(pc)await pc.addIceCandidate(d).catch(()=>{})}}catch(e){console.warn('vc',e)}vcUI()})});
-await F.updateDoc(F.doc(db,'rooms',id),{['vc.'+FBU.uid]:true}).catch(()=>{});
-const r=NET.room||{};const others=Object.keys(r.vc||{}).filter(u=>u!=FBU.uid&&r.vc[u]&&(r.players||[]).includes(u));
-for(const u of others){const pc=vcPC(u);const o=await pc.createOffer();await pc.setLocalDescription(o);await vcSig(u,'offer',o)}
-toast('🎙️ Chat de voz activado');vcUI()}
-async function vcStop(){if(!VC.on)return;VC.on=false;Object.keys(VC.pcs).forEach(vcDrop);if(VC.st)VC.st.getTracks().forEach(t=>t.stop());VC.st=null;if(VC.un){VC.un();VC.un=null}
+VC.on=true;VC.mic=true;VC.room=id;VC.qi={};VC.tc={};VC.th={};VC.sid=Date.now();vcMeter(FBU.uid,VC.st);const t0=Date.now()-3000;
+if(RT.on()){const ref=RT.ref(id+'/rtc/'+FBU.uid);try{await FB.D.remove(ref)}catch(e){}const un=FB.D.onChildAdded(ref,sn=>{const m=sn.val();try{FB.D.remove(sn.ref)}catch(e){}if(m&&m.t>=t0)vcHandle(m)});VC.un=un}
+else{const {F,db}=FB;VC.un=F.onSnapshot(F.query(F.collection(db,'rooms',id,'rtc'),F.where('to','==',FBU.uid)),sn=>{sn.docChanges().forEach(ch=>{if(ch.type!='added')return;const m=ch.doc.data();if(m.t>=t0)vcHandle(m)})})}
+await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',id),{['vc.'+FBU.uid]:true}).catch(()=>{});
+setTimeout(vcHealth,600);toast('🎙️ Chat de voz activado');vcUI()}
+async function vcStop(){if(!VC.on)return;VC.on=false;Object.keys(VC.pcs).forEach(vcDrop);if(VC.st)VC.st.getTracks().forEach(t=>t.stop());VC.st=null;if(VC.un){try{VC.un()}catch(e){}VC.un=null}try{if(RT.on())FB.D.remove(RT.ref(VC.room+'/rtc/'+FBU.uid))}catch(e){}
 try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',VC.room),{['vc.'+FBU.uid]:false})}catch(e){}vcUI()}
 function vcMic(){if(!VC.st)return;VC.mic=!VC.mic;VC.st.getTracks().forEach(t=>t.enabled=VC.mic);try{FB.F.updateDoc(FB.F.doc(FB.db,'rooms',VC.room),{['vc.'+FBU.uid]:VC.mic?true:'m'})}catch(e){}vcUI();toast(VC.mic?'🎙️ Micrófono encendido':'🔇 Micrófono silenciado')}
 function vcMuteAll(){const any=Object.keys(VC.aud).some(u=>!VC.mute[u]);Object.keys(VC.aud).forEach(u=>{VC.mute[u]=any;VC.aud[u].muted=any});vcUI();toast(any?'🔈 Silenciaste a los demás':'🔊 Vuelves a escuchar a todos')}
@@ -1370,7 +1377,7 @@ const {F,db}=FB;LV.unM=F.onSnapshot(F.collection(db,'rooms',id,'moves'),sn=>{sn.
 function lvSubState(id){if(LV.unS){try{LV.unS()}catch(e){}LV.unS=null}if(!RT.on())return;
 LV.unS=FB.D.onValue(RT.ref(id+'/gs'),sn=>{const v=sn.val();if(!v||LV.mode!='guest'||!NET.room)return;if((v.gn||0)!==(LV.gameN||0))lvNewGame(v.gn||0);try{lvApply({...NET.room,gs:v.gs,ev:v.ev})}catch(e){console.warn(e)}})}
 function lvNewGame(gn){betPay(NET.room);rkFeePay(NET.room);LV.gameN=gn;LV.me=(NET.room.seats||NET.room.players).indexOf(FBU.uid);LV.seen=0;LV.endShown=0;LV.fq=[];LV.prevTb=null;const es=$('esum');es&&es.remove();if(gn)toast('🔁 ¡Nueva partida!')}
-async function lvClearLive(id){if(!RT.on())return;try{await FB.D.remove(RT.ref(id))}catch(e){}}
+async function lvClearLive(id){if(!RT.on())return;try{await FB.D.remove(RT.ref(id+'/moves'));await FB.D.remove(RT.ref(id+'/gs'))}catch(e){}}
 function lvRot(s,N2,me){return (s-me+N2)%N2}
 function lvApply(r){const g=JSON.parse(r.gs),me=LV.me,n=g.N,rot=s=>lvRot(s,n,me),multi=n==3||(n==4&&g.IND),rt=t=>multi?rot(t):(t-me%2+2)%2,RA=a=>{const o=[];(a||[]).forEach((v,i)=>o[rot(i)]=v);return o};
 N=n;IND=g.IND;META=g.META;opt.players=n;opt.mode='normal';mano=rot(g.mano);turn=rot(g.turn);over=g.over;hands=RA(g.hands);table=g.table;caps=RA(g.caps);deck={length:g.dk};deck=Array(g.dk).fill(0);
