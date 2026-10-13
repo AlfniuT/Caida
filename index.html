@@ -1263,7 +1263,7 @@ function lvFlashQ(){if(LV.fqB||!LV.fq||!LV.fq.length)return;const [t,lv]=LV.fq.s
 /* ===== CHAT DE VOZ (WebRTC, señal por Firebase) ===== */
 const VC={on:false,mic:true,st:null,pcs:{},aud:{},mute:{},un:null,room:null};
 const METERED='';/* ← aquí va el enlace de Metered */
-const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302']},{urls:'stun:openrelay.metered.ca:80'},{urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
+const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun.relay.metered.ca:80']},{urls:['turn:global.relay.metered.ca:80','turn:global.relay.metered.ca:80?transport=tcp','turn:global.relay.metered.ca:443','turns:global.relay.metered.ca:443?transport=tcp'],username:'375c36bcc1f5710993bc1683',credential:'S/0GTZ7yUPorIQ9+'}]};
 function vcRoom(){return LV.room||(NET.room&&NET.room.id)}
 async function vcSig(to,type,data){const m={from:FBU.uid,to,type,data:JSON.stringify(data),t:Date.now(),sid:VC.sid||0};if(RT.on()){await FB.D.push(RT.ref(VC.room+'/rtc/'+to),m);return}const {F,db}=FB;await F.addDoc(F.collection(db,'rooms',VC.room,'rtc'),m)}
 
