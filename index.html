@@ -1884,11 +1884,12 @@ Object.assign(opt,{players:r.size,team:r.solo?'solo':'parejas',mode:'normal',met
 RN=[null];for(let q=1;q<r.size;q++){const u=LV.seats[q],pi=u?(r.pinfo||{})[u]||{}:null;RN[q]=pi?pi.name||'Jugador':['','Rafa','Marta','Luis'][q]}window._keepRN=1;ADV=null;startGame(0);for(let q=1;q<r.size;q++){const u=LV.seats[q],pi=u?(r.pinfo||{})[u]||{}:null;if(u){LV.REM[q]=u;AIC[q]={av:pi.av||'oro',fr:pi.fr||'none',ns:pi.ns||'none',deck:pi.face||'clasico',back:pi.back||'clasico',table:pi.table||'madera',fxc:pi.fxc||'none',fxk:pi.fxk||'none',ph:pi.ph||{},vp:1,human:1}}}
 LV.gameN=r.gameN||0;(RT.on()?lvClearLive(r.id):Promise.resolve()).then(()=>{lvSubMoves(r.id);lvPush()});
 betPay(r);rkFeePay(r);render();lvPush();setTimeout(vcUI,500)}
+function busyFix(){const rem=LV.mode=='host'&&LV.REM&&LV.REM[turn];busy=turn!=0&&!rem;if(rem&&!over)lvRemoteTurn(turn)}
 function lvMove(m){const p=m.seat;if(!p||LV.REM[p]!=m.by||over&&m.t!='emo'&&m.t!='again'&&m.t!='pick')return;if(LV.away&&LV.away[p]){LV.away[p]=0;toast('👋 '+nm(p)+' volvió a la partida');msg(nm(p)+' volvió a la partida')}if(LV.miss)LV.miss[p]=0;if(m.t=='pick'){if(LV.sp&&!LV.sp.done&&LV.sp.taken[p]==null&&!Object.values(LV.sp.taken).includes(m.i)){LV.sp.taken[p]=m.i;LV.spMark&&LV.spMark(p,m.i);lvPush()}return}if(m.t=='hello'){lvPush();return}const h=hands[p]||[];
 if(m.t=='play'){if(turn!=p||busy)return;if(m.tsq!=null&&m.tsq!==(LV.tsq||0)){lvPushSoon(true);return}const c=h.find(x=>x.id==m.id);if(!c)return;clearTimeout(LV.wait);busy=true;play(p,c)}
 else if(m.t=='canto'){const d=dec[p].find(x=>x.name==m.n&&!x.void);if(d){if(d.say!=h.length){d.say=h.length;d.missed=false;const tx=h.length==1?vista(d.name):d.name;msg(nm(p)+' dice: '+tx);bubble(p,'🔔 '+tx);speak(tx);render()}}else if(h.length==3)declare(p,m.n)}
 else if(m.t=='mal')challenge(p);
-else if(m.t=='pido'){pidoCanto(p);busy=turn!=0}
+else if(m.t=='pido'){pidoCanto(p);busyFix()}
 else if(m.t=='quemo')lvBurn(p);
 else if(m.t=='open'&&LV.openR&&LV.need&&LV.need.seat==p){const r=LV.openR;LV.openR=null;LV.need=null;r(m.v==4?4:1)}
 else if(m.t=='again'){toast('✋ '+nm(p)+' quiere jugar otra');bubble(p,'✋ ¡Otra!',3000)}
@@ -2338,7 +2339,7 @@ msg('¡Se quemó '+art(d.name)+' '+d.name+' '+deN(q)+'! +1 para '+tn(tm(0)));bur
 if(!any)return;render();if(over)end()}
 function partnerForgot(bp,d){setTimeout(()=>{if(over||d.void)return;if(Math.random()<.7){const q=rivalsOf(bp)[0];d.void=true;d.burnt=true;add(tm(q),1);
 msg('¡Se quemó '+art(d.name)+' '+d.name+' de '+nm(bp)+'! +1 para '+tn(tm(q)));bubble(q,'🔥 ¡Se quemó!');burnFlash(nm(bp)+' no lo repitió',d,1,tm(q));render();if(over)end()}},2300)}
-async function trivilin(p,d){busy=true;stopTimer();await sleep(1900);if(over)return;
+async function trivilin(p,d){if(d._tv)return;d._tv=1;busy=true;stopTimer();await sleep(1900);if(over)return;
 msg((p==0?'Enseñas tus cartas: ':nm(p)+' enseña sus cartas: ')+d.h.map(x=>x.n+SU[x.s][1]).join(' '));
 if(btnValid('trivilín',d.h)){forceW=tm(p);if(p==0)ST().triv++;const dbl=score.every((x,i)=>i==forceW||x==0);over=true;
 msg('¡TRIVILÍN MATA PARTIDA!'+(dbl?' Y VALE DOBLE (el rival no tenía puntos)':''));render();
@@ -2346,7 +2347,7 @@ flash('<div style="font-size:30px">🔥💎👑💎🔥</div><div style="font-si
 sfx.caida(4);speak('¡Trivilín mata partida'+(dbl?' y vale doble!':'!'));await sleep(3400);end()}
 else{d.void=true;const q=p==0?nxt(0):0;add(tm(q),2);msg('¡MAL CANTO! '+nm(p)+' no tenía trivilín. +2 para '+tn(tm(q)));
 flash('¡MAL CANTO!<br><span style="font-size:22px">No tenía trivilín. +2 para '+tn(tm(q))+'</span>',1);speak('¡Mal canto!');render();if(over)return end();
-busy=turn!=0;render();if(turn==0)startTimer()}}
+busyFix();render();if(turn==0)startTimer()}}
 
 function ST(){if(!store.st)store.st={};const d={games:0,wins:0,streak:0,maxStreak:0,caidas:0,rey:0,ml:0,cantos:0,best:0,mc:0,quem:0,triv:0,gold:0};for(const k in d)if(store.st[k]==null)store.st[k]=d[k];return store.st}
 const ACH=[
@@ -3183,9 +3184,12 @@ function startTR(){buildTR();if(!TRX)return;trWalk(document.body);new MutationOb
 function setLang(l){store.lang=l;save();location.reload()}
 
 
-(function(){let n=0,last=performance.now(),el=null;function tick(t){if(!store.fps){if(el){el.remove();el=null}setTimeout(()=>requestAnimationFrame(tick),1500);n=0;last=performance.now();return}n++;if(t-last>=1000){if(store.fps){if(!el){el=document.createElement('div');el.id='fpsm';document.body.appendChild(el)}const f=Math.round(n*1000/(t-last));el.textContent=f+' fps';el.style.background=f>=45?'#1fae74':f>=28?'#ff9a00':'#c8312f'}else if(el){el.remove();el=null}n=0;last=t}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+(function(){let n=0,last=performance.now(),el=null;function tick(t){if(!store.fps){if(el){el.remove();el=null}setTimeout(()=>requestAnimationFrame(tick),1500);n=0;last=performance.now();return}n++;if(t-last>=1000){if(store.fps){if(!el){el=document.createElement('div');el.id='fpsm';document.body.appendChild(el)}const f=Math.round(n*1000/(t-last));const lt=Math.round(window.__lt||0),tp=Math.round(window.__tap||0);window.__lt=0;el.textContent=f+' fps · bloqueo '+lt+' ms · toque '+tp+' ms';el.style.background=(f>=45&&lt<150&&tp<120)?'#1fae74':(f>=28&&lt<400&&tp<300)?'#ff9a00':'#c8312f'}else if(el){el.remove();el=null}n=0;last=t}requestAnimationFrame(tick)}requestAnimationFrame(tick)})();
+
+try{new PerformanceObserver(L=>{for(const e of L.getEntries())window.__lt=(window.__lt||0)+e.duration}).observe({entryTypes:['longtask']})}catch(e){}
+document.addEventListener('pointerdown',e=>{const t0=e.timeStamp||performance.now();requestAnimationFrame(()=>requestAnimationFrame(()=>{window.__tap=performance.now()-t0}))},{capture:true,passive:true});
 const _playSafe=play;play=async function(){try{return await _playSafe.apply(this,arguments)}catch(e){console.warn('Caída: error al tirar, recuperando',e);window._stuck=1;LA=0}};
-let LA=Date.now();setInterval(()=>{try{if($('app').style.display!='block'||over||LV.mode=='guest'||(LV.mode=='host'&&LV.REM&&LV.REM[turn])||(typeof PLANNING!='undefined'&&PLANNING)){LA=Date.now();return} if(Date.now()-LA>(window._stuck?1000:12000)&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){window._stuck=0;LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},1000);
+let LA=Date.now();setInterval(()=>{try{if(LV.mode=='host'&&LV.REM&&LV.REM[turn]&&busy&&!over&&$('app').style.display=='block'&&Date.now()-LA>7000&&!$('ov').className){LA=Date.now();console.warn('Caída: turno remoto destrabado');busy=false;render();lvRemoteTurn(turn);return}if($('app').style.display!='block'||over||LV.mode=='guest'||(LV.mode=='host'&&LV.REM&&LV.REM[turn])||(typeof PLANNING!='undefined'&&PLANNING)){LA=Date.now();return} if(Date.now()-LA>(window._stuck?1000:12000)&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){window._stuck=0;LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},1000);
 window.addEventListener('error',e=>{console.warn('Caída error:',e.message)});
 
 function audioUnlock(){try{if(navigator.audioSession&&navigator.audioSession.type!='playback')navigator.audioSession.type='playback'}catch(e){}try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
