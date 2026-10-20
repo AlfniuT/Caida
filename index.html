@@ -894,6 +894,10 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 .dg-aura .c.aura::before,.dg-aura .c.aura::after,.dg-aura .c.bloodc::before,.dg-aura .c.bloodc::after{animation:none!important;display:none!important}
 .dg-marco .av *,.dg-marco .av::before,.dg-marco .av::after,.dg-marco .fz,.dg-marco .fz *{animation:none!important}
 .dg-nombre [class*="n-"]{animation:none!important}
+
+#menu .si *,#menu .si *::before,#menu .si *::after{animation-play-state:paused!important}
+#menu .si.play.vis *,#menu .si.play.vis *::before,#menu .si.play.vis *::after{animation-play-state:running!important}
+#menu .si.play{box-shadow:0 0 0 2px #ffd84a88,0 6px 18px #0008}
 </style></head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -1570,7 +1574,7 @@ let rawLast=performance.now(),acc=0;try{const _x=cv.getContext('2d');Object.defi
 const TPS=new WeakMap();let TPRAF=0,TPLAST=performance.now();
 function tpKick(){if(!TPRAF){TPLAST=performance.now();TPRAF=requestAnimationFrame(tpLoop)}}
 function tpLoop(now){const L=document.querySelectorAll('canvas.tpc');if(!L.length){TPRAF=0;return}TPRAF=requestAnimationFrame(tpLoop);if(now-TPLAST<32)return;if(document.hidden){TPLAST=now;return}const dt=Math.min(.05,(now-TPLAST)/1000);TPLAST=now;
-L.forEach(cv=>{const si=cv.closest('.si');if(si&&!si.classList.contains('vis'))return;const r=cv.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight||r.width<4)return;const dpr=perfLow()?1:Math.min(1.5,devicePixelRatio||1);let S=TPS.get(cv);if(!S){S={};TPS.set(cv,S)}if(cv.width!=Math.round(r.width*dpr)){cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);S.init=0}const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);try{TFXC[cv.dataset.t](c,r.width,r.height,dt,S,now/1000)}catch(e){}})}
+L.forEach(cv=>{const si=cv.closest('.si');if(si&&!si.classList.contains('vis'))return;const S0=TPS.get(cv);if(si&&!si.classList.contains('play')&&S0&&S0._f>8)return;const r=cv.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight||r.width<4)return;const dpr=perfLow()?1:Math.min(1.5,devicePixelRatio||1);let S=TPS.get(cv);if(!S){S={};TPS.set(cv,S)}if(cv.width!=Math.round(r.width*dpr)){cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr);S.init=0}const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);try{TFXC[cv.dataset.t](c,r.width,r.height,dt,S,now/1000);S._f=(S._f||0)+1}catch(e){}})}
 TPRAF=requestAnimationFrame(tpLoop);
 function prevBig(...a){const r=prevBig0(...a);setTimeout(()=>{try{tpKick()}catch(e){}},30);return r}
 function prevBig0(id){const it=itemList('table').find(x=>x.id==id);const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};
@@ -3224,6 +3228,8 @@ document.addEventListener('pointerdown',e=>{const t0=e.timeStamp||performance.no
 
 function dgApply(){const d=store.dg||{};const b=document.body.classList;b.toggle('dg-aura',!!d.aura);b.toggle('dg-marco',!!d.marco);b.toggle('dg-nombre',!!d.nombre);b.toggle('dg-mesa',!!d.mesa)}
 setTimeout(()=>{try{dgApply()}catch(e){}},300);
+
+document.addEventListener('click',e=>{const si=e.target.closest&&e.target.closest('#menu .si');if(!si)return;document.querySelectorAll('#menu .si.play').forEach(x=>{if(x!==si)x.classList.remove('play')});si.classList.add('play');clearTimeout(si._pt);si._pt=setTimeout(()=>si.classList.remove('play'),8000);try{tpKick()}catch(_){}},true);
 const _playSafe=play;play=async function(){try{return await _playSafe.apply(this,arguments)}catch(e){console.warn('Caída: error al tirar, recuperando',e);window._stuck=1;LA=0}};
 let LA=Date.now();setInterval(()=>{try{if(LV.mode=='host'&&LV.REM&&LV.REM[turn]&&busy&&!over&&$('app').style.display=='block'&&Date.now()-LA>7000&&!$('ov').className){LA=Date.now();console.warn('Caída: turno remoto destrabado');busy=false;render();lvRemoteTurn(turn);return}if($('app').style.display!='block'||over||LV.mode=='guest'||(LV.mode=='host'&&LV.REM&&LV.REM[turn])||(typeof PLANNING!='undefined'&&PLANNING)){LA=Date.now();return} if(Date.now()-LA>(window._stuck?1000:12000)&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){window._stuck=0;LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},1000);
 window.addEventListener('error',e=>{console.warn('Caída error:',e.message)});
