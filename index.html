@@ -1907,7 +1907,7 @@ function betaModal(){if($('bmod'))return;const d=document.createElement('div');d
 const LV={mode:null,room:null,me:0,REM:{},seats:[],ev:[],evq:0,seen:0,raw:[],pT:null,unM:null,done:{},wait:null,need:null,openR:null,hostName:'',myName:''};
 function lvOn(){return LV.mode=='host'||LV.mode=='guest'}
 function lvEv(e){if(LV.mode!='host')return;e.q=++LV.evq;LV.ev.push(e);if(LV.ev.length>40)LV.ev.shift();if(e.k=='spk'||e.k=='fxk'){clearTimeout(LV.pT);lvPush()}else lvPushSoon()}
-function lvPushSoon(now){if(LV.mode!='host')return;const since=Date.now()-(LV.lastPush||0);clearTimeout(LV.pT);const gap=RT.on()?140:450;LV.pT=setTimeout(lvPush,now?Math.max(0,gap-since):Math.max(RT.on()?60:120,(RT.on()?180:550)-since))}
+function lvPushSoon(now){if(LV.mode!='host')return;const since=Date.now()-(LV.lastPush||0);clearTimeout(LV.pT);const gap=RT.on()?50:450;LV.pT=setTimeout(lvPush,now?Math.max(0,gap-since):Math.max(RT.on()?60:120,(RT.on()?180:550)-since))}
 function lvState(){return{sp:LV.sp&&!LV.sp.done?LV.sp:null,dkc:LV.mode=='host'&&deck&&deck.length&&typeof deck[0]=='object'?deck:null,N,IND,META,mano,turn,over,hands,table,dec,score,caps,dk:deck?deck.length:0,last,lastCap,lost,playedBy,pileAt,asked,tsq:LV.tsq||0,gl:over?GLOG.slice(0,160):undefined,gn:over?glogNames():undefined,raw:LV.raw.slice(-6),need:LV.need,tl:LV.tL?Math.max(0,Math.round(LV.tL-(Date.now()-LV.tS)/1000)):0,fin:over?{w:score.indexOf(Math.max(...score))}:null}}
 async function lvPush(){if(LV.mode!='host'||!LV.room)return;LV.lastPush=Date.now();if(RT.on()){try{await FB.D.set(RT.ref(LV.room+'/gs'),{gs:JSON.stringify(lvState()),ev:JSON.stringify(LV.ev),gn:LV.gameN||0,t:Date.now(),hu:FBU.uid})}catch(e){console.warn('rt push',e)}return}try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',LV.room),{gs:JSON.stringify(lvState()),ev:JSON.stringify(LV.ev),gq:Date.now()})}catch(e){console.warn('lvPush',e)}}
 async function lvSend(m){if(LV.mode!='guest')return;if(RT.on()){try{await FB.D.push(RT.ref(LV.room+'/moves'),{by:FBU.uid,seat:LV.me,...m,t0:Date.now()})}catch(e){toast('Sin conexión: '+(e.code||e.message))}return}try{await FB.F.addDoc(FB.F.collection(FB.db,'rooms',LV.room,'moves'),{by:FBU.uid,seat:LV.me,...m,t0:Date.now()})}catch(e){toast('Sin conexión: '+(e.code||e.message))}}
@@ -2155,7 +2155,8 @@ async function lvRestart(shuffle){const r=NET.room;if(!r||LV.mode!='host')return
 const gn=(r.gameN||0)+1;$('esum')&&$('esum').remove();try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',r.id),{state:'playing',seats,gameN:gn,gs:null,ev:null})}catch(e){toast('Error: '+(e.code||e.message));return}
 lvStartHost({...r,players:seats,seats,gameN:gn});LV.gameN=gn}
 async function lvBackLobby(){const id=LV.room;lvLeave();try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',id),{state:'lobby',gs:null,ev:null})}catch(e){}$('app').style.display='none';showMenu('lobby')}
-function lvLeave(){try{if(LV.unS){LV.unS();LV.unS=null}}catch(e){}try{if(LV.mode=='host'&&LV.room&&!(NET.room&&NET.room.state=='playing'&&!over))lvClearLive(LV.room)}catch(e){}opt.triv=true;PTS['trivilín']=99;try{vcStop();const b=$('vcbar');b&&b.remove()}catch(e){}if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
+const WL={l:null};async function wlOn(){try{if(WL.l||!navigator.wakeLock)return;WL.l=await navigator.wakeLock.request('screen');WL.l.addEventListener('release',()=>{WL.l=null})}catch(e){}}function wlOff(){try{WL.l&&WL.l.release()}catch(e){}WL.l=null}document.addEventListener('visibilitychange',()=>{if(!document.hidden&&lvOn&&lvOn())wlOn()});setInterval(()=>{try{if(lvOn())wlOn()}catch(e){}},5000);
+function lvLeave(){try{wlOff()}catch(e){}try{if(LV.unS){LV.unS();LV.unS=null}}catch(e){}try{if(LV.mode=='host'&&LV.room&&!(NET.room&&NET.room.state=='playing'&&!over))lvClearLive(LV.room)}catch(e){}opt.triv=true;PTS['trivilín']=99;try{vcStop();const b=$('vcbar');b&&b.remove()}catch(e){}if(LV.unM){LV.unM();LV.unM=null}clearTimeout(LV.wait);LV.mode=null;LV.need=null;LV.openR=null}
 
 setTimeout(()=>{try{Object.keys(sfx).forEach(k=>{const o=sfx[k];if(typeof o!='function')return;sfx[k]=(...a)=>{lvEv({k:'sfx',f:k,a});return o(...a)}})}catch(e){}},0);
 const _render0=render;render=function(){_render0.apply(this,arguments);if(LV.mode=='host')lvPushSoon()};
@@ -3471,15 +3472,15 @@ const src=p==0?document.querySelector('#hd [data-id="'+card.id+'"]'):document.qu
 const g=ghost(card,src?src.getBoundingClientRect():{left:innerWidth/2-29,top:innerHeight/2-43,width:58,height:86});if(src)src.style.visibility='hidden';
 const m=table.find(c=>c.n==card.n);
 if(!m){playLogic(p,card);const el=document.querySelector('#tb [data-id="'+card.id+'"]');
-if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),p?1000:550);el.style.visibility='';sfx.flip()}g.remove();return}
+if(el){el.style.visibility='hidden';await fly(g,el.getBoundingClientRect(),LV.mode=='host'?260:(p?1000:550));el.style.visibility='';sfx.flip()}g.remove();return}
 const grp=[m];let k=ORD.indexOf(m.n)+1;
 while(k<10){const x=table.find(c=>c.n==ORD[k]);if(!x)break;grp.push(x);k++}
-{const te=document.querySelector('#tb [data-id="'+m.id+'"]');await fly(g,te?te.getBoundingClientRect():{left:innerWidth/2-29,top:innerHeight/2-43,width:58,height:86},p&&!(LV.mode=='host'&&LV.REM[p])?(LV.mode?700:1000):550)}
+{const te=document.querySelector('#tb [data-id="'+m.id+'"]');await fly(g,te?te.getBoundingClientRect():{left:innerWidth/2-29,top:innerHeight/2-43,width:58,height:86},LV.mode=='host'?280:(p&&!(LV.mode=='host'&&LV.REM[p])?(LV.mode?700:1000):550))}
 const gs=[g];
 for(const x of grp){const el=document.querySelector('#tb [data-id="'+x.id+'"]');if(!el)continue;gs.push(ghost(x,el.getBoundingClientRect()));el.style.visibility='hidden'}
-sfx.capture();await sleep(p?700:350);
+sfx.capture();await sleep(LV.mode=='host'?220:(p?700:350));
 const cpe=document.querySelector('#cap'+holderOf(tm(p))),cr=cpe&&cpe.getBoundingClientRect(),dest=cr?{left:cr.left,top:cr.top}:{left:innerWidth/2-29,top:tm(p)?-120:innerHeight+20};
-await Promise.all(gs.map(e=>fly(e,dest,600,true)));
+await Promise.all(gs.map(e=>fly(e,dest,LV.mode=='host'?300:600,true)));
 gs.forEach(e=>e.remove());playLogic(p,card)}
 const HW={on:0};
 function handEnd(){resolve();if(over){end();return}if(deck.length){busy=true;(async()=>{msg('Se reparten 3 cartas más');await dealAnim();if(!deck.length){msg('¡ÚLTIMAS! En esta ronda no vale mesa limpia');sfx.drum();flash('¡ÚLTIMAS!!<br><span style="font-size:22px">no vale mesa limpia</span>',3);speak('¡Últimas!')}next()})();return}else return finishHand()}
