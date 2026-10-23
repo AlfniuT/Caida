@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Borrar mi cuenta · Caída</title>
+<style>
+:root{--bg:#f7f4fb;--card:#fff;--tx:#241a33;--mut:#5d5270;--ac:#6a2bb3;--ln:#e4dcef;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#160a26;--card:#22123a;--tx:#f1eafb;--mut:#b9abcf;--ac:#c79bff;--ln:#3a2558;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+main{max-width:720px;margin:0 auto;padding:24px 18px 48px}
+h1{font-size:26px;margin:0 0 4px;color:var(--ac)}
+.fecha{color:var(--mut);font-size:14px;margin:0 0 20px}
+section{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:16px 18px;margin:0 0 14px}
+h2{font-size:18px;margin:0 0 8px}
+p{margin:0 0 10px}
+ol,ul{margin:0 0 10px;padding-left:22px}
+li{margin:0 0 8px}
+a{color:var(--ac)}
+.btn{display:inline-block;background:var(--ac);color:#fff;text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px;margin-top:4px}
+code{background:var(--ln);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<main>
+<h1>Borrar tu cuenta de Caída</h1>
+<p class="fecha">Caída: cartas venezolanas · Desarrollador: AlfniuT</p>
+
+<section>
+<h2>Cómo pedir que borremos tu cuenta</h2>
+<ol>
+<li>Escríbenos al correo <b><span class="mail">que aparece en nuestra <a href="privacidad.html">política de privacidad</a></span></b>.</li>
+<li>Pon como asunto: <code>Borrar mi cuenta de Caída</code>.</li>
+<li>En el mensaje indica tu <b>nombre de usuario</b> en el juego y el <b>correo de Google</b> con el que entras.</li>
+<li>Envíalo desde ese mismo correo de Google, para confirmar que la cuenta es tuya.</li>
+</ol>
+<p>Borraremos tu cuenta y tus datos en un plazo máximo de <b>30 días</b> y te avisaremos por correo cuando esté listo.</p>
+<p id="btnw"></p>
+</section>
+
+<section>
+<h2>Qué datos se borran</h2>
+<ul>
+<li>Tu cuenta y tu identificador de usuario.</li>
+<li>Tu correo electrónico.</li>
+<li>Tu nombre en el juego, avatar, marcos y demás personalización.</li>
+<li>Tu progreso: oro, gemas, objetos, nivel, logros, estadísticas e historial de partidas.</li>
+<li>Tu lista de amigos, tu lugar en clanes y tus puestos en los rankings.</li>
+</ul>
+<p>Al borrar la cuenta pierdes todo lo que tenías en el juego, incluidas las compras. Esto no se puede deshacer.</p>
+</section>
+
+<section>
+<h2>Qué datos se conservan</h2>
+<ul>
+<li><b>Reportes de mal comportamiento:</b> si otros jugadores te reportaron, guardamos esos reportes hasta <b>90 días</b> para proteger a la comunidad, y luego se borran.</li>
+<li><b>Registros de compras:</b> los guarda Google Play según sus propias reglas, no nosotros.</li>
+</ul>
+<p>Los mensajes del chat y el audio del chat de voz no se guardan, así que no hay nada que borrar de ellos.</p>
+</section>
+
+<section>
+<h2>Datos en tu teléfono</h2>
+<p>Para borrar también lo que el juego guarda en tu teléfono, desinstala Caída o borra los datos de la app en los ajustes de Android.</p>
+</section>
+</main>
+<script>
+fetch('privacidad.html').then(r=>r.text()).then(t=>{const m=t.match(/mailto:([^"'?\s>]+)/);if(!m||/TU_CORREO/i.test(m[1]))return;const e=m[1];
+document.querySelectorAll('.mail').forEach(s=>{s.innerHTML='<a href="mailto:'+e+'">'+e+'</a>'});
+document.getElementById('btnw').innerHTML='<a class="btn" href="mailto:'+e+'?subject='+encodeURIComponent('Borrar mi cuenta de Caída')+'&body='+encodeURIComponent('Hola, quiero borrar mi cuenta de Caída.\n\nNombre de usuario: \nCorreo de Google: ')+'">✉️ Escribir el correo ahora</a>'}).catch(()=>{});
+</script>
+</body>
+</html>
