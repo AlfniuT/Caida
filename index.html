@@ -933,6 +933,7 @@ body{background:radial-gradient(130% 700px at 50% -10%,#4a1a8c 0%,#24093f 55%,#1
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
+.siplb{position:absolute;right:8px;top:40%;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:900;background:#ff4f7b;color:#fff;box-shadow:0 2px 8px #0006;z-index:3;pointer-events:none;transition:opacity .3s}.si.play .siplb,.pfb.play .siplb{opacity:0}
 /* barra superior: que todo quepa en pantalla; la bandera baja a la derecha */
 .hdr{position:relative;gap:6px!important;flex-wrap:nowrap;min-width:0}
 .hdr .pf{flex:1 1 auto;min-width:0;max-width:none}
@@ -2650,7 +2651,8 @@ const SCATS=[['dest','⭐','Destacados'],['cofres','🎁','Cofres'],['av','👤'
 const RARS=[['all','Todo'],['com','Común'],['rar','Raro'],['epi','Épico'],['leg','Legendario']];
 
 
-let SIO=null;function shopObserve(){try{if(SIO)SIO.disconnect();SIO=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('vis',e.isIntersecting)),{rootMargin:'80px'});document.querySelectorAll('#menu .si,#menu .pfb').forEach(el=>SIO.observe(el))}catch(e){}}
+let SIO=null;function shopObserve(){try{if(SIO)SIO.disconnect();SIO=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('vis',e.isIntersecting)),{rootMargin:'80px'});document.querySelectorAll('#menu .si,#menu .pfb').forEach(el=>SIO.observe(el))}catch(e){}setTimeout(siAnimMark,80)}
+function siAnimMark(){const L=[...document.querySelectorAll('#menu .si:not([data-ak]),#menu .pfb:not([data-ak])')];let i=0;const on=x=>x&&x!='none';const step=()=>{const end=Math.min(L.length,i+6);for(;i<end;i++){const si=L[i];si.dataset.ak=1;if(si.querySelector('.plb'))continue;const box=si.querySelector('.sicx')||si;let an=false;for(const el of [box,...box.querySelectorAll('*')].slice(0,250)){try{if(on(getComputedStyle(el).animationName)||on(getComputedStyle(el,'::before').animationName)||on(getComputedStyle(el,'::after').animationName)){an=true;break}}catch(e){}}if(an){if(getComputedStyle(si).position=='static')si.style.position='relative';si.insertAdjacentHTML('beforeend','<span class="siplb">▶ Ver</span>')}}if(i<L.length)setTimeout(step,30)};step()}
 function shopGroups(L){const G=[['gold','🪙 Con oro',x=>typeof x=='number'],['gem','💎 Con gemas',x=>isG(x)],['x','🎁 Solo en cofres',x=>x==='x'],['v','🗺️ Se ganan en la Aventura',x=>x==='v'],['r','🏆 Se ganan en Rankeds',x=>x==='r'],['b','🧪 Premios de beta',x=>x==='b']];const val=p=>typeof p=='number'?p:isG(p)?amt(p):0;
 G.push(['p','🎟️ Pase de temporada',x=>x==='p']);return G.map(([k,t,f])=>{const S=L.filter(([ty,it])=>f(it.price)).sort((a,b)=>val(a[1].price)-val(b[1].price));return S.length?`<h3 class="sgh sgh-${k}">${t} <small>${S.length}</small></h3><div class="sg">${S.map(([ty,it])=>itemCard(ty,it)).join('')}</div>`:''}).join('')}
 function shopGo(c,r){if(c)SHOP.cat=c;if(r)SHOP.rar=r;else if(c)SHOP.rar='all';showMenu('tienda');setTimeout(()=>{const e=document.querySelector('.scat.on');e&&e.scrollIntoView({inline:'center',block:'nearest'})},30)}
