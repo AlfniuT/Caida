@@ -1021,6 +1021,45 @@ html{background:#120a24!important}body{background:transparent!important}
 .mi{background:linear-gradient(110deg,#11806a,#0f5a8f)!important}
 #menu .box{background-color:#24164a;background-image:linear-gradient(160deg,#30205e,#1c1240)}
 
+
+@property --fa{syntax:'<angle>';inherits:false;initial-value:0deg}
+.frw{position:absolute!important;left:-26%!important;top:-26%!important;width:152%!important;height:152%!important;pointer-events:none;z-index:2;display:block;transform-origin:50% 50%;will-change:transform}
+.av .frw>.frm,.frw>.frm,.av .frw>img.frm.frin,.frw>img.frm.frin,.av .frw>svg.frm{position:absolute!important;left:0!important;top:0!important;width:100%!important;height:100%!important;right:auto!important;bottom:auto!important;max-width:none!important}
+.frw>.frm{display:block}
+.frgl,.frlr{-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;pointer-events:none}
+.frgl{background:var(--fc);filter:blur(5px);opacity:.55;transform:scale(1.04);animation:frgl 2.2s ease-in-out infinite;z-index:1!important}
+@keyframes frgl{0%,100%{opacity:.25;transform:scale(1.02)}50%{opacity:.75;transform:scale(1.08)}}
+.frlr{z-index:3!important;mix-blend-mode:screen;background:conic-gradient(from var(--fa),transparent 0deg,transparent 40deg,color-mix(in srgb,var(--fc) 70%,#fff) 70deg,#fff 82deg,color-mix(in srgb,var(--fc) 70%,#fff) 94deg,transparent 125deg,transparent 220deg,var(--fc) 250deg,#fff 262deg,var(--fc) 274deg,transparent 305deg);animation:fa 3.2s linear infinite}
+@keyframes fa{to{--fa:360deg}}
+.frw>.frsh{opacity:.7}
+.fm-fire{filter:url(#frFire);animation:fmFire 1.4s ease-in-out infinite}
+@keyframes fmFire{0%,100%{transform:scale(1)}30%{transform:scale(1.035) translateY(-1%)}60%{transform:scale(.995)}}
+.fm-fire>img{animation:fmFl 0.9s steps(4) infinite}
+@keyframes fmFl{0%{filter:brightness(1)}25%{filter:brightness(1.18) saturate(1.2)}50%{filter:brightness(.97)}75%{filter:brightness(1.12)}}
+.fm-smoke{filter:url(#frSmoke);animation:fmSway 5s ease-in-out infinite}
+.fm-bolt{animation:fmBolt 2.2s linear infinite}
+.fm-bolt>img{filter:url(#frBolt)}
+@keyframes fmBolt{0%,100%{transform:translate(0,0)}4%{transform:translate(1.2%,-.8%)}8%{transform:translate(-1%,.6%)}12%{transform:translate(0,0)}52%{transform:translate(0,0) scale(1)}55%{transform:translate(-.8%,.8%) scale(1.03)}58%{transform:translate(.6%,-.4%)}61%{transform:translate(0,0) scale(1)}}
+.fm-bolt>.frgl{animation:frBoltG 2.2s linear infinite}
+@keyframes frBoltG{0%,100%,14%,62%{opacity:.25}4%,8%,55%,58%{opacity:1}}
+.fm-ice{animation:fmIce 3.6s ease-in-out infinite}
+@keyframes fmIce{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.04) rotate(2deg)}}
+.fm-ice>img{animation:fmIceC 3.6s ease-in-out infinite}
+@keyframes fmIceC{0%,100%{filter:brightness(1) hue-rotate(0)}50%{filter:brightness(1.2) hue-rotate(-12deg)}}
+.fm-heart{animation:fmBeat 1.5s ease-in-out infinite}
+@keyframes fmBeat{0%,40%,100%{transform:scale(1)}10%{transform:scale(1.08)}20%{transform:scale(1.01)}30%{transform:scale(1.06)}}
+.fm-petal{animation:fmSway 4.2s ease-in-out infinite}
+@keyframes fmSway{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.03)}}
+.fm-jelly{animation:fmJelly 2.6s ease-in-out infinite}
+@keyframes fmJelly{0%,100%{transform:scale(1,1)}25%{transform:scale(1.05,.96)}50%{transform:scale(.97,1.04)}75%{transform:scale(1.03,.98)}}
+.fm-spin{animation:fmSpin 16s linear infinite}
+@keyframes fmSpin{to{transform:rotate(360deg)}}
+@keyframes fmPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.fm-royal{animation:fmRoyal 3.8s ease-in-out infinite}
+@keyframes fmRoyal{0%,100%{transform:translateY(0) rotate(-2deg) scale(1)}50%{transform:translateY(-2.5%) rotate(2deg) scale(1.03)}}
+.lowfx .frw,.lowfx .frw *{animation:none!important}.lowfx .frw{filter:none!important}.lowfx .frlr,.lowfx .frgl{display:none!important}
+@media (prefers-reduced-motion:reduce){.frw,.frw *{animation-duration:12s!important}}
+
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -3682,10 +3721,14 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.01e';
+const GAME_VER='2026.11.01f';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-01',v:'2026.11.01f',t:'Marcos con movimiento de verdad',it:[
+['m','🔥','Los marcos se mueven','Ahora el marco completo cobra vida: los de fuego ondulan como llamas, los eléctricos tiemblan con chispazos, los de corazones laten, los de flores se mecen, los de hielo respiran y brillan, los de humo flotan, los galácticos giran y los reales flotan con su corona.'],
+['m','✨','Luz que recorre el marco','Dos destellos de luz del color de tu marco le dan la vuelta sin parar, y el marco tiene un resplandor que pulsa.'],
+['m','⚡','Modo ahorro','Si tienes activado el modo de efectos bajos, los marcos se quedan quietos para cuidar tu batería.']]},
 {d:'2026-11-01',v:'2026.11.01e',t:'Fondos de perfil premium, marcos con vida y sonidos nuevos',it:[
 ['n','🌄','9 fondos de perfil ilustrados','Dragón dorado, Caracas y sus fuegos, Caracas neón, Pico Bolívar, Canaima, Selva del Amazonas, Atardecer llanero, Médanos de Coro e Isla de Margarita. Cada uno con su animación y se ven en tu perfil, en el inicio y en tus partidas.'],
 ['m','🖼️','Marcos con mucha más animación','Los marcos tienen brillo que los recorre y partículas según su tema: llamas, hielo, rayos, corazones, pétalos, humo, burbujas y más.'],
@@ -4934,6 +4977,20 @@ if(T=='orbit')o+=`<g class="fpO"><circle cx="50" cy="3" r="2.2" fill="#fff"/><ci
 if(T=='royal')o+=`<g class="fpO fpO3"><path d="M50 1.5L51.2 4.8L54.5 6L51.2 7.2L50 10.5L48.8 7.2L45.5 6L48.8 4.8Z" fill="#fff"/><circle cx="50" cy="6" r="4" fill="${c}" opacity=".35"/></g>`;
 return `<svg class="frm frth" viewBox="0 0 100 100" aria-hidden="true" style="overflow:visible;--fc:${c}">${o}</svg>`}
 const _frAI0=frAI;frAI=function(id){const c=FRCOL[id]||'#ffd84a',u=`fr/${id}.webp?v=22`;return `<img class="frm frai" src="${u}" alt="" draggable="false" style="--fc:${c}"><span class="frm frsh" style="-webkit-mask-image:url(${u});mask-image:url(${u})"></span>`+frTheme(id,c)+frSpk(c)};
+/* ===== MARCOS v23: movimiento real del marco (ondas, latido, giro, balanceo) + luz que lo recorre ===== */
+const FRMV={fire:'fire',fireb:'fire',ice:'ice',bolt:'bolt',heart:'heart',petal:'petal',smoke:'smoke',bubble:'jelly',drop:'jelly',orbit:'spin',royal:'royal'};
+const FRSPIN=new Set(['galaxia','agujero','bhole','orbita','anillos','ochoest','arcoiris','neon','tricolorx','esmeralda','rosaneon']);
+function frDefs(){if(document.getElementById('frdefs'))return;const d=document.createElement('div');d.id='frdefs';d.style.cssText='position:absolute;width:0;height:0;overflow:hidden';
+d.innerHTML=`<svg width="0" height="0" aria-hidden="true"><defs>
+<filter id="frFire" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.025 0.09" numOctaves="2" seed="3" result="n"><animate attributeName="baseFrequency" dur="2.4s" values="0.025 0.09;0.03 0.12;0.025 0.09" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="5" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="frSmoke" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="2" seed="7" result="n"><animate attributeName="baseFrequency" dur="5s" values="0.018 0.03;0.024 0.042;0.018 0.03" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="frBolt" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="turbulence" baseFrequency="0.09" numOctaves="1" seed="1" result="n"><animate attributeName="seed" dur="0.6s" values="1;4;9;2;6" calcMode="discrete" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+</defs></svg>`;document.body.appendChild(d)}
+try{if(document.body)frDefs();else document.addEventListener('DOMContentLoaded',frDefs)}catch(e){}
+frAI=function(id){const c=FRCOL[id]||'#ffd84a',u=`fr/${id}.webp?v=22`,T=FRTH[id]||'royal';let M=FRMV[T]||'royal';if(FRSPIN.has(id))M='spin';if(id.startsWith('rk_'))M='royal';
+const mk=`-webkit-mask-image:url(${u});mask-image:url(${u})`;
+return `<span class="frw fm-${M}" style="--fc:${c}"><span class="frm frgl" style="${mk}"></span><img class="frm frai frin" src="${u}" alt="" draggable="false"><span class="frm frlr" style="${mk}"></span><span class="frm frsh" style="${mk}"></span>${frTheme(id,c)}${frSpk(c)}</span>`};
+
 
 
 /* ===== FONDOS DE PERFIL ILUSTRADOS (v22) ===== */
