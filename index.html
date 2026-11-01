@@ -1060,6 +1060,7 @@ html{background:#120a24!important}body{background:transparent!important}
 .lowfx .frw,.lowfx .frw *{animation:none!important}.lowfx .frw{filter:none!important}.lowfx .frlr,.lowfx .frgl{display:none!important}
 @media (prefers-reduced-motion:reduce){.frw,.frw *{animation-duration:12s!important}}
 
+.newsl .newsi{padding:7px 10px!important;align-items:center}.newsl .newsi b{font-size:14px}.newsl{gap:5px}
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -3721,10 +3722,12 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.01f';
+const GAME_VER='2026.11.01g';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-01',v:'2026.11.01g',t:'Novedades más cortas',it:[
+['m','📜','Novedades más cortas y fáciles de leer']]},
 {d:'2026-11-01',v:'2026.11.01f',t:'Marcos con movimiento de verdad',it:[
 ['m','🔥','Los marcos se mueven','Ahora el marco completo cobra vida: los de fuego ondulan como llamas, los eléctricos tiemblan con chispazos, los de corazones laten, los de flores se mecen, los de hielo respiran y brillan, los de humo flotan, los galácticos giran y los reales flotan con su corona.'],
 ['m','✨','Luz que recorre el marco','Dos destellos de luz del color de tu marco le dan la vuelta sin parar, y el marco tiene un resplandor que pulsa.'],
@@ -3811,7 +3814,7 @@ const CHLOG=[
 ];
 const CHK={n:['✨','Nuevo'],m:['⬆️','Mejorado'],f:['🔧','Arreglado'],q:['🗑️','Quitado o cambiado']};
 function chFecha(d){try{const t=new Date(d+'T12:00:00').toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'});return t.charAt(0).toUpperCase()+t.slice(1)}catch(e){return d}}
-function chEntryHTML(e){const g=k=>e.it.filter(x=>x[0]==k);return `<div class="chd"><b>📅 ${chFecha(e.d)}</b><small>${e.t}</small></div>`+['n','m','f','q'].filter(k=>g(k).length).map(k=>`<div class="chk chk-${k}">${CHK[k][0]} ${CHK[k][1]}</div>`+g(k).map(n=>`<div class="newsi"><span>${n[1]}</span><div><b>${n[2]}</b><small>${n[3]}</small></div></div>`).join('')).join('')}
+function chEntryHTML(e){const g=k=>e.it.filter(x=>x[0]==k);return `<div class="chd"><b>📅 ${chFecha(e.d)}</b><small>${e.t}</small></div>`+['n','m','f','q'].filter(k=>g(k).length).map(k=>`<div class="chk chk-${k}">${CHK[k][0]} ${CHK[k][1]}</div>`+g(k).map(n=>`<div class="newsi"><span>${n[1]}</span><div><b>${n[2]}</b></div></div>`).join('')).join('')}
 function newsCheck(force,all){try{if(!force&&(store.seenVer==GAME_VER||!(store.played>0||store.welcomed)))return;if(!force&&($('bmod')||$('dmod')||$('ginvm')||($('app')&&$('app').style.display=='block'))){setTimeout(newsCheck,3000);return}
 const seen=store.seenVer;let L=all?CHLOG:CHLOG.filter(e=>!seen||e.v>seen);if(!L.length)L=CHLOG.slice(0,1);store.seenVer=GAME_VER;save();const o=$('gmod');if(o)o.remove();
 const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};d.innerHTML=`<div class="gbox"><div style="text-align:center"><div style="font-size:46px">🎉</div><b style="font-size:24px;font-family:'Lilita One','Nunito',system-ui,sans-serif">${all?'Historial de cambios':'¡Novedades!'}</b><p class="sub">${all?'Todo lo que ha cambiado en Caída, día por día':'Esto es lo nuevo en Caída'}</p></div><div class="newsl">${L.map(chEntryHTML).join('')}</div>${all?'':`<button class="sm off" style="width:100%;margin-bottom:6px" onclick="newsCheck(true,1)">📜 Ver todo el historial</button>`}<button class="mb" onclick="$('gmod').remove()">¡A jugar!</button></div>`;document.body.appendChild(d)}catch(e){console.warn(e)}}
