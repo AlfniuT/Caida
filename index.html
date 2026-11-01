@@ -1061,6 +1061,13 @@ html{background:#120a24!important}body{background:transparent!important}
 @media (prefers-reduced-motion:reduce){.frw,.frw *{animation-duration:12s!important}}
 
 .newsl .newsi{padding:7px 10px!important;align-items:center}.newsl .newsi b{font-size:14px}.newsl{gap:5px}
+
+#updb{position:fixed;left:12px;right:12px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:9000;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:linear-gradient(135deg,#25b35a,#0f7a8f);border:2px solid #ffffff66;box-shadow:0 6px 0 #0a4a3a,0 10px 24px #0008;color:#fff;animation:updIn .5s cubic-bezier(.2,1.4,.4,1)}
+#updb .upde{font-size:28px;animation:updB 1.2s ease-in-out infinite}
+#updb .updt{flex:1;display:flex;flex-direction:column;line-height:1.2}#updb .updt b{font-size:15px}#updb .updt small{font-size:12px;opacity:.9}
+#updb button{border:0;border-radius:12px;padding:10px 14px;font-weight:900;font-size:15px;background:#fff;color:#0f7a4a;box-shadow:0 3px 0 #0006}
+@keyframes updIn{from{transform:translateY(140%)}to{transform:none}}@keyframes updB{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -3722,10 +3729,12 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.01g';
+const GAME_VER='2026.11.01h';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-01',v:'2026.11.01h',t:'Botón para actualizar',it:[
+['n','🚀','Botón de actualizar cuando hay versión nueva']]},
 {d:'2026-11-01',v:'2026.11.01g',t:'Novedades más cortas',it:[
 ['m','📜','Novedades más cortas y fáciles de leer']]},
 {d:'2026-11-01',v:'2026.11.01f',t:'Marcos con movimiento de verdad',it:[
@@ -3819,6 +3828,13 @@ function newsCheck(force,all){try{if(!force&&(store.seenVer==GAME_VER||!(store.p
 const seen=store.seenVer;let L=all?CHLOG:CHLOG.filter(e=>!seen||e.v>seen);if(!L.length)L=CHLOG.slice(0,1);store.seenVer=GAME_VER;save();const o=$('gmod');if(o)o.remove();
 const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};d.innerHTML=`<div class="gbox"><div style="text-align:center"><div style="font-size:46px">🎉</div><b style="font-size:24px;font-family:'Lilita One','Nunito',system-ui,sans-serif">${all?'Historial de cambios':'¡Novedades!'}</b><p class="sub">${all?'Todo lo que ha cambiado en Caída, día por día':'Esto es lo nuevo en Caída'}</p></div><div class="newsl">${L.map(chEntryHTML).join('')}</div>${all?'':`<button class="sm off" style="width:100%;margin-bottom:6px" onclick="newsCheck(true,1)">📜 Ver todo el historial</button>`}<button class="mb" onclick="$('gmod').remove()">¡A jugar!</button></div>`;document.body.appendChild(d)}catch(e){console.warn(e)}}
 setTimeout(newsCheck,4000);
+/* ===== BOTÓN ACTUALIZAR: avisa si hay una versión nueva del juego ===== */
+let UPD_V=null;
+async function updCheck(){try{if(navigator.onLine===false||!/^http/.test(location.protocol))return;const t=await fetch('index.html?u='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'');const m=t.match(/GAME_VER='([^']+)'/);if(m&&m[1]>GAME_VER){UPD_V=m[1];updShow()}}catch(e){}}
+function updShow(){try{if($('updb'))return;if($('app')&&$('app').style.display=='block'){setTimeout(updShow,15000);return}const b=document.createElement('div');b.id='updb';b.innerHTML=`<span class="upde">🚀</span><div class="updt"><b>¡Nueva versión de Caída!</b><small>Actualiza para ver lo nuevo</small></div><button onclick="updGo(this)">Actualizar</button>`;document.body.appendChild(b)}catch(e){}}
+async function updGo(btn){try{if(btn){btn.disabled=true;btn.textContent='Actualizando…'}if(navigator.serviceWorker&&navigator.serviceWorker.getRegistrations){const r=await navigator.serviceWorker.getRegistrations();for(const x of r)await x.update().catch(()=>{})}if(window.caches){const k=await caches.keys();for(const n of k){const c=await caches.open(n);await c.delete('./index.html').catch(()=>{});await c.delete('./').catch(()=>{})}}}catch(e){}location.replace(location.pathname+'?v='+encodeURIComponent(UPD_V||Date.now()))}
+setTimeout(updCheck,6000);setInterval(updCheck,4*60*1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(updCheck,1500)});
+
 /* ===== REPORTAR ERRORES ===== */
 function bugInfo(){let v='';try{v=($('app')&&$('app').style.display=='block')?('partida '+(lvOn()?'en línea ('+LV.mode+')':'IA')+' · '+N+' jug · modo '+opt.mode+' · mesa '+(store.table||'')):('menú: '+curView)}catch(e){}return {ver:GAME_VER,app:window.Capacitor?'app nativa':(matchMedia('(display-mode: standalone)').matches?'app Play':'navegador'),ua:navigator.userAgent.slice(0,160),scr:innerWidth+'x'+innerHeight+'@'+(devicePixelRatio||1),where:v,perf:store.perf||'auto',speed:store.speed||'rapida'}}
 function bugOpen(){const d=document.createElement('div');d.id='gmod';d.onclick=e=>{if(e.target==d)d.remove()};let cat='Error';d.innerHTML=`<div class="gbox"><div style="text-align:center"><div style="font-size:44px">🐞</div><b style="font-size:21px">Reportar un error</b><p class="sub">Cuéntanos qué pasó. Lo leemos todo y lo arreglamos 🙌</p></div><div class="bugc">${['Error','Se traba / lento','Idea','Otro'].map((c,i)=>`<button class="sm ${i?'off':''}" data-c="${c}">${c}</button>`).join('')}</div><textarea id="bugt" maxlength="800" placeholder="Ej: estaba en una mesa de 4 en línea, le di a trivilín y la partida se quedó pegada…"></textarea><p class="sub" style="margin:4px 0">Se envía también tu modelo de teléfono y la versión del juego, para encontrar el error más rápido.</p><button class="mb" id="bugs">📨 Enviar reporte</button><button class="mb bk" onclick="$('gmod').remove()">Cancelar</button></div>`;document.body.appendChild(d);
