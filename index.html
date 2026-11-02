@@ -1087,6 +1087,16 @@ html{background:#120a24!important}body{background:transparent!important}
 .newhero>span{font-size:44px}.newhero div{flex:1}.newhero small{display:block;font:900 11px 'Nunito',system-ui;letter-spacing:1.5px;opacity:.95}.newhero small.nh2{letter-spacing:0;font-size:13px;font-weight:700}.newhero b{display:block;font-family:'Lilita One','Nunito',system-ui,sans-serif;font-size:26px}.newhero i{font-style:normal;font-size:30px;font-weight:900}
 @keyframes nhP{0%{box-shadow:0 0 0 0 #25d36699}100%{box-shadow:0 0 0 16px #25d36600}}
 .lowfx .newhero{animation:none}
+
+body.gtight #hd .c{width:42px!important;height:61px!important}body.gtight #hd{min-height:66px!important}body.gtight .cg button{padding:3px 2px!important;font-size:11.5px!important;min-height:0!important}body.gtight #lg,body.gtight .log{max-height:1.5em!important;overflow:hidden}body.gtight #app .sel button{padding:4px 8px!important;font-size:12.5px!important}body.gtight #act{min-height:0!important}body.gtight #act button{padding:6px 12px!important}
+body.gtight2 #hd .c{width:38px!important;height:55px!important}body.gtight2 #hd{min-height:58px!important}body.gtight2 #lg,body.gtight2 .log{display:none!important}body.gtight2 #app .sel{display:none!important}
+#opn,#board>#opn{position:absolute!important;left:50%!important;top:50%!important;margin:0!important;transform:translate(-50%,-50%);z-index:30;display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 16px 16px;border-radius:20px;background:radial-gradient(circle at 50% 0%,#3a1f6acc,#120a26e6);border:2px solid #ffd76a;box-shadow:0 10px 30px #000a,0 0 24px #ffd76a55;animation:opnIn .35s cubic-bezier(.2,1.4,.4,1);width:max-content;max-width:92%}
+#opn .opnt{color:#ffe9a8;font-weight:800;font-size:16px;text-shadow:0 2px 0 #0008;text-align:center}
+#opn .opnb{display:flex;gap:14px}
+#opn button{min-width:96px;padding:10px 14px 8px;font-size:30px;font-weight:900;line-height:1;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:3px}
+#opn button small{font-size:12px;font-weight:700;opacity:.9}
+@keyframes opnIn{from{opacity:0;transform:translate(-50%,-50%) scale(.6)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+body.gtight #opn button{min-width:80px;font-size:24px;padding:8px 10px 6px}
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -2388,7 +2398,34 @@ function rkFound(){try{navigator.vibrate&&navigator.vibrate([400,150,400,150,600
 
 async function rmVote(){if(!NET.room)return;try{await FB.F.updateDoc(FB.F.doc(FB.db,'rooms',NET.room.id),{['again.'+FBU.uid]:true});toast('✋ Esperando que los demás acepten la revancha')}catch(e){}}
 function rmCount(){const R=NET.room||{},a=R.again||{};return [(R.players||[]).filter(u=>a[u]).length,(R.players||[]).length]}
-function vcMicHelp(e){const n=e&&e.name||'';const d=document.createElement('div');d.id='bmod';d.innerHTML=`<div class="bmb" style="border-color:#ff7ad1"><div style="font-size:48px">🎙️</div><div class="ttl" style="font-size:24px">No pude usar el micrófono</div><p>${n=='NotAllowedError'?'El permiso del micrófono está bloqueado.':n=='NotFoundError'?'No encontré un micrófono en este teléfono.':'Este navegador no deja usar el micrófono aquí.'}</p><p class="sub">Para activarlo: abre los <b>Ajustes del teléfono → Apps → Chrome</b> (o la app Caída) <b>→ Permisos → Micrófono → Permitir</b>. En iPhone: <b>Ajustes → Safari → Micrófono → Permitir</b>. Luego vuelve a tocar «Activar chat de voz».</p><p class="sub" style="opacity:.6;font-size:11px">Código: ${String(n||'?').replace(/</g,'')}${e&&e.message?' · '+String(e.message).slice(0,80).replace(/</g,''):''}${window.Capacitor?' · app':' · web'}</p><button class="mb" onclick="$('bmod').remove()">Entendido</button></div>`;document.body.appendChild(d)}
+function vcInApp(){const u=navigator.userAgent||'';return !window.Capacitor&&/FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|TikTok|musical_ly|Snapchat|Twitter/i.test(u)}
+function vcTwa(){return !window.Capacitor&&/android-app:\/\//.test(document.referrer||'')}
+function vcTO(p,ms){let to=false;return Promise.race([p.then(s=>{if(to&&s)try{s.getTracks().forEach(t=>t.stop())}catch(e){}return s}),new Promise((_,r)=>setTimeout(()=>{to=true;r({name:'Timeout',message:'el teléfono no respondió'})},ms))])}
+async function vcGetMic(){const md=navigator.mediaDevices;
+if(vcInApp())throw{name:'InApp'};
+if(window.isSecureContext===false)throw{name:'SecurityError',message:'página no segura'};
+if(!md||!md.getUserMedia)throw{name:'NotSupported'};
+const G=c=>vcTO(md.getUserMedia(c),30000),hard=e=>e&&/NotAllowed|PermissionDenied|Security|Timeout/.test(e.name||'');let last;
+for(const c of [{audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}},{audio:true}]){try{return await G(c)}catch(e){last=e;if(hard(e))throw e}}
+/* micrófono ocupado o el audio del juego lo bloquea: soltar el audio y reintentar */
+const res=()=>{try{if(typeof AC!='undefined'&&AC&&AC.state=='suspended')AC.resume()}catch(e){}};
+try{if(typeof AC!='undefined'&&AC&&AC.state=='running')await AC.suspend()}catch(e){}
+try{if(typeof MZ!='undefined'&&MZ.el)Object.values(MZ.el).forEach(a=>{try{a.pause()}catch(e){}})}catch(e){}
+await new Promise(r=>setTimeout(r,800));
+try{const st=await G({audio:true});res();return st}catch(e){last=e;if(hard(e)){res();throw e}}
+try{const L=(await md.enumerateDevices()).filter(d=>d.kind=='audioinput'&&d.deviceId&&d.deviceId!='default'&&d.deviceId!='communications');for(const d of L){try{const st=await G({audio:{deviceId:{exact:d.deviceId}}});res();return st}catch(e){last=e}}}catch(e){}
+res();throw last||{name:'Unknown'}}
+function vcMicLog(e){try{const n=(e&&e.name)||'?';VC.lg=VC.lg||{};if(VC.lg[n])return;VC.lg[n]=1;const r={uid:(window.FBU&&FBU.uid)||'sin-cuenta',name:store.name||'Jugador',cat:'mic',text:('Micrófono: '+n+' · '+((e&&e.message)||'')+' · '+(window.Capacitor?'app':vcTwa()?'twa':'web')+' · '+navigator.userAgent).slice(0,780),t:Date.now(),...(typeof bugInfo=='function'?bugInfo():{})};if(window.FBU&&fbOk())FB.F.addDoc(FB.F.collection(FB.db,'bugs'),r).catch(()=>{});else{store.bugQ=(store.bugQ||[]).concat([r]).slice(-10);save()}}catch(_){}}
+function vcOpenChrome(){const u='intent://alfniut.github.io/Caida/#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent('https://alfniut.github.io/Caida/')+';end';location.href=u}
+function vcMicHelp(e){vcMicLog(e);const n=e&&e.name||'';const ios=/iPhone|iPad|iPod/.test(navigator.userAgent),app=!!window.Capacitor,twa=vcTwa(),and=/Android/.test(navigator.userAgent);let why,how;
+if(/NotAllowed|PermissionDenied/.test(n)){why='El permiso del micrófono está bloqueado.';how=app?'Abre <b>Ajustes del teléfono → Apps → Caída → Permisos → Micrófono → Permitir</b> (o «Preguntar siempre»).':ios?'Abre <b>Ajustes → Safari → Micrófono → Permitir</b>. Si juegas desde el ícono del inicio, bórralo y vuelve a agregarlo.':twa?'La app usa Chrome para el micrófono: abre <b>Ajustes → Apps → Chrome → Permisos → Micrófono → Permitir</b>. Luego en Chrome: <b>⋮ → Configuración → Configuración de sitios → Micrófono</b> y quita el bloqueo de <b>alfniut.github.io</b>.':'Toca el <b>candado 🔒</b> junto a la dirección → <b>Permisos → Micrófono → Permitir</b>. Si sigue igual: <b>Ajustes del teléfono → Apps → Chrome → Permisos → Micrófono → Permitir</b>.'}
+else if(/NotReadable|TrackStart|Abort/.test(n)){why='Otra app está usando el micrófono.';how='Cierra la llamada, WhatsApp, la grabadora u otra app con audio. Si tienes audífonos Bluetooth, desconéctalos un momento. Luego toca <b>Reintentar</b>.'}
+else if(/NotFound|DevicesNotFound|Overconstrained/.test(n)){why='No encontré un micrófono que funcione.';how='Revisa que el micrófono no esté tapado o desactivado (en algunos teléfonos hay un botón de «Acceso al micrófono» en el menú rápido de arriba). Luego toca <b>Reintentar</b>.'}
+else if(n=='Timeout'){why='El teléfono no respondió al pedir el permiso.';how='Toca <b>Reintentar</b>. Si no aparece la ventana de permiso, actívalo a mano en <b>Ajustes del teléfono → Apps → '+(app?'Caída':'Chrome')+' → Permisos → Micrófono</b>.'}
+else if(n=='InApp'||n=='NotSupported'){why='Abriste el juego dentro de otra app (Instagram, Facebook, TikTok…) y ahí no se puede usar el micrófono.';how=and?'Toca <b>Abrir en Chrome</b>.':ios?'Toca los <b>⋯</b> de arriba y elige <b>Abrir en Safari</b>.':'Abre el juego en Chrome o Safari.'}
+else if(n=='SecurityError'){why='Esta página no deja usar el micrófono.';how='Abre el juego desde <b>https://alfniut.github.io/Caida/</b> o desde la app Caída.'}
+else{why='No pude usar el micrófono.';how='Toca <b>Reintentar</b>. Si sigue, revisa los permisos de micrófono en los Ajustes del teléfono.'}
+const d=document.createElement('div');d.id='bmod';d.innerHTML=`<div class="bmb" style="border-color:#ff7ad1"><div style="font-size:48px">🎙️</div><div class="ttl" style="font-size:24px">No pude usar el micrófono</div><p>${why}</p><p class="sub">${how}</p><p class="sub" style="opacity:.6;font-size:11px">Código: ${String(n||'?').replace(/</g,'')}${e&&e.message?' · '+String(e.message).slice(0,80).replace(/</g,''):''}${app?' · app':twa?' · twa':' · web'}</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${(n=='InApp'||n=='NotSupported')&&and?`<button class="mb" onclick="vcOpenChrome()">🌐 Abrir en Chrome</button>`:`<button class="mb" onclick="$('bmod').remove();vcStart()">🔄 Reintentar</button>`}<button class="mb" style="background:#ffffff22" onclick="$('bmod').remove()">Entendido</button></div></div>`;document.body.appendChild(d)}
 function seatOfUid(u){if(!FBU)return -1;if(u==FBU.uid)return 0;if(LV.mode=='host'){for(const q in LV.REM)if(LV.REM[q]==u)return +q;return -1}if(LV.mode=='guest'&&NET.room){const S=NET.room.seats||NET.room.players,i=S.indexOf(u);return i<0?-1:(i-LV.me+N)%N}return -1}
 const VA={an:{},t:null};
 function vcMeter(u,stream){try{const a=au();if(!a)return;VA.sm=VA.sm||{};if(VA.an[u]&&VA.sm[u]===stream)return;try{if(VA.an[u]&&VA.an[u]._src)VA.an[u]._src.disconnect()}catch(e){}VA.sm[u]=stream;const src=a.createMediaStreamSource(stream),an=a.createAnalyser();an.fftSize=256;src.connect(an);an._src=src;VA.an[u]=an;if(a.state=='suspended')a.resume().catch(()=>{})}catch(e){}}
@@ -2413,7 +2450,7 @@ function vcHealth(){if(!VC.on||!FBU)return;for(const u of vcPeers()){const pc=VC
 Object.keys(VC.pcs).forEach(u=>{if(!vcPeers().includes(u))vcDrop(u)});vcUI()}
 setInterval(()=>{try{vcHealth()}catch(e){}},2500);
 async function vcStart(force){if(VC.on&&!force)return;if(VC.on){try{await vcStop()}catch(e){}}Object.keys(VC.pcs).forEach(vcDrop);const id=vcRoom();if(!id||!fbOk()||!FBU){toast('El chat de voz funciona dentro de una mesa en línea');return}
-try{if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw{name:'NotSupported'};try{VC.st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:{ideal:true},noiseSuppression:{ideal:true},autoGainControl:{ideal:true},channelCount:1}})}catch(e1){if(e1&&e1.name=='NotAllowedError')throw e1;VC.st=await navigator.mediaDevices.getUserMedia({audio:true})}}catch(e){vcMicHelp(e);return}
+if(VC._asking)return;VC._asking=1;try{VC.st=await vcGetMic()}catch(e){VC._asking=0;vcMicHelp(e);return}VC._asking=0;
 if(METERED&&!VC.iceOk){try{const r=await fetch(METERED);const L=await r.json();if(Array.isArray(L)&&L.length){ICE.iceServers=[{urls:'stun:stun.l.google.com:19302'},...L];VC.iceOk=1}}catch(e){console.warn('metered',e)}}
 VC.on=true;VC.mic=true;VC.room=id;VC.qi={};VC.tc={};VC.th={};VC.sid=Date.now();vcMeter(FBU.uid,VC.st);const t0=Date.now()-3000;
 if(RT.on()){const ref=RT.ref(id+'/rtc/'+FBU.uid);try{await FB.D.remove(ref)}catch(e){}const un=FB.D.onChildAdded(ref,sn=>{const m=sn.val();try{FB.D.remove(sn.ref)}catch(e){}if(m&&m.t>=t0)vcHandle(m)});VC.un=un}
@@ -2503,7 +2540,7 @@ if(!same&&n==4&&!g.IND){t=t.replace(/tu equipo/gi,'§R§').replace(/los rivales/
 t=t.replace(/¡Repartes tú!/g,'¡Reparte '+hn+'!').replace(/Eres mano/g,hn+' es mano').replace(/No pegaste/g,hn+' no pegó').replace(/Pegaste/g,hn+' pegó').replace(/(^|[^\p{L}])tú(?![\p{L}])/gu,(m,a)=>a+hn).replace(/(^|[^\p{L}])para ti(?![\p{L}])/gu,(m,a)=>a+'para '+hn).replace(/te llevas/g,'se lleva').replace(/(^|[^\p{L}])Tú(?![\p{L}])/gu,(m,a)=>a+hn).replace(/(^|[^\p{L}])tuya(?![\p{L}])/gu,(m,a)=>a+'de '+hn);
 if(my){t=t.split('¡Reparte '+my+'!').join('¡Repartes tú!').split('para '+my).join('para ti').split('de '+my).join('tuya').split(my).join('Tú')}return t};
 log=(g.raw||[]).map(x=>T(fix(x)));if(g.tsq!==LV.gtsq)LV.tsqAt=Date.now();busy=turn!=0||(g.hb&&Date.now()-(LV.tsqAt||0)<5000)||(LV.sentTsq!=null&&LV.sentTsq===g.tsq&&Date.now()-LV.sentAt<4000);if(g.hb&&turn==0){clearTimeout(LV.hbT);LV.hbT=setTimeout(()=>{if(LV.mode=='guest'&&turn==0&&!over&&!(LV.sentTsq!=null&&LV.sentTsq===LV.gtsq)){busy=false;render()}},5200)}if(LV.pp&&!(hands[0]||[]).some(x=>String(x.id)==LV.pp.id))LV.pp=null;
-if(g.need&&rot(g.need.seat)==0)setAct('<span class="sub">Eres mano: ¿cuál dices?</span><button id="b1">1 ↑</button><button id="b4">4 ↓</button>'),$('b1').onclick=()=>{setAct('');lvSend({t:'open',v:1})},$('b4').onclick=()=>{setAct('');lvSend({t:'open',v:4})};else setAct('');
+if(g.need&&rot(g.need.seat)==0)opnShow(),$('b1').onclick=()=>{setAct('');lvSend({t:'open',v:1})},$('b4').onclick=()=>{setAct('');lvSend({t:'open',v:4})};else setAct('');
 LV.gtsq=g.tsq;if(g.gl){const fx=t=>{t=String(t||'');const hn=LV.hostName||'Anfitrión';return t.replace(/(^|[^\p{L}])Tú(?![\p{L}])/gu,(m,a)=>a+hn).replace(/para ti(?![\p{L}])/g,'para '+hn)};LV.gl=g.gl.map(e=>({...e,w:fx(e.w)}));LV.gn=(g.gn||[]).map(fx)}LV.dl=g.tl?Date.now()+g.tl*1000:0;const chg=r.gs!==LV.lastGs;LV.lastGs=r.gs;LV.lastEv=r.ev;let E=[];try{E=JSON.parse(r.ev||'[]')}catch(e){}LV.mvDone=LV.mvDone||{};for(const e of E){if(e.k=='mv'&&e.q>LV.seen&&!LV.mvDone[e.q]){LV.mvDone[e.q]=1;try{const sp=rot(e.p);if(sp!=0)gFly(sp,e.c)}catch(x){}}}if(e_deal(E,rot))0;if(chg){const preR={};document.querySelectorAll('#tb .c').forEach(el=>preR[el.dataset.id]=el.getBoundingClientRect());const prevIds=LV.prevTb||[];render();lvTick();try{lvAnim(prevIds,preR,g,rot)}catch(e){}if(LV.dealSeq){const q=LV.dealSeq;LV.dealSeq=null;dealVisual(q)}LV.prevTb=(table||[]).map(c=>String(c.id));LV.drw=Math.round(performance.now()-_t0);try{meterUI()}catch(e){}}
 for(const e of E){if(e.q<=LV.seen)continue;LV.seen=e.q;try{
 if(e.k=='mv'){}else if(e.k=='flash'){LV.fq=LV.fq||[];LV.fq.push([fix(e.t),e.lv]);lvFlashQ()}else if(e.k=='bub')bubble(rot(e.p),fix(e.t),e.ms);else if(e.k=='bhs')bhSuck(false);else if(e.k=='spk'){const tx=fix(e.t);const S=LV.selfSpk;if(S&&Date.now()-S.t<4000&&tx.toLowerCase().includes(S.n)){LV.selfSpk=null}else speak(tx)}else if(e.k=='sfx'&&sfx[e.f])sfx[e.f](...(e.a||[]));else if(e.k=='emo')emote(rot(e.p),e.v);else if(e.k=='fx')fxBurst(e.v);else if(e.k=='snd')playSnd(e.v);else if(e.k=='fxk')fxCanto(e.v,rot(e.p),e.n);else if(e.k=='tfx')tfxEvent(e.v,e.n);else if(e.k=='cnt')cntGuest(e)}catch(x){}}
@@ -2624,7 +2661,19 @@ $('lg').innerHTML=log.slice(-4).map(t=>'<div>'+t+'</div>').join('');renderCg();
 document.querySelectorAll('#hd .c').forEach(el=>el.onclick=()=>{if(PLANNING){planTap(el.dataset.id);return}if(LV.mode=='guest'){if(turn==0&&!over&&!busy){busy=true;const c=(hands[0]||[]).find(x=>String(x.id)==el.dataset.id);if(c){gFly(0,c,el);el.style.visibility='hidden'}LV.sentTsq=LV.gtsq;LV.sentAt=Date.now();LV.mS=performance.now();LV.mT=LV.gtsq;lvSend({t:'play',id:el.dataset.id,tsq:LV.gtsq});LV.pp={id:String(el.dataset.id),n:0};clearTimeout(LV.ppT);LV.ppT=setTimeout(lvPPchk,2500)}return}if(turn==0&&!busy&&!over){const c=hands[0].find(x=>x.id==el.dataset.id);busy=true;play(0,c)}});
 }
 function lvPPchk(){const q=LV.pp;if(!q||LV.mode!='guest')return;if(over||turn!==0||!(hands[0]||[]).some(x=>String(x.id)==q.id)){LV.pp=null;return}if(q.n>=3){LV.pp=null;LV.sentTsq=null;busy=false;render();toast('📶 Conexión lenta: vuelve a tirar tu carta');return}q.n++;LV.sentAt=Date.now();lvSend({t:'play',id:q.id,tsq:LV.gtsq});LV.ppT=setTimeout(lvPPchk,2500)}
-function setAct(h){$('act').innerHTML=h}
+function setAct(h){const o=$('opn');if(o)o.remove();$('act').innerHTML=h}
+function opnShow(){if($('opn')&&$('opn').isConnected)return;setAct('');const B=$('board');if(!B)return;const d=document.createElement('div');d.id='opn';d.innerHTML='<div class="opnt">Eres mano: ¿cuál dices?</div><div class="opnb"><button id="b1">1 ↑<small>sube</small></button><button id="b4">4 ↓<small>baja</small></button></div>';B.appendChild(d)}
+/* Ajuste a pantallas cortas: la mesa se encoge para que la mano y los botones siempre quepan */
+const GFIT={raf:0};
+function gameFit(){GFIT.raf=0;try{const A=$('app'),B=$('board');if(!A||!B||A.style.display!='block'){document.body.classList.remove('gtight','gtight2');return}
+const vh=(window.visualViewport&&visualViewport.height)||innerHeight;B.style.removeProperty('height');document.body.classList.remove('gtight','gtight2');
+const over=()=>Math.ceil(A.getBoundingClientRect().bottom+parseFloat(getComputedStyle(A).paddingBottom||0)*0-vh)+2;
+let o=over();if(o<=0)return;const h0=B.getBoundingClientRect().height;const sh=m=>{o=over();if(o>0)B.style.setProperty('height',Math.max(m,B.getBoundingClientRect().height-o)+'px','important');o=over()};
+if(o>40||h0-o<230){document.body.classList.add('gtight');o=over()}if(o<=0)return;sh(220);if(o<=0)return;document.body.classList.add('gtight','gtight2');sh(170);if(o>0)sh(140)}catch(e){}}
+function gameFitQ(){if(!GFIT.raf)GFIT.raf=requestAnimationFrame(gameFit)}
+addEventListener('resize',gameFitQ);try{visualViewport&&visualViewport.addEventListener('resize',gameFitQ)}catch(e){}
+try{new MutationObserver(gameFitQ).observe($('app'),{childList:true,subtree:true});new MutationObserver(gameFitQ).observe($('app'),{attributes:true,attributeFilter:['style']})}catch(e){}
+
 function best(h){
 const ns=h.map(c=>c.n),ix=ns.map(n=>ORD.indexOf(n)).sort((a,b)=>a-b),fl=h.every(c=>c.s==h[0].s),hi=ix[2];
 const reg=[...ns].sort((a,b)=>a-b).join()=='1,11,12',pat=ix[1]-ix[0]==1&&ix[2]-ix[1]==1;
@@ -3751,10 +3800,15 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.01i';
+const GAME_VER='2026.11.02a';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-02',v:'2026.11.02a',t:'Micrófono y pantallas cortas',it:[
+['f','🎙️','Micrófono arreglado para más teléfonos'],
+['f','📱','Cartas completas en pantallas cortas'],
+['m','🎯','Botones 1 y 4 al centro de la mesa'],
+['n','🌄','Tu fondo de perfil también se ve en tu perfil']]},
 {d:'2026-11-01',v:'2026.11.01i',t:'Inicio más fácil de usar',it:[
 ['m','🏠','Inicio nuevo: Aventura y Rankeds primero'],
 ['n','🎓','Botón para aprender a jugar en el inicio'],
@@ -3985,7 +4039,7 @@ for(let a=0;a<4;a++){const tr=table.filter((_,i)=>i!=a);
 for(const n of info(tr).has){if(T.includes(n)&&(!b||PTS[n]>PTS[b]))b=n}}
 return b}
 function deal(){for(let k=0;k<3;k++)for(let p=0;p<N;p++)hands[p].push(deck.pop());dealt=hands.map(h=>[...h]);missPen=F()}
-function askCall(){return new Promise(r=>{setAct('<span class="sub">Eres mano: ¿cuál dices?</span><button id="b1">1 ↑</button><button id="b4">4 ↓</button>');
+function askCall(){return new Promise(r=>{opnShow();
 $('b1').onclick=()=>{setAct('');r(1)};$('b4').onclick=()=>{setAct('');r(4)}})}
 async function opening(call){
 let hits=0;
@@ -4873,7 +4927,7 @@ function launchRoom(){const r=CUR;Object.assign(opt,{players:r.n,mode:r.mode,met
 RN=[null,...r.pl.slice(0,r.n-1)];if(ROOMS&&!r.mine)ROOMS=ROOMS.filter(x=>x!==r);startGame(r.e)}
 
 /* fondos de menú IA */
-const BGV={"tienda": "bg_tienda", "guild": "bg_clan", "ranked": "bg_ranked", "profile": "bg_perfil"};function bgSet(v){try{let L=document.getElementById('bgl');if(!L){L=document.createElement('div');L.id='bgl';document.body.prepend(L);const F=document.createElement('div');F.id='bgfx';F.innerHTML=[...Array(16)].map((_,i)=>`<i style="left:${(i*37)%100}%;animation-delay:${-i*1.3}s;animation-duration:${9+i%5*2}s"></i>`).join('');document.body.prepend(F)}const tab=(typeof TABOF!='undefined'&&TABOF[v])||v;const pid=(((typeof WALLET!='undefined'&&WALLET)&&WALLET.eq)||{}).bg;const usePb=(tab=='home'||v=='game')&&pid&&pid!='none'&&((typeof PBG2!='undefined'&&PBG2[pid])||(typeof PBAI!='undefined'&&PBAI.has(pid)));const key=usePb?'pb:'+pid:(BGV[tab]||'bg_home');if(L.dataset.b==key)return;L.dataset.b=key;const sh='linear-gradient(180deg,#0b061a99,#0b061a33 35%,#0b061a88)';if(usePb&&PBG2[pid]){const x=PBG2[pid];L.style.backgroundImage='none';L.style.background=x[3]||'#120a2a';L.innerHTML=`<svg viewBox="${x[2]}" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">${x[4]}</svg><div style="position:absolute;inset:0;background:${sh}"></div>`}else{L.innerHTML='';L.style.background='';L.style.backgroundImage=`${sh},url(${usePb?'pb/'+pid:'bg/'+key}.webp?v=21)`}}catch(e){}}
+const BGV={"tienda": "bg_tienda", "guild": "bg_clan", "ranked": "bg_ranked", "profile": "bg_perfil"};function bgSet(v){try{let L=document.getElementById('bgl');if(!L){L=document.createElement('div');L.id='bgl';document.body.prepend(L);const F=document.createElement('div');F.id='bgfx';F.innerHTML=[...Array(16)].map((_,i)=>`<i style="left:${(i*37)%100}%;animation-delay:${-i*1.3}s;animation-duration:${9+i%5*2}s"></i>`).join('');document.body.prepend(F)}const tab=(typeof TABOF!='undefined'&&TABOF[v])||v;const pid=(((typeof WALLET!='undefined'&&WALLET)&&WALLET.eq)||{}).bg;const usePb=(tab=='home'||tab=='profile'||v=='profile'||v=='game')&&pid&&pid!='none'&&((typeof PBG2!='undefined'&&PBG2[pid])||(typeof PBAI!='undefined'&&PBAI.has(pid)));const key=usePb?'pb:'+pid:(BGV[tab]||'bg_home');if(L.dataset.b==key)return;L.dataset.b=key;const sh='linear-gradient(180deg,#0b061a99,#0b061a33 35%,#0b061a88)';if(usePb&&PBG2[pid]){const x=PBG2[pid];L.style.backgroundImage='none';L.style.background=x[3]||'#120a2a';L.innerHTML=`<svg viewBox="${x[2]}" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">${x[4]}</svg><div style="position:absolute;inset:0;background:${sh}"></div>`}else{L.innerHTML='';L.style.background='';L.style.backgroundImage=`${sh},url(${usePb?'pb/'+pid:'bg/'+key}.webp?v=21)`}}catch(e){}}
 function showMenu(v){bgSet(v);
 const _keepY=(typeof curView!='undefined'&&v===curView&&$('app').style.display!='block')?scrollY:0;
 if(v!=curView||$('app').style.display=='block')navPush(v);
