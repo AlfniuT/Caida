@@ -1175,6 +1175,15 @@ button,.si,.c,.mb,.sm,.tbb,a{touch-action:manipulation}
 /* respuesta inmediata al tocar */
 .tbb:active,.si:active,.advn:active,.mb:active,.sm:active{transform:scale(.96)}
 
+
+/* v32: cartas de la mano grandes en pantallas chicas */
+@media (max-height:760px){#hd .c{width:60px!important;height:88px!important}#hd{min-height:92px}}
+@media (max-height:640px){#hd .c{width:58px!important;height:85px!important}}
+body.gtight #hd .c{width:58px!important;height:85px!important}body.gtight #hd{min-height:89px!important}
+body.gtight2 #hd .c{width:54px!important;height:79px!important}body.gtight2 #hd{min-height:83px!important}
+body.gtight #rem{font-size:12px!important;line-height:1.25!important;padding:3px 8px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.gtight2 #rem:not(:has(b)){display:none!important}
+body.gtight .seats.n3 .mid .c,body.gtight .seats.n4 .mid .c{width:40px!important;height:59px!important}
 </style><style>
 .lagw{background:#ffb34722;border:1.5px solid #ffb347;color:inherit;border-radius:14px;padding:10px 12px;margin:8px 0 10px;font-size:14px;line-height:1.4}
 #blkmod{position:fixed;inset:0;z-index:100;background:#0b0218d0;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -2747,7 +2756,7 @@ function gameFit(){GFIT.raf=0;try{const A=$('app'),B=$('board');if(!A||!B||A.sty
 const vh=(window.visualViewport&&visualViewport.height)||innerHeight;B.style.removeProperty('height');document.body.classList.remove('gtight','gtight2');
 const over=()=>Math.ceil(A.getBoundingClientRect().bottom+parseFloat(getComputedStyle(A).paddingBottom||0)*0-vh)+2;
 let o=over();if(o<=0)return;const h0=B.getBoundingClientRect().height;const sh=m=>{o=over();if(o>0)B.style.setProperty('height',Math.max(m,B.getBoundingClientRect().height-o)+'px','important');o=over()};
-if(o>40||h0-o<230){document.body.classList.add('gtight');o=over()}if(o<=0)return;sh(220);if(o<=0)return;document.body.classList.add('gtight','gtight2');sh(170);if(o>0)sh(140)}catch(e){}}
+if(o>40||h0-o<230){document.body.classList.add('gtight');o=over()}if(o<=0)return;sh(220);if(o<=0)return;document.body.classList.add('gtight','gtight2');sh(170);if(o>0)sh(140);if(o>0)sh(115)}catch(e){}}
 function gameFitQ(){if(!GFIT.raf)GFIT.raf=requestAnimationFrame(gameFit)}
 addEventListener('resize',gameFitQ);try{visualViewport&&visualViewport.addEventListener('resize',gameFitQ)}catch(e){}
 try{new MutationObserver(gameFitQ).observe($('app'),{childList:true,subtree:true});new MutationObserver(gameFitQ).observe($('app'),{attributes:true,attributeFilter:['style']})}catch(e){}
@@ -3287,6 +3296,11 @@ Reglas|Rules|Regras|Règles|Regeln|Regole|Правила|规则|ルール
 Guía escrita|Written guide|Guia escrito|Guide écrit|Anleitung|Guida scritta|Руководство|文字指南|ガイド
 Estadísticas|Statistics|Estatísticas|Statistiques|Statistiken|Statistiche|Статистика|统计|統計
 Historial|History|Histórico|Historique|Verlauf|Cronologia|История|历史|履歴
+¡Recompensa diaria!|Daily reward!|Recompensa diária!|Récompense quotidienne !|Tägliche Belohnung!|Ricompensa giornaliera!|Ежедневная награда!|每日奖励！|デイリー報酬！
+Entra cada día y el premio sube.|Come back every day and the prize grows.|Entre todo dia e o prêmio aumenta.|Reviens chaque jour et le prix augmente.|Komm jeden Tag und die Belohnung wächst.|Entra ogni giorno e il premio cresce.|Заходи каждый день — награда растёт.|每天登录，奖励递增。|毎日入ると報酬が増えるよ。
+¡Vuelve mañana por más!|Come back tomorrow for more!|Volte amanhã para mais!|Reviens demain pour plus !|Komm morgen für mehr wieder!|Torna domani per altro!|Возвращайся завтра за новым!|明天再来领更多！|明日もまた来てね！
+Si faltas un día, vuelves al día 1.|If you miss a day, you go back to day 1.|Se faltar um dia, volta ao dia 1.|Si tu rates un jour, tu reviens au jour 1.|Verpasst du einen Tag, geht es zurück zu Tag 1.|Se salti un giorno, torni al giorno 1.|Пропустишь день — начнёшь с 1-го дня.|漏掉一天就回到第1天。|1日休むと1日目に戻るよ。
+Mañana|Tomorrow|Amanhã|Demain|Morgen|Domani|Завтра|明天|明日
 Recompensa diaria|Daily reward|Recompensa diária|Récompense quotidienne|Tägliche Belohnung|Ricompensa giornaliera|Ежедневная награда|每日奖励|デイリー報酬
 Reclamar|Claim|Resgatar|Récupérer|Abholen|Riscatta|Забрать|领取|受け取る
 Más tarde|Later|Mais tarde|Plus tard|Später|Più tardi|Позже|稍后|あとで
@@ -3889,10 +3903,15 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.06a';
+const GAME_VER='2026.11.06b';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-06',v:'2026.11.06b',t:'Arreglos',it:[
+['f','🃏','Cartas más grandes en pantallas chicas'],
+['f','🏆','Marcos de liga arreglados'],
+['f','⚡','Las victorias rápidas ya cuentan'],
+['f','🌎','Premio diario traducido completo']]},
 {d:'2026-11-06',v:'2026.11.06a',t:'Más fluido',it:[
 ['m','⚡','Juego mucho más fluido'],
 ['m','🗺️','Aventura sin trabas al deslizar'],
@@ -4718,8 +4737,8 @@ return o}
 /* ===== MARCOS IA (2026-11) ===== */
 const FRAI=new Set(["agujero", "anillos", "arcoiris", "auraroja", "auraverde", "bhole", "bronce", "calabaza", "calavera", "cometa", "corazones", "corona", "cristal", "demonio", "diamante", "dragon", "electrico", "esmeralda", "espectro", "fenix", "flores", "fuego", "galaxia", "hielo", "hielor", "humo", "lavar", "llamaazul", "neon", "ochoest", "orbita", "oro", "pionero", "plata", "real", "reyllano", "rosaneon", "sakura", "tricolorx", "venezuela"]),RKAI=new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),FRCOL={"oro": "#ffd84a", "bronce": "#e0a060", "plata": "#dfe8ff", "venezuela": "#ffd100", "hielo": "#7fe8ff", "neon": "#ff3dd0", "fuego": "#ff7a00", "arcoiris": "#ff9aff", "real": "#c58cff", "galaxia": "#b58cff", "diamante": "#bff6ff", "pionero": "#5dff9a", "fenix": "#ff8a00", "llamaazul": "#4ab0ff", "ochoest": "#ffffff", "cristal": "#e6fbff", "dragon": "#ffcc33", "espectro": "#d6e2ff", "calabaza": "#ff9a2a", "lavar": "#ff5a00", "hielor": "#9ae8ff", "auraroja": "#ff2a3a", "auraverde": "#5dff3d", "auraneon": "#36d6ff", "agujero": "#ff9a3d", "humo": "#ffffff", "rosaneon": "#ff5ec8", "sakura": "#ffb3d9", "calavera": "#e8e0f0", "orbita": "#9ad0ff", "flores": "#ff8ab8", "corazones": "#ff4a7a", "electrico": "#fff04a", "esmeralda": "#3dff8a", "tricolorx": "#ffd100", "anillos": "#ffd84a", "cometa": "#bfe8ff", "corona": "#e6f8ff", "demonio": "#ff2a2a", "bhole": "#b06aff", "reyllano": "#ffd84a"};
 function frSpk(c){return `<svg class="frm frsp" viewBox="0 0 100 100" aria-hidden="true" style="--fc:${c}">${[[50,4,1],[92,36,.7],[83,86,.85],[14,80,.7],[9,30,.9]].map(([x,y,s],i)=>`<path class="frsk" style="animation-delay:${-i*.55}s" d="M${x} ${y-5*s}L${x+1.3*s} ${y-1.3*s}L${x+5*s} ${y}L${x+1.3*s} ${y+1.3*s}L${x} ${y+5*s}L${x-1.3*s} ${y+1.3*s}L${x-5*s} ${y}L${x-1.3*s} ${y-1.3*s}Z" fill="${c}"/>`).join('')}</svg>`}
-function frAI(id){return `<img loading="lazy" decoding="async" class="frm frai" src="fr/${id}.webp?v=21" alt="" draggable="false" style="--fc:${FRCOL[id]||'#ffd84a'}">`+frSpk(FRCOL[id]||'#ffd84a')}
-let FRN=0;const frameSVG=fr=>FRAI.has(fr)?frAI(fr):(typeof fr=='string'&&fr.startsWith('rank'))?(()=>{let r,l;if(fr=='rank'){const b=rkBest();r=b.r;l=b.l}else{const q=fr.split(':');r=+q[1]||0;l=+q[2]||0}if(RKAI.has(r)){const L=rkLet(r)[l]||'C',c=['#e0b07a','#c9d1e2','#cd7f32','#dfe6f5','#ffc61a','#36d6ff','#a86aff','#ff3d7f','#ff8a00','#ffe680'][r];return `<img loading="lazy" decoding="async" class="frm frai frk" src="fr/rk_${r}.webp?v=21" alt="" draggable="false" style="--fc:${c}">`+frSpk(c)+`<svg class="frm" viewBox="0 0 100 100" aria-hidden="true" style="overflow:visible"><circle cx="50" cy="88" r="8" fill="#140818" stroke="${c}" stroke-width="2"/><text x="50" y="91.6" text-anchor="middle" font-size="${L.length>1?8:10}" font-weight="900" fill="#fff" font-family="Lilita One,sans-serif">${L}</text></svg>`}return `<svg class="frm fz-rank rkt${r}" viewBox="0 0 100 100" aria-hidden="true" style="overflow:visible">${rankFrame(r,l,'rk'+(++FRN))}</svg>`})():FRS[fr]?`<svg class="frm fz-${fr}" viewBox="0 0 100 100" aria-hidden="true">${FRS[fr]('fr'+(++FRN))}</svg>`:'';
+function frAI(id){return `<img loading="lazy" decoding="async" class="frm frai" src="fr/${id}.webp?v=32" onerror="this.style.display='none'" alt="" draggable="false" style="--fc:${FRCOL[id]||'#ffd84a'}">`+frSpk(FRCOL[id]||'#ffd84a')}
+let FRN=0;const frameSVG=fr=>FRAI.has(fr)?frAI(fr):(typeof fr=='string'&&fr.startsWith('rank'))?(()=>{let r,l;if(fr=='rank'){const b=rkBest();r=b.r;l=b.l}else{const q=fr.split(':');r=+q[1]||0;l=+q[2]||0}if(RKAI.has(r)){const L=rkLet(r)[l]||'C',c=['#e0b07a','#c9d1e2','#cd7f32','#dfe6f5','#ffc61a','#36d6ff','#a86aff','#ff3d7f','#ff8a00','#ffe680'][r];return `<img loading="lazy" decoding="async" class="frm frai frk" src="fr/rk_${r}.webp?v=32" onerror="rkFb(this,${r},${l})" alt="" draggable="false" style="--fc:${c}">`+frSpk(c)+`<svg class="frm" viewBox="0 0 100 100" aria-hidden="true" style="overflow:visible"><circle cx="50" cy="88" r="8" fill="#140818" stroke="${c}" stroke-width="2"/><text x="50" y="91.6" text-anchor="middle" font-size="${L.length>1?8:10}" font-weight="900" fill="#fff" font-family="Lilita One,sans-serif">${L}</text></svg>`}return `<svg class="frm fz-rank rkt${r}" viewBox="0 0 100 100" aria-hidden="true" style="overflow:visible">${rankFrame(r,l,'rk'+(++FRN))}</svg>`})():FRS[fr]?`<svg class="frm fz-${fr}" viewBox="0 0 100 100" aria-hidden="true">${FRS[fr]('fr'+(++FRN))}</svg>`:'';
 
 FR.push(['tricolorx','Tricolor estelar 🇻🇪','x'],['anillos','Anillos dobles 💫','x'],['cometa','Cometa ☄️','x'],['corona','Corona real 👑','x']);
 NS.push(['tricolor','Tricolor 🇻🇪','x'],['boreal','Aurora boreal 🌌','x'],['oroliq','Oro líquido 🪙','x'],['cometa','Cometa ☄️','x']);
@@ -5290,6 +5309,10 @@ return `<div class="setr"><span style="width:30px;flex:none;font-size:22px;text-
 (function(){let n=0,t0=0,bad=0;const f=t=>{requestAnimationFrame(f);if(document.hidden){t0=0;return}if(!t0){t0=t;n=0;return}n++;const d=t-t0;if(d<3000)return;const fps=n*1000/d;t0=t;n=0;
  try{if(store.perf&&store.perf!='auto')return;if(perfLow())return;if(fps<40){bad++;if(bad>=2){store.perfAuto='low';PERF.decided=true;save();perfApply();toast('⚡ Activamos el modo rendimiento para que el juego vaya más fluido')}}else bad=0}catch(e){}};
  setTimeout(()=>requestAnimationFrame(f),12000)})();
+
+
+/* ===== v32: marco de liga de respaldo ===== */
+function rkFb(img,r,l){try{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','frm fz-rank rkt'+r);s.setAttribute('viewBox','0 0 100 100');s.style.overflow='visible';s.innerHTML=rankFrame(r,l,'rkf'+(++FRN));img.replaceWith(s)}catch(e){img.style.display='none'}}
 
 </script><script type="module">
 const V='10.12.2',B='https://www.gstatic.com/firebasejs/'+V+'/';
