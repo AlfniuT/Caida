@@ -3497,7 +3497,7 @@ Aventura|Adventure|Aventura|Aventure|Abenteuer|Avventura|Приключение|
 Diseños de cartas|Card designs|Designs de cartas|Designs de cartes|Kartendesigns|Design delle carte|Дизайны карт|卡牌设计|カードデザイン
 Efectos de caída|Caída effects|Efeitos de caída|Effets de caída|Caída-Effekte|Effetti caída|Эффекты каиды|落牌特效|カイーダ演出
 Efectos de canto|Call effects|Efeitos de canto|Effets d'annonce|Ansage-Effekte|Effetti dichiarazione|Эффекты объявлений|叫牌特效|役の演出
-Música de la partida|Game music|Música da partida|Musique de la partie|Spielmusik|Musica della partita|Музыка в игре|对局音乐|対戦の音楽
+Música del juego|Game music|Música da partida|Musique de la partie|Spielmusik|Musica della partita|Музыка в игре|对局音乐|対戦の音楽
 Música del menú|Menu music|Música do menu|Musique du menu|Menümusik|Musica del menu|Музыка меню|菜单音乐|メニューの音楽
 Criolla (clásica)|Venezuelan folk (classic)|Crioula (clássica)|Créole (classique)|Venezolanisch (klassisch)|Creola (classica)|Креольская (классика)|克里奥尔（经典）|クリオーリャ（定番）
 Tambor de la costa|Coastal drums|Tambor da costa|Tambours de la côte|Küstentrommeln|Tamburi della costa|Барабаны побережья|海岸鼓乐|海岸の太鼓
@@ -3932,10 +3932,12 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.06d';
+const GAME_VER='2026.11.06e';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-06',v:'2026.11.06e',t:'Salsa en todo el juego',it:[
+['f','🎺','Salsa 2 suena también en el menú']]},
 {d:'2026-11-06',v:'2026.11.06d',t:'Marcos nuevos',it:[
 ['n','✨','Todos los marcos rediseñados'],
 ['n','🏆','Marcos de rango nuevos'],
@@ -5334,16 +5336,16 @@ try{['frame:fuego','frame:fenix','frame:auraverde','frame:hielor','frame:auraroj
 const MUSST=[['salsa2','🎺','Salsa 2'],['criolla','🇻🇪','Criolla (clásica)']];
 const MUSV='?v=30';
 function mzPick(st){if(st=='mix'){const o=MUSST.map(x=>x[0]).filter(x=>x!='criolla'&&x!='mix');st=o[Math.floor(Math.random()*o.length)]}return st+'_'+(Math.random()<.5?'a':'z')}
-function mzSrc(k){const st=store.musSt||'salsa2';if(st=='salsa2'||!MUSST.some(x=>x[0]==st)){if(k=='menu')return 'mus/menu.mp3?v=21';return 'mus/salsa_b.mp3'+MUSV}
+function mzSrc(k){const st=store.musSt||'salsa2';if(st=='salsa2'||!MUSST.some(x=>x[0]==st))return 'mus/salsa_b.mp3'+MUSV;
 if(k=='menu')return store.musMenu=='suave'?'mus/menu_'+(MZ.mv||(MZ.mv=Math.random()<.5?'a':'z'))+'.mp3'+MUSV:'mus/menu.mp3?v=21';
 if(st=='criolla')return MUSF[k]+'?v=21';
 if(k=='final')return 'mus/tension_'+(Math.random()<.5?'a':'z')+'.mp3'+MUSV;
 if(!MZ.pk||MZ.pkSt!=st){MZ.pk=mzPick(st);MZ.pkSt=st}return 'mus/'+MZ.pk+'.mp3'+MUSV}
 function mzReset(){try{Object.values(MZ.el).forEach(a=>{try{clearInterval(a._f);a.pause()}catch(e){}})}catch(e){}MZ.el={};MZ.cur=null;mzSync()}
-function musSet(v){store.musSt=v;MZ.pk=null;save();mzReset();try{toast('🎶 '+(MUSST.find(x=>x[0]==v)||[,,v])[2])}catch(e){}}
+function musSet(v){store.musSt=v;store.musPick=1;MZ.pk=null;save();mzReset();try{toast('🎶 '+(MUSST.find(x=>x[0]==v)||[,,v])[2])}catch(e){}}
 function musMenuSet(v){store.musMenu=v;MZ.mv=null;save();mzReset()}
 function musSelHTML(){const st=MUSST.some(x=>x[0]==store.musSt)?store.musSt:'salsa2';
-return `<div class="setr"><span style="width:30px;flex:none;font-size:22px;text-align:center">🎶</span><span style="flex:1">Música de la partida</span><select class="lsel" onchange="musSet(this.value)">${MUSST.map(x=>`<option value="${x[0]}" ${st==x[0]?'selected':''}>${x[1]} ${x[2]}</option>`).join('')}</select></div>`}
+return `<div class="setr"><span style="width:30px;flex:none;font-size:22px;text-align:center">🎶</span><span style="flex:1">Música del juego</span><select class="lsel" onchange="musSet(this.value)">${MUSST.map(x=>`<option value="${x[0]}" ${st==x[0]?'selected':''}>${x[1]} ${x[2]}</option>`).join('')}</select></div>`}
 (function(){const _g=gmStart;gmStart=function(){try{if((store.musSt||'salsa2')!='criolla'&&!MZ.game){MZ.pk=null;if(MZ.el.juego){try{MZ.el.juego.pause()}catch(e){}delete MZ.el.juego}if(MZ.el.final){try{MZ.el.final.pause()}catch(e){}delete MZ.el.final}}}catch(e){}return _g.apply(this,arguments)}})();
 
 
@@ -5377,6 +5379,10 @@ function rmTick(){const r=NET.room;const box=document.getElementById('rmst');
   box.innerHTML=`<div class="box" style="margin:6px 0;text-align:left">`+RM.seen.map(u=>{const st=!(r.players||[]).includes(u)?'🚪':a[u]?'✅':'⏳';return `<div style="display:flex;justify-content:space-between;padding:2px 0"><span>${rmNm(u)}</span><b>${st}</b></div>`}).join('')+(left!=null?`<div class="sub" style="text-align:center;margin-top:4px">Se cierra en ${left} s</div>`:'')+`<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:6px">${['¡Buena partida! 👏','¡Otra! 🔁','Me voy 👋'].map(t=>`<button class="sm off" onclick="rmSay('${t}')">${t}</button>`).join('')}</div></div>`}
  if(RM.on&&!RM.go){if(gone.length)rmNext(RM.m,'🔎 Buscando otra ranked…');else if(Date.now()-RM.t>15000)rmNext(RM.m,'⏱️ La revancha no se completó: buscando otra ranked…')}}
 setInterval(()=>{try{if(typeof lvOn=='function'&&lvOn()&&NET.room&&NET.room.ranked&&over)rmTick();else if(RM.seen&&!over){RM.seen=null;RM.on=0}}catch(e){}},700);
+
+
+/* ===== v35: Salsa 2 en todo el juego ===== */
+try{if(!store.mus35){store.mus35=1;if(store.musSt!='criolla'||!store.musPick)store.musSt='salsa2';save();try{mzReset()}catch(e){}}}catch(e){}
 
 </script><script type="module">
 const V='10.12.2',B='https://www.gstatic.com/firebasejs/'+V+'/';
