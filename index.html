@@ -2541,9 +2541,12 @@ function navPush(v){try{if(NAVPOP)return;history.pushState({v},'')}catch(e){}}
 window.addEventListener('popstate',e=>{const M=['repmod','bmod','chmod','gmod','cmod','lmod','esum'].map(id=>$(id)).find(Boolean);
 if(M){M.remove();if(typeof CH!='undefined')CH.open=false;if(typeof DM!='undefined'&&DM.with)dmClose();history.pushState({v:curView},'');return}
 if($('app').style.display=='block'){if(lvOn()&&!over){history.pushState({v:'game'},'');showMenu('home');return}history.pushState({v:'game'},'');showMenu(ADV!=null||store._advLast!=null?'aventura':'jugar');return}
-if(curView=='home'){if(Date.now()-NAVEXIT<2000){history.back();return}NAVEXIT=Date.now();toast('Toca atrás otra vez para salir');history.pushState({v:'home'},'');return}
+if(curView=='home'){if(Date.now()-NAVEXIT<2000){const A=capApp();if(A&&A.exitApp){A.exitApp();return}history.back();return}NAVEXIT=Date.now();toast('Toca atrás otra vez para salir');history.pushState({v:'home'},'');return}
 const P=(typeof PARENT!='undefined'&&PARENT[curView])||'home';NAVPOP=true;try{showMenu(P)}finally{NAVPOP=false}});
 setTimeout(()=>{try{history.replaceState({v:'root'},'');history.pushState({v:'home'},'')}catch(e){}},300);
+function capApp(){try{const P=window.Capacitor&&window.Capacitor.Plugins;return P&&P.App||null}catch(e){return null}}
+/* v44: botón o gesto Atrás del teléfono (necesita @capacitor/app en la app, desde .aab v8) */
+(function(){const A=capApp();if(!A||!A.addListener)return;A.addListener('backButton',()=>{try{const s=history.state;if(!s||s.v=='root')history.pushState({v:curView},'');history.back()}catch(e){}})})();
 
 function rkFound(){try{navigator.vibrate&&navigator.vibrate([400,150,400,150,600])}catch(e){}try{audioUnlock();sfx.chime();setTimeout(()=>sfx.win(),400)}catch(e){}toast('⚔️ ¡Partida encontrada!');const t0=document.title;let k=0;const iv=setInterval(()=>{document.title=k++%2?'⚔️ ¡Partida encontrada!':t0;if(k>10){clearInterval(iv);document.title=t0}},700)}
 
@@ -2892,7 +2895,7 @@ if(d.name=='trivilín'&&opt.triv){if(forceW==null)forceW=tm(p);over=true;msg(nm(
 const f=info(d.h);C.push({p,d,k:[RK[d.name]??0,(d.name=='ronda'&&f.pair!==undefined)?ORD.indexOf(f.pair):f.hi]})}
 for(const c of C)msg(nm(c.p)+' enseña '+c.d.name+' ('+c.d.h.map(x=>x.n+SU[x.s][1]).join(' ')+')');
 if(C.length){C.sort((a,b)=>b.k[0]-a.k[0]||b.k[1]-a.k[1]||(((a.p-mano-1+N*2)%N)-((b.p-mano-1+N*2)%N)));
-const w=C[0],n=ptsOf(w.d.name,w.d.h);C.forEach(c=>{if(c.p!==w.p&&c.p>0&&AIC[c.p]&&AIC[c.p].lose&&!C.slice(0).some(o=>o!==c&&o.p===c.p&&o===w))setTimeout(()=>emote(c.p,AIC[c.p].lose),2600)});add(tm(w.p),n);const _wn=w.p==0?(store.name||'Tú'):nm(w.p);setTimeout(()=>{flash(`<div class="cwin"><div class="cwt">GANÓ EL CANTO</div><div class="cwn">${String(_wn).replace(/</g,'')}</div><div class="cwc">con <b>${w.d.name}</b></div><div class="cwp">+${n} puntos</div></div>`,2);speak('Ganó el canto '+_wn+' con '+w.d.name)},300);if(w.p==0){ST().cantos++;try{c43Canto(w.d.name)}catch(e){}ST().best=Math.max(ST().best||0,n)}else{sxAdd(w.p,'cantos');sxAdd(w.p,'best',n)}msg('Ganó el canto '+(w.p==0?(store.name||'Tú'):nm(w.p))+' con '+w.d.name+': +'+n+' puntos'+(C.length>1?' (los demás no suman)':''))}
+const w=C[0],n=(typeof c45Pts=='function'?c45Pts(w.p,w.d.name,ptsOf(w.d.name,w.d.h)):ptsOf(w.d.name,w.d.h));C.forEach(c=>{if(c.p!==w.p&&c.p>0&&AIC[c.p]&&AIC[c.p].lose&&!C.slice(0).some(o=>o!==c&&o.p===c.p&&o===w))setTimeout(()=>emote(c.p,AIC[c.p].lose),2600)});add(tm(w.p),n);const _wn=w.p==0?(store.name||'Tú'):nm(w.p);setTimeout(()=>{flash(`<div class="cwin"><div class="cwt">GANÓ EL CANTO</div><div class="cwn">${String(_wn).replace(/</g,'')}</div><div class="cwc">con <b>${w.d.name}</b></div><div class="cwp">+${n} puntos</div></div>`,2);speak('Ganó el canto '+_wn+' con '+w.d.name)},300);if(w.p==0){ST().cantos++;try{c43Canto(w.d.name)}catch(e){}ST().best=Math.max(ST().best||0,n)}else{sxAdd(w.p,'cantos');sxAdd(w.p,'best',n)}msg('Ganó el canto '+(w.p==0?(store.name||'Tú'):nm(w.p))+' con '+w.d.name+': +'+n+' puntos'+(C.length>1?' (los demás no suman)':''))}
 dec=Z();lost=F();asked=false;playedBy=Z()}
 function renderCg(){
 const can=turn==0&&!busy&&!over&&hands[0].length==3;
@@ -3982,10 +3985,14 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.07h';
+const GAME_VER='2026.11.07j';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-07',v:'2026.11.07j',t:'Guerra de clanes',it:[
+['n','⚔️','Guerra de clanes'],
+['n','🏆','Sala de trofeos'],
+['n','🃏','Mesa del clan']]},
 {d:'2026-11-07',v:'2026.11.07h',t:'Misiones de clan',it:[
 ['n','🎯','Misiones del clan'],
 ['n','🎁','Cofre del Clan'],
@@ -4699,11 +4706,17 @@ d.innerHTML=`<div class="gbox"><div style="display:flex;justify-content:space-be
 
 /* ===== Pagos con Google Play (Digital Goods API) ===== */
 const GPAY={np:null,det:{},ready:false,busy:false};function npP(){try{const P=window.Capacitor&&window.Capacitor.Plugins;return P&&P.NativePurchases}catch(e){return null}}
-async function gpInit(){try{const NP=npP();if(!NP)return;GPAY.np=NP;const ids=[...GEMP.map(g=>g[2]),PASS_SKU];try{const rs=await NP.getProducts({productIdentifiers:[SUB_ID],productType:'subs'});GPAY.sub=(rs.products||[])[0]||null}catch(e){}const r=await NP.getProducts({productIdentifiers:ids,productType:'inapp'});(r.products||[]).forEach(p=>{GPAY.det[p.identifier]=p});GPAY.ready=(r.products||[]).length>0;setTimeout(gpRecover,3000);if(curView=='tienda'||curView=='pase')showMenu(curView)}catch(e){console.warn('gpay',e)}}
+async function gpInit(n){n=n||0;try{const NP=npP();if(!NP){GPAY.err='NO_PLUGIN';return}GPAY.np=NP;if(GPAY.loading)return;GPAY.loading=true;const ids=[...GEMP.map(g=>g[2]),PASS_SKU];
+try{const r=await NP.getProducts({productIdentifiers:ids,productType:'inapp'});(r.products||[]).forEach(p=>{GPAY.det[p.identifier]=p});GPAY.ready=(r.products||[]).length>0;GPAY.err=GPAY.ready?null:'Product not found'}catch(e){GPAY.err=gpErrTxt(e);console.warn('gpay',e)}
+try{const rs=await NP.getProducts({productIdentifiers:[SUB_ID],productType:'subs'});GPAY.sub=(rs.products||[])[0]||null}catch(e){}
+GPAY.loading=false;if(GPAY.ready){setTimeout(gpRecover,3000);if(curView=='tienda'||curView=='pase')showMenu(curView)}else if(n<3&&!/BILLING_UNAVAILABLE|FEATURE_NOT_SUPPORTED/.test(GPAY.err||''))setTimeout(()=>gpInit(n+1),[3000,8000,20000][n])}catch(e){GPAY.loading=false;console.warn('gpay',e)}}
+function gpErrTxt(e){try{return String((e&&e.code?e.code+' ':'')+(e&&(e.message||e.errorMessage)||e||''))}catch(_){return 'ERR'}}
+function gpWhy(err){const t=String(err||'');if(t=='NO_PLUGIN')return '💎 Esta versión de la app no tiene pagos. Actualízala desde Google Play';if(/Product not found|ITEM_UNAVAILABLE/i.test(t))return '💎 Google Play no muestra los productos a esta cuenta. Usa la cuenta de Play con la que te uniste a la prueba e instala el juego desde Google Play';if(/BILLING_UNAVAILABLE|FEATURE_NOT_SUPPORTED/i.test(t))return '💎 Google Play no permite compras con esta cuenta o en este teléfono. Abre Play Store, revisa la cuenta y actualiza Play Store';if(/timed out|SERVICE|disconnect|NETWORK/i.test(t))return '📶 No se pudo conectar con Google Play. Revisa internet e intenta de nuevo';return '💎 Google Play no respondió'+(t?' ('+t.slice(0,60)+')':'')+'. Intenta de nuevo'}
+function gpCancel(e){return /cancel/i.test(gpErrTxt(e))}
 function gpPrice(id){const p=GPAY.det[id];return p&&p.priceString?p.priceString:null}
 async function gpGrant(id,token,quiet){for(let i=0;i<4;i++){try{const q=await econ('purchase',{id,token},true);if(q.already)return q;store.buys=(store.buys||0)+1;save();sfx.caida(3);try{fxBurst('oro')}catch(e){}if(q.pass){flash('<div style="font-size:40px">🎟️ ¡PASE PREMIUM!</div><div style="font-size:20px">Ya puedes cobrar todos los premios dorados</div>');if(curView=='pase')showMenu('pase')}else{toast('💎 ¡Gracias por tu compra! +'+q.gems.toLocaleString('es')+' gemas'+(q.first?' (¡doble por primera vez!)':''));if(curView=='tienda')showMenu('tienda')}return q}catch(e){if(i==3&&!quiet)toast('⚠️ Tu compra quedó pendiente: se entregará sola cuando vuelvas a abrir el juego. No se te cobra dos veces.');await sleep(2500)}}}
 async function gpRecover(){try{if(!GPAY.np||!econOn())return;const r=await GPAY.np.getPurchases({productType:'inapp'});for(const t of (r.purchases||[])){if(t.purchaseToken&&(t.purchaseState==null||String(t.purchaseState)=='1'))await gpGrant(t.productIdentifier,t.purchaseToken,true)}}catch(e){console.warn('gpRecover',e)}}
-async function gpBuy(id){if(GPAY.busy)return;if(!GPAY.ready){toast(isApp()?'💎 La tienda de Google Play todavía se está cargando. Intenta en unos segundos':'💎 Las compras funcionan en la app de Google Play');if(isApp())gpInit();return}if(!econOn()){toast('📶 Necesitas internet para comprar');return}GPAY.busy=true;try{const t=await GPAY.np.purchaseProduct({productIdentifier:id,productType:'inapp',isConsumable:false,autoAcknowledgePurchases:false});if(t&&t.purchaseToken){if(t.purchaseState!=null&&String(t.purchaseState)!='1')toast('⏳ Tu pago está pendiente. Te entregamos todo apenas Google lo confirme.');else await gpGrant(id,t.purchaseToken)}}catch(e){if(!/cancel/i.test(String(e&&(e.message||e.code))))toast('No se pudo completar la compra. No se te cobró nada.')}GPAY.busy=false}
+async function gpBuy(id){if(GPAY.busy)return;if(!GPAY.np)GPAY.np=npP();if(!GPAY.np){toast(isApp()?gpWhy('NO_PLUGIN'):'💎 Las compras funcionan en la app de Google Play');return}if(!GPAY.ready)gpInit();if(!econOn()){toast('📶 Necesitas internet para comprar');return}GPAY.busy=true;try{const t=await GPAY.np.purchaseProduct({productIdentifier:id,productType:'inapp',isConsumable:false,autoAcknowledgePurchases:false});if(t&&t.purchaseToken){if(t.purchaseState!=null&&String(t.purchaseState)!='1')toast('⏳ Tu pago está pendiente. Te entregamos todo apenas Google lo confirme.');else await gpGrant(id,t.purchaseToken)}}catch(e){console.warn('gpBuy',e);if(!gpCancel(e)){const w=gpErrTxt(e);toast(/not found|UNAVAILABLE|SERVICE|timed out|disconnect|NETWORK|FEATURE/i.test(w)?gpWhy(w):'No se pudo completar la compra. No se te cobró nada.')}}GPAY.busy=false}
 setTimeout(gpInit,1500);
 const GOLDX=[[100,1500,''],[300,4800,'+7%'],[550,9500,'+15%'],[1200,22000,'+22%'],[2500,48000,'¡El mejor!']];
 function buyGold(i){const g=GOLDX[i];if((store.gems||0)<g[0]){toast('💎 No te alcanzan las gemas');return}econ('exchange',{i}).then(r=>{sfx.caida(2);fxBurst('oro');toast('💰 +'+r.gold.toLocaleString('es')+' de oro');showMenu(curView)}).catch(()=>{})}
@@ -5730,7 +5743,7 @@ const E=['😂','👏','🔥','😡','🤥 ¡Mentiroso!'].concat(itemList('emo')
 const head=`<div class="ghead">${gEmbHTML(G,62)}<div style="flex:1;min-width:0"><b style="font-size:21px"><span class="g41tag">[${g41e(G.tag)}]</span> ${g41e(G.name)}</b>${(G.lema||G.desc)?`<br><small class="sub">«${g41e(G.lema||G.desc)}»</small>`:''}<br><small class="sub">${gCtyTxt(G.cty)} · ⭐ Nivel ${clanLvl(G)} · 👥 ${M.length}/30 · ${G41.ent[gEntry(G)]}</small><br><small>Tú: ${gRkChip(Math.max(0,a))}</small>${c43Head(G)}</div></div>
 <div class="seg" style="margin:8px 0"><button class="${GLD.tab=='chat'?'on':''}" onclick="GLD.tab='chat';showMenu('guild')">💬 Chat</button><button class="${GLD.tab=='mem'?'on':''}" onclick="GLD.tab='mem';showMenu('guild')">👥 Miembros</button>${a>=2?`<button class="${GLD.tab=='req'?'on':''}" onclick="GLD.tab='req';showMenu('guild')" style="position:relative">📨 Entrar${R.length?`<i class="g41bd">${R.length}</i>`:''}</button>`:''}<button class="${GLD.tab=='war'?'on':''}" onclick="GLD.tab='war';showMenu('guild')">⚔️</button><button class="${GLD.tab=='aj'?'on':''}" onclick="GLD.tab='aj';showMenu('guild')">⚙️</button></div>${c43Tabs()}`;
 let body='';
-if(GLD.tab=='mis')body=c43Mis();else if(GLD.tab=='cof')body=c43Cof();else if(GLD.tab=='don')body=c43Don();else if(GLD.tab=='lv')body=c43LvHTML();else if(GLD.tab=='war')body=warHTML();
+if(GLD.tab=='mesa')body=c45Mesa();else if(GLD.tab=='tro')body=c45Tro();else if(GLD.tab=='pase')body=c45Pase();else if(GLD.tab=='mis')body=c43Mis();else if(GLD.tab=='cof')body=c43Cof();else if(GLD.tab=='don')body=c43Don();else if(GLD.tab=='lv')body=c43LvHTML();else if(GLD.tab=='war')body=warHTML();
 else if(GLD.tab=='chat')body=`<div id="gchat" class="gchat">${GLD.msgs.map(gMsgHTML).join('')||'<p class="sub">Aún no hay mensajes. ¡Saluda a tu clan!</p>'}</div><div class="g41quick">${G41.quick.map(q=>`<button onclick="gQuick('${q.replace(/'/g,'')}')">${q}</button>`).join('')}</div><div class="gemr">${E.map(e=>`<button data-e="${e.replace(/"/g,'&quot;')}" onclick="gSend({emo:this.dataset.e})">${e.startsWith('stk:')?stkSVG(e.slice(4)):isMsg(e)?`<span class="rxs-m${msgCls(e)}" style="background:${MSGS[e]}">${e}</span>`:e.split(' ')[0]}</button>`).join('')}</div><div class="gin"><input id="gmsg" placeholder="Escribe a tu clan…" maxlength="120" onkeydown="if(event.key=='Enter')gSend()"><button class="sm" onclick="gSend()">Enviar</button></div><button class="mb" onclick="gShareTable()">📣 Compartir mi mesa con el clan</button><div class="box ginvbox"><b>➕ Invitar al clan</b><p class="sub">Manda el enlace por WhatsApp: al tocarlo se abre el juego y les aparece la invitación.</p><div class="ginvbtns"><button class="sm wa" onclick="gWhats()">🟢 WhatsApp</button><button class="sm" onclick="gCopyLink()">📋 Copiar enlace</button><button class="sm off" onclick="gShareLink()">📤 Compartir</button></div>${(NET.friends||[]).filter(f=>!M.includes(f.uid)).length?`<p class="sub" style="margin-top:8px">Tus amigos:</p>${(NET.friends||[]).filter(f=>!M.includes(f.uid)).map(f=>`<div class="wrow"><span>${String(f.name||'Amigo').replace(/</g,'')}</span><button class="sm" onclick="gInvite('${f.uid}','${String(f.name||'').replace(/'/g,'')}');this.disabled=true;this.textContent='✓'">Invitar</button></div>`).join('')}`:''}</div>`;
 else if(GLD.tab=='mem'){const jd=G.jd||{};body=`<div class="gmem">${M.slice().sort((x,y)=>gEffR(G,y)-gEffR(G,x)||(jd[x]||0)-(jd[y]||0)).map(u=>{const m=MP[u]||{},r=gEffR(G,u);const ex=r==0&&jd[u]?`Veterano en ${Math.max(1,Math.ceil((jd[u]+G41.VET-Date.now())/864e5))} d`:'⭐ Nivel '+(m.lv||1);
  const can=u!=FBU.uid&&(a==3||(a==2&&r<2));return `<div class="gmr g41mr"><span onclick="gProfile('${u}')">${avatarHTML(42,m.av||'oro',m.fr||'none')}</span><div style="flex:1;min-width:0;text-align:left" onclick="gProfile('${u}')"><b>${nameHTML(String(m.name||'Jugador').replace(/</g,''),m.ns)}</b> ${gRkChip(r)}<br><small class="sub">${ex} · <span style="color:${RKC[m.rks||0]}">${rkTxt({r:m.rks||0,l:m.rkl||0})}</span></small><br><small class="gact">${u==FBU.uid?'🟢 tú':agoT(m.t)}</small></div>${can?`<button class="sm off g41more" onclick="gMemSheet('${u}')" aria-label="Opciones">⋯</button>`:''}</div>`}).join('')}</div>
@@ -5929,6 +5942,160 @@ async function c43Give(did,b){const G=GLD.g,d=(GLD.dons||[]).find(x=>x.id==did);
  store.c43don={d:c43Day(),n:C43.DON_MAX-(r.left??C43.DON_MAX)};save();toast('🤝 Donaste: +'+r.got+' 🪙 +2 XP al clan');showMenu('guild')}catch(e){toast('⚠️ '+String(e.message||''));if(b)b.disabled=false}}
 async function c43Ask(b){const e=($('c43e')||{}).value;if(!e)return;if(b)b.disabled=true;try{await gFn('ask',{gid:GLD.g.id,e},true);toast('📨 Pedido enviado al clan')}catch(x){toast('⚠️ '+String(x.message||''));if(b)b.disabled=false}}
 async function c43Cancel(did){try{await gFn('cancelAsk',{gid:GLD.g.id,did},true)}catch(e){}}
+
+</script>
+<style id="v45css">
+.c45pins{display:inline-flex;flex-wrap:wrap;gap:4px}
+.c45tier{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px;color:#1a1030;white-space:nowrap}
+.c45gift{display:flex;gap:8px;align-items:center;background:#11452f;border:2px solid #36cf8c;border-radius:14px;padding:8px 10px;margin-top:6px}
+.c45gift>span{font-size:26px}
+.c45table{border-radius:24px;padding:12px;box-shadow:0 8px 0 #0006}
+.c45felt{aspect-ratio:4/3;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;overflow:hidden}
+.c45tg{font-size:20px;letter-spacing:.12em;color:#ffffffc0}
+.c45lm{font-size:12px;color:#ffffffa0;font-weight:700;text-align:center;padding:0 10px}
+.c45opts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.c45opts button{background:#3a2575;border:3px solid #3a2575;border-radius:12px;padding:5px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:800;color:#fff}
+.c45opts button.on{border-color:#ffc93c}.c45opts button[disabled]{background:#2b1a5c;border-color:#2b1a5c;color:#a99bc9}
+.c45opts i{display:block;width:100%;height:26px;border-radius:8px}
+.c45sw{display:flex;gap:10px;align-items:center;background:#3a2575;border:0;border-radius:14px;padding:10px;color:#fff}
+.c45tgl{width:46px;height:26px;border-radius:99px;background:#140a2e;position:relative;flex:none}
+.c45tgl::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#8a7bb0;transition:left .2s}
+.c45tgl.on{background:#36cf8c}.c45tgl.on::after{left:23px;background:#fff}
+.c45shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:linear-gradient(#4a2f12,#2e1c08);border-radius:14px;padding:10px 8px 14px;border-bottom:7px solid #1e1206}
+.c45shelf div{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;font-size:11px;font-weight:800;color:#ffe9c2}
+.c45shelf .t{font-size:36px;line-height:1}
+.c45tro{display:flex;gap:8px;align-items:center;background:#3a2575;border-radius:12px;padding:8px}
+.c45tro .t{font-size:26px;width:34px;text-align:center;flex:none}
+.c45tro.c45lk{background:#2b1a5c}.c45tro.c45lk .t{filter:grayscale(1) brightness(.6)}
+.c45pin{font-size:15px;padding:3px 6px;border-radius:9px;background:#140a2e;border:0}.c45pin.on{background:#ffc93c}
+.c45phase{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.c45phase div{background:#140a2e;border-radius:10px;padding:5px 2px;text-align:center;font-size:11px;font-weight:800;color:#a99bc9}
+.c45phase div.on{background:#8b5cf6;color:#fff}
+.c45warn{color:#ff7a8a;font-weight:800;margin:4px 0 0;font-size:13px}
+.c45mem{padding:4px 0;border-bottom:1px solid #4b3579}
+.c45vs{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;text-align:center}
+.c45vs>div{display:flex;flex-direction:column;align-items:center}
+.c45score{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums}
+.c45dots{display:flex;gap:4px}.c45dots i{width:13px;height:13px;border-radius:50%;background:#140a2e;display:block}.c45dots i.w{background:#36cf8c}.c45dots i.l{background:#ff5d73}
+.c45cg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.c45cg div{background:#3a2575;border-radius:10px;padding:5px 2px;text-align:center;font-size:11px;font-weight:700}
+.c45cg div.ok{background:#11452f;color:#7ff0b8}.c45cg b{display:block;font-size:18px}
+.c45res{align-items:center;text-align:center}
+</style>
+<script id="v45clan">
+/* ===== CLANES v45 (parte 3): mesa del clan, trofeos, pase → 400 de oro, guerra etapa 1 ===== */
+const C45={TELAS:[['verde','Verde clásico','#1f7a46','#0f4a2a',1],['morado','Morado','#5b2ca0','#2e1460',1],['azul','Azul','#1d5fa8','#0c2f5c',3],['vino','Vino','#8a1c3a','#4a0a1d',3],['noche','Noche','#26303f','#0d1219',6],['tricolor','Tricolor','#0033a0','#cf142b',9]],
+BORDES:[['madera','Madera','#8a5a2b','#4a2c10',1],['plata','Plata','#c3cad8','#5d667a',4],['oro','Oro','#ffd84a','#8a5a00',7]],
+TRO:[['guerras','⚔️','Guerras ganadas',[1,5,20]],['racha','🔥','Racha de guerras',[2,3,5]],['cofres','🎁','Cofres del clan',[1,10,30]],['diarias','🎯','Misiones diarias',[7,30,100]],['nivel','⭐','Nivel del clan',[3,6,10]],['donar','🤝','Donaciones',[50,250,1000]],['flores','🌸','Flores cantadas',[100,500,2000]],['victorias','🏆','Victorias del clan',[100,1000,5000]],['miembros','👥','Miembros a la vez',[10,20,30]],['pases','💳','Pases comprados',[1,5,15]]],
+TIER:[['Bronce','#d08a4a'],['Plata','#dfe5f0'],['Oro','#ffd84a']],
+CAN:[['ronda','Ronda','🔁',150],['vigia','Vigía','👀',40],['patrulla','Patrulla','🚓',40],['registro','Registro','📋',25],['flor','Flor','🌸',20],['casas','Casas','🏠',8],['florpat','Flor patrulla','💐',5],['florreg','Flor registro','🌺',3]],
+RK:['Novato','Veterano','Co-líder'],w:{},wal:null,walT:0};
+let WAR45=null;
+function c45Phase(){return ((new Date(c43Day()+'T12:00:00Z').getUTCDay()+6)%7)<=4?'ins':'bat'}
+function c45Prev(wk){const d=new Date(wk+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-7);return d.toISOString().slice(0,10)}
+function c45Tier(G,k){const t=((G&&G.tt)||{})[k];return t==null?-1:t}
+function c45Felt(m){const T=C45.TELAS.find(t=>t[0]==(m&&m.tela))||C45.TELAS[0];return T[0]=='tricolor'?'linear-gradient(#ffcc00 0 33%,#0033a0 33% 66%,#cf142b 66%)':`radial-gradient(circle at 50% 45%,${T[2]},${T[3]})`}
+function c45Bord(m){return (C45.BORDES.find(b=>b[0]==(m&&m.borde))||C45.BORDES[0])}
+function c45Pins(G){const P=(G&&G.pin)||[];if(!P.length)return '';return `<span class="c45pins">${P.map(k=>{const T=C45.TRO.find(t=>t[0]==k);if(!T)return '';const ti=c45Tier(G,k);return `<span class="c45tier" style="background:${ti>=0?C45.TIER[ti][1]:'#5b4a85'}">${T[1]} ${ti>=0?C45.TIER[ti][0]:'—'}</span>`}).join('')}</span>`}
+
+/* ---- mesa del clan en la partida ---- */
+function c45Cache(){const G=GLD.g;if(!G)return;const c={mesa:G.mesa||{tela:'verde',borde:'madera'},sh:G.sh||null,tag:G.tag};if(JSON.stringify(store.c45m)!=JSON.stringify(c)){store.c45m=c;save()}}
+function c45TableBg(){const c=store.c45m;if(!c)return null;let sv='';try{if(c.sh)sv=gShield(c.sh,200).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" opacity=".42" ')}catch(e){}
+ const img=sv?`url("data:image/svg+xml;utf8,${encodeURIComponent(sv)}") center/34% no-repeat, `:'';return {bg:img+c45Felt(c.mesa),bd:c45Bord(c.mesa)[3]}}
+const _apT45=applyTable;applyTable=function(){_apT45.apply(this,arguments);try{const b=$('board');if(!b)return;const on=(store.guild||(NET.me&&NET.me.guild))&&store.c45m&&(WAR45||store.c45mesa!==false)&&!(typeof lvOn=='function'&&lvOn()&&!WAR45);const T=on&&c45TableBg();
+ if(T){b.dataset.t='clan';b.style.background=T.bg;b.style.borderColor=T.bd}else{b.style.background='';b.style.borderColor=''}}catch(e){}};
+
+/* ---- cantos con candado en la guerra ---- */
+function c45Pts(p,name,n){if(!WAR45)return n;const k=c43Key(name);if(!k)return n;const can=p==0?WAR45.myCan:WAR45.foeCan;if(can&&can[k]===false){try{msg('🔒 '+name+' está bloqueado en esta guerra: no suma')}catch(e){}return 0}return n}
+
+/* ---- guerra: datos ---- */
+async function c45WarLoad(){const G=GLD.g;if(!G||!window.FB||!FB.F)return;const {F,db}=FB,wk=c43Week(),pw=c45Prev(wk);try{
+ const [a,b]=await Promise.all([F.getDoc(F.doc(db,'wars2',wk+'_'+G.id)),F.getDoc(F.doc(db,'wars2',pw+'_'+G.id))]);const W={wk,cur:a.exists()?a.data():null,prev:b.exists()?b.data():null};
+ if(W.cur&&W.cur.foe&&!W.cur.ghost){const f=await F.getDoc(F.doc(db,'wars2',wk+'_'+W.cur.foe));W.foe=f.exists()?f.data():null}
+ if(W.prev&&W.prev.foe&&!W.prev.ghost){const f=await F.getDoc(F.doc(db,'wars2',pw+'_'+W.prev.foe));W.pfoe=f.exists()?f.data():null}
+ GLD.c45w=W;if(curView=='guild'&&GLD.tab=='war'&&GLD.view==null&&$('app').style.display!='block')showMenu('guild')}catch(e){}}
+function c45Res(D,F){const fp=D.ghost?Math.round((D.n||5)*3*.45):(F?F.pts||0:0),fc=D.ghost?(D.n||5)*6:(F?F.cai||0:0),p=D.pts||0,c=D.cai||0;return {res:p>fp||(p==fp&&c>fc)?'win':p==fp&&c==fc?'tie':'lose',fp,fc}}
+function c45MyCos(){return {av:store.avatar,fr:store.frame,ns:store.nameStyle,deck:store.face,back:store.back,table:store.table,fxc:store.fxc,fxk:store.fxk}}
+async function c45Ins(b){if(b)b.disabled=true;try{await gFn('warIns',{gid:GLD.g.id,cos:c45MyCos()});toast('⚔️ ¡Te inscribiste en la guerra!')}catch(e){}c45WarLoad()}
+async function c45Out(){try{await gFn('warOut',{gid:GLD.g.id})}catch(e){}c45WarLoad()}
+async function c45Min(v){try{await gFn('warMin',{gid:GLD.g.id,min:+v});toast('Ahora se inscriben desde '+C45.RK[+v])}catch(e){}}
+async function c45Claim(b){if(b)b.disabled=true;try{const r=await gFn('warClaim',{gid:GLD.g.id},true);if(r.gotGems){store.gems=(store.gems||0)+r.gotGems;save()}
+ if(r.got){try{sfx.caida(3)}catch(e){}flash(`<div style="font-size:50px">${r.res=='win'?'🏆':'⚔️'}</div><div style="font-size:26px;color:#ffd84a">+${r.got} 🪙${r.gotGems?' +'+r.gotGems+' 💎':''}</div>`,2.4)}else toast('No jugaste batallas: sin premio esta vez');store.c45wc=c45Prev(c43Week());save()}catch(e){toast('⚠️ '+String(e.message||''))}c45WarLoad()}
+
+/* ---- guerra: jugar una batalla (IA Experto con cosméticos del rival) ---- */
+function c45Okc(list,id){return list.some(x=>x[0]==id)}
+async function c45Fight(b){const G=GLD.g;if(b)b.disabled=true;
+ try{if(WAR45&&WAR45.opt){try{Object.assign(opt,JSON.parse(WAR45.opt))}catch(e){}}WAR45=null;
+  const r=await gFn('warStart',{gid:G.id},true);const m=await econ('mStart',{kind:'ai',entry:0,n:2,multi:false});
+  WAR45={gid:G.id,bid:r.bid,mid:m.mid,foe:r.foe,cos:r.cos||{},myCan:r.myCan,foeCan:r.foeCan,cai0:stSnap().caidas,opt:JSON.stringify(opt)};
+  MID=m.mid;window._keepMID=1;Object.assign(opt,{players:2,team:'parejas',mode:'normal',meta:24,dif:'dificil',entry:0,casa:true,flor:true,noCheat:false,triv:false});
+  RN=[null,'⚔️ '+String(r.foe||'Rival').slice(0,16)];window._keepRN=1;startGame(0);genAIC();try{applyTable()}catch(e){}
+  setTimeout(()=>flash(`<div style="font-size:40px">⚔️ Batalla ${r.n}/3</div><div style="font-size:19px">IA Experto con los cosméticos de ${String(r.foe||'').replace(/</g,'')}</div>`,2.4),400)}
+ catch(e){toast('⚠️ '+String(e.message||''));if(b)b.disabled=false}}
+const _genAIC45=genAIC;genAIC=function(){_genAIC45.apply(this,arguments);try{if(WAR45&&AIC[1]){const c=WAR45.cos||{},A=AIC[1];const avl=[...AVP,...AVS];
+ if(c45Okc(avl,c.av))A.av=c.av;if(c45Okc(FR,c.fr))A.fr=c.fr;if(c45Okc(NS,c.ns))A.ns=c.ns;if(c45Okc(DECKS,c.deck))A.deck=c.deck;if(c45Okc(BKS,c.back))A.back=c.back;if(c45Okc(TBL,c.table))A.table=c.table;if(c45Okc(FXC,c.fxc))A.fxc=c.fxc;if(c45Okc(FXK,c.fxk))A.fxk=c.fxk}}catch(e){}};
+const _econ45=econ;econ=async function(op,args){const r=await _econ45.apply(this,arguments);if(op=='mEnd'&&WAR45&&args&&args.mid==WAR45.mid)c45WarEnd();return r};
+function c45WarEnd(){const W=WAR45;WAR45=null;if(!W)return;try{Object.assign(opt,JSON.parse(W.opt))}catch(e){}const cai=Math.max(0,stSnap().caidas-W.cai0);
+ setTimeout(()=>gFn('warEnd',{gid:W.gid,bid:W.bid,mid:W.mid,cai},true).then(r=>{toast(r.win?'⚔️ ¡Victoria! +1 punto para tu clan':'⚔️ Derrota. ¡La próxima es tuya!');c45WarLoad()}).catch(e=>toast('⚠️ '+String(e.message||''))),900)}
+
+/* ---- regalos del pase ---- */
+async function c45WalLoad(force){if(!window.FB||!FB.F||!window.FBU)return;if(!force&&Date.now()-C45.walT<60000)return;C45.walT=Date.now();try{const s=await FB.F.getDoc(FB.F.doc(FB.db,'wallets',FBU.uid));C45.wal=(s.exists()&&s.data().cl)||{};if(curView=='guild'&&GLD.view==null&&$('app').style.display!='block')showMenu('guild')}catch(e){}}
+function c45GiftOk(){const c=C45.wal||{};return (c.gifts||[]).length&&c.giftDay!=c43Day()}
+async function c45Gift(b){if(b)b.disabled=true;try{const r=await gFn('gift',{gid:GLD.g.id},true);try{sfx.caida(3)}catch(e){}toast('💳 +'+r.got+' de oro (regalo de '+r.who+')')}catch(e){toast('⚠️ '+String(e.message||''))}c45WalLoad(true)}
+function c45PaseCheck(){try{const P=(typeof WALLET!='undefined'&&WALLET&&WALLET.pass)||null;if(!P||!P.prem||!GLD.g||store.c45pase==P.sid||C45.paseT)return;C45.paseT=1;
+ gFn('pase',{gid:GLD.g.id},true).then(r=>{store.c45pase=P.sid;save();if(!r.already&&r.n)toast('💳 Tu pase regaló 400 de oro a '+r.n+' compañeros')}).catch(()=>{}).finally(()=>{C45.paseT=0})}catch(e){}}
+const _gEx45=gExtras;gExtras=function(){_gEx45.apply(this,arguments);if(!GLD.g)return;c45Cache();c45WalLoad();c45PaseCheck();if(!GLD.c45w||GLD.c45w.gid!=GLD.g.id||Date.now()-(GLD.c45wT||0)>60000){GLD.c45wT=Date.now();c45WarLoad().then(()=>{if(GLD.c45w)GLD.c45w.gid=GLD.g.id})}};
+
+/* ---- pantallas ---- */
+const _c43Head45=c43Head;c43Head=function(G){let h=_c43Head45(G)+(c45Pins(G)?`<div style="margin-top:4px">${c45Pins(G)}</div>`:'');
+ if(c45GiftOk()){const g=(C45.wal.gifts||[])[0];h+=`<div class="c45gift"><span>💳</span><div style="flex:1;min-width:0"><b>${g41e(g.who)} compró el Pase</b><br><small>+400 de oro para ti</small></div><button class="sm g41gold" onclick="c45Gift(this)">Cobrar</button></div>`}return h};
+const _c43Tabs45=c43Tabs;c43Tabs=function(){const t=GLD.tab;return _c43Tabs45()+`<div class="seg c43seg" style="margin:0 0 8px"><button class="${t=='mesa'?'on':''}" onclick="GLD.tab='mesa';showMenu('guild')">🃏 Mesa</button><button class="${t=='tro'?'on':''}" onclick="GLD.tab='tro';showMenu('guild')">🏆 Trofeos</button><button class="${t=='pase'?'on':''}" onclick="GLD.tab='pase';showMenu('guild')" style="position:relative">💳 Pase${c45GiftOk()?'<i class="g41bd">!</i>':''}</button></div>`};
+const _gCard45=gCardHTML;gCardHTML=function(g){const h=_gCard45(g),p=c45Pins(g);if(!p)return h;const i=h.lastIndexOf('</div><button');return i<0?h:h.slice(0,i)+p+h.slice(i)};
+function c45TableHTML(G,m){const c={mesa:m||G.mesa||{tela:'verde',borde:'madera'}};return `<div class="c45table" style="background:linear-gradient(${c45Bord(c.mesa)[2]},${c45Bord(c.mesa)[3]})"><div class="c45felt" style="background:${c45Felt(c.mesa)}">${G.sh?gShield(G.sh,86).replace('<svg ','<svg style="opacity:.6" '):`<span style="font-size:56px;opacity:.6">${G.emb||'🛡️'}</span>`}<b class="c45tg">[${g41e(G.tag)}]</b>${G.lema?`<small class="c45lm">«${g41e(G.lema)}»</small>`:''}</div></div>`}
+function c45Mesa(){const G=GLD.g,l=clanLvl(G),lead=gMyR()==3,m=G.mesa||{tela:'verde',borde:'madera'};
+ return `<div class="box c43box"><div class="c43row"><b class="c43t">Mesa del clan</b><span class="c43pill">${lead?'tú eliges':'la elige el líder'}</span></div>${c45TableHTML(G)}
+ <p class="sub">Así se ve en la partida: el escudo al centro y el [TAG] del clan.</p><b>Tela</b><div class="c45opts">${C45.TELAS.map(t=>`<button class="${m.tela==t[0]?'on':''}" ${l<t[4]||!lead?'disabled':''} onclick="c45SetMesa('${t[0]}',null)"><i style="background:${t[0]=='tricolor'?'linear-gradient(#ffcc00 0 33%,#0033a0 33% 66%,#cf142b 66%)':`linear-gradient(${t[2]},${t[3]})`}"></i>${t[1]}${l<t[4]?' · Nv. '+t[4]:''}</button>`).join('')}</div>
+ <b>Borde</b><div class="c45opts">${C45.BORDES.map(b=>`<button class="${m.borde==b[0]?'on':''}" ${l<b[4]||!lead?'disabled':''} onclick="c45SetMesa(null,'${b[0]}')"><i style="background:linear-gradient(${b[2]},${b[3]})"></i>${b[1]}${l<b[4]?' · Nv. '+b[4]:''}</button>`).join('')}</div>
+ <button class="c45sw" onclick="store.c45mesa=store.c45mesa===false;save();showMenu('guild')"><span class="c45tgl${store.c45mesa!==false?' on':''}"></span><span style="flex:1;text-align:left"><b>Usar la mesa del clan en mis partidas</b><br><small class="sub">En la guerra sale siempre.</small></span></button>
+ <p class="sub">Telas y bordes nuevos se abren al subir de nivel el clan.</p></div>`}
+async function c45SetMesa(t,b){const G=GLD.g,m=G.mesa||{tela:'verde',borde:'madera'};try{await gFn('mesa',{gid:G.id,tela:t||m.tela,borde:b||m.borde});toast('🃏 Mesa del clan cambiada')}catch(e){}}
+function c45Tro(){const G=GLD.g,lead=gMyR()==3,st=G.st||{},P=G.pin||[];let n=0;C45.TRO.forEach(t=>{n+=c45Tier(G,t[0])+1});
+ const val=k=>k=='racha'?(st.rmax||0):k=='nivel'?clanLvl(G):k=='miembros'?Math.max(st.miembros||0,(G.members||[]).length):(st[k]||0);
+ return `<div class="box c43box"><div class="c43row"><b class="c43t">Vitrina</b><span class="c43pill">${n}/${C45.TRO.length*3}</span></div>
+ <div class="c45shelf">${P.length?P.map(k=>{const T=C45.TRO.find(t=>t[0]==k),ti=c45Tier(G,k);return T?`<div><span class="t">${T[1]}</span>${T[2]}<span class="c45tier" style="background:${ti>=0?C45.TIER[ti][1]:'#5b4a85'}">${ti>=0?C45.TIER[ti][0]:'Sin trofeo'}</span></div>`:''}).join(''):'<div style="grid-column:1/-1">Vitrina vacía</div>'}</div>
+ <p class="sub">${lead?'Toca 📌 para elegir los 3 de la vitrina.':'El líder elige los 3 de la vitrina.'} Salen en la tarjeta del clan cuando otros los buscan.</p></div>
+ <div class="box c43box"><b class="c43t">Sala de trofeos</b>${C45.TRO.map(t=>{const v=val(t[0]),ti=c45Tier(G,t[0]),nx=t[3][ti+1],pin=P.includes(t[0]);
+  return `<div class="c45tro${ti<0?' c45lk':''}"><span class="t">${t[1]}</span><div style="flex:1;min-width:0"><b>${t[2]}</b>${ti>=0?` <span class="c45tier" style="background:${C45.TIER[ti][1]}">${C45.TIER[ti][0]}</span>`:''}<br><small class="sub">${v.toLocaleString('es')}${nx?' / '+nx.toLocaleString('es')+' para '+C45.TIER[ti+1][0]:' · ¡máximo!'}</small>${nx?`<div class="c43bar"><i style="width:${Math.min(100,v/nx*100)}%"></i></div>`:''}</div>${lead?`<button class="c45pin${pin?' on':''}" onclick="c45Pin('${t[0]}')" aria-label="Vitrina">📌</button>`:''}</div>`}).join('')}
+ <p class="sub">Cada trofeo nuevo (bronce, plata u oro) da +25 XP al clan.</p></div>`}
+async function c45Pin(k){const G=GLD.g;let P=(G.pin||[]).slice();const i=P.indexOf(k);if(i>=0)P.splice(i,1);else{if(P.length>=3)P.shift();P.push(k)}try{await gFn('pin',{gid:G.id,keys:P})}catch(e){}}
+function c45Pase(){const c=C45.wal||{},q=c.gifts||[],H=c.giftH||[];
+ return `<div class="box c43box"><b class="c43t">💳 Pase del clan</b><div class="c43mis"><b>Cuando alguien del clan compra el Pase de temporada, los demás reciben 400 de oro.</b><br><small class="sub">· Solo si llevas 3 días o más en el clan.<br>· 1 regalo al día: si llegan más, quedan en espera.<br>· El que compra no recibe, pero sale en el chat y suma al trofeo 💳.</small></div>
+ ${q.length?`<div class="c45gift"><span>🎁</span><div style="flex:1;min-width:0"><b>Regalos en espera: ${q.length}</b><br><small>${q.map(g=>g41e(g.who)).join(', ')}</small></div>${c.giftDay==c43Day()?'<span class="c43pill">mañana</span>':'<button class="sm g41gold" onclick="c45Gift(this)">Cobrar 400</button>'}</div>`:'<p class="sub">No tienes regalos en espera.</p>'}
+ <button class="mb" onclick="showMenu('pase')">💳 Ver el Pase de temporada</button></div>
+ ${H.length?`<div class="box c43box"><b class="c43t">Cobrados</b>${H.map(g=>`<div class="c43row"><span>🎁</span><span style="flex:1">${g41e(g.who)}</span><small class="sub">${fmtT(g.t)}</small></div>`).join('')}</div>`:''}`}
+function c45War(){const G=GLD.g,W=GLD.c45w,me=FBU.uid,ph=c45Phase(),lead=gMyR()==3,a=gMyR(),wmin=G.wmin||0;
+ if(!W)return '<div class="box" style="text-align:center">⏳ Cargando la guerra…</div>';
+ const D=W.cur,ins=(D&&D.ins)||{},I=ins[me],L=Object.entries(ins);let h='';
+ // resultado de la semana pasada
+ const P=W.prev;if(P&&P.foe&&P.ins&&P.ins[me]&&((P.ins[me].b||[]).length||P.ins[me].p)&&!P.ins[me].cl&&store.c45wc!=c45Prev(W.wk)){const R=c45Res(P,W.pfoe);
+  h+=`<div class="box c43box c45res"><div style="font-size:44px">${R.res=='win'?'🏆':R.res=='tie'?'🤝':'😤'}</div><b class="c43t">${R.res=='win'?'¡Tu clan ganó la guerra!':R.res=='tie'?'Empate en la guerra':'Ganó '+g41e(P.foeName||'el rival')}</b><small class="sub">${P.pts||0} – ${R.fp} puntos · caídas ${P.cai||0} – ${R.fc}</small><button class="mb g41gold" onclick="c45Claim(this)">Cobrar premio</button></div>`}
+ h+=`<div class="box c43box"><div class="c43row"><b class="c43t">Guerra de clanes</b><span class="c43pill">etapa 1 · vs IA</span></div><div class="c45phase">${[['Inscripción','lun–vie'],['Batallas','sáb–dom'],['Resultado','lunes']].map((p,i)=>`<div class="${(ph=='ins'&&i==0)||(ph=='bat'&&i==1)?'on':''}">${p[0]}<br>${p[1]}</div>`).join('')}</div>`;
+ if(ph=='ins'){h+=`<div class="c43mis"><div class="c43row"><span class="c43ic">📝</span><div style="flex:1;min-width:0"><b>Inscritos: ${L.length}/10</b><br><small class="sub">Mínimo 5 para pelear · desde ${C45.RK[wmin]} · gratis</small></div>${I?`<button class="sm off" onclick="c45Out()">Salir</button>`:a>=wmin?`<button class="sm g41gold" ${L.length>=10?'disabled':''} onclick="c45Ins(this)">Inscribirme</button>`:'<span class="c43pill">rango bajo</span>'}</div>${L.length<5?`<p class="c45warn">Faltan ${5-L.length} para que el clan pelee este fin de semana.</p>`:''}</div>
+  ${lead?`<div class="c43row"><b style="flex:1">Desde qué rango se inscriben</b><select class="inp" style="width:auto" onchange="c45Min(this.value)">${[0,1,2].map(r=>`<option value="${r}" ${wmin==r?'selected':''}>${C45.RK[r]}</option>`).join('')}</select></div>`:''}
+  ${L.map(([u,x])=>`<div class="c43row c45mem">${avatarHTML(30,((x.cos||{}).av)||'oro','none')}<b style="flex:1">${g41e(x.name)}${u==me?' (tú)':''}</b>${gRkChip(gEffR(G,u))}</div>`).join('')}`}
+ else if(!D||(D.n||0)<5)h+=`<p class="sub">Tu clan no pelea este fin de semana (se necesitan 5 inscritos de lunes a viernes).</p>`;
+ else{const F=W.foe,fp=D.ghost?'?':(F?F.pts||0:0),fc=D.ghost?'?':(F?F.cai||0:0);
+  if(!D.foe){h+=`<p class="sub">⏳ Buscando rival…</p>`;if(!GLD._c45pair){GLD._c45pair=1;gFn('warPair',{gid:G.id},true).catch(()=>{}).finally(()=>{GLD._c45pair=0;c45WarLoad()})}}
+  else{h+=`<div class="c45vs"><div>${gEmbHTML(G,42)}<small><b>[${g41e(G.tag)}]</b></small></div><div><div class="c45score">${D.pts||0} – ${fp}</div><small class="sub">puntos · caídas ${D.cai||0}–${fc}</small></div><div>${D.foeSh?gShield(D.foeSh,42):'<span style="font-size:34px">👻</span>'}<small><b>[${g41e(D.foeTag||'')}]</b></small></div></div><p class="sub" style="text-align:center">Rival: <b>${g41e(D.foeName||'')}</b></p>`;
+   if(I){const b=I.b||[],n=b.length+(I.p?1:0);h+=`<div class="c43mis"><div class="c43row"><span class="c43ic">⚔️</span><div style="flex:1"><b>Tus batallas</b><br><small class="sub">3 contra la IA Experto con cosméticos del rival · victoria = 1 punto</small></div><div class="c45dots">${[0,1,2].map(i=>`<i class="${b[i]==null?'':b[i].w?'w':'l'}"></i>`).join('')}</div></div>${b.length<3?`<button class="mb g41gold" onclick="c45Fight(this)">Jugar batalla ${Math.min(3,b.length+1)}/3</button>${I.p?'<p class="sub">Una batalla quedó sin terminar: si empiezas otra, esa cuenta como derrota.</p>':''}`:'<p class="c43ok">✅ Jugaste tus 3 batallas. ¡Gracias por aportar!</p>'}</div>`}
+   else h+=`<p class="sub">No te inscribiste esta vez. Mira cómo va tu clan.</p>`;
+   h+=L.map(([u,x])=>{const b=x.b||[];return `<div class="c43row c45mem">${avatarHTML(28,((x.cos||{}).av)||'oro','none')}<span style="flex:1">${g41e(x.name)}</span><div class="c45dots">${[0,1,2].map(i=>`<i class="${b[i]==null?'':b[i].w?'w':'l'}"></i>`).join('')}</div></div>`}).join('')}}
+ h+=`</div>`;
+ const wa=(G.cm&&G.cm.w==c43Week()&&G.cm.wa)||{};h+=`<div class="box c43box"><div class="c43row"><b class="c43t">Cantos para la guerra</b><span class="c43pill">esta semana</span></div><div class="c45cg">${C45.CAN.map(k=>{const v=wa[k[0]]||0,ok=v>=k[3];return `<div class="${ok?'ok':''}"><b>${ok?k[2]:'🔒'}</b>${k[1]}<br>${ok?'✔':Math.min(v,k[3])+'/'+k[3]}</div>`}).join('')}</div>
+ <p class="sub">Se abren cantando en cualquier partida durante la semana (cuentan los 8). Canto con 🔒 no suma en la guerra. La IA rival solo suma con los cantos que abrió su clan.</p>
+ <p class="sub">Premios: ganador +50 XP y 300 🪙 + 10 💎 por jugador; perdedor +15 XP y 100 🪙. Empate en puntos → gana quien hizo más caídas.</p></div>`;
+ return h}
+warHTML=function(){try{return c45War()}catch(e){return '<div class="box">⚠️ '+String(e.message||e)+'</div>'}};
 
 </script>
 </body></html>
