@@ -1474,7 +1474,7 @@ function setHolders(){if(N==4&&!IND){if(tm(mano)==0)pileAt[0]=(mano+2)%4;else pi
 function teamLbl(t){return t==0?(N==4&&!IND?'Tu equipo':nameHTML(store.name||'Tú')):(N==4&&!IND?'Rivales':IND?nm(t):(N==2?'Rival':nm(t)))}
 
 let AIC=[];
-function genAIC(){AIC=[];const A=[...AVP.filter(a=>a[0]!='p_mono').map(a=>a[0]),...AVS.slice(0,12).map(a=>a[0])],pk2=a=>a[Math.floor(Math.random()*a.length)];
+function genAIC(){AIC=[];const A=[...AVP.filter(a=>a[0]!='p_mono'&&a[3]!='v'&&a[3]!='x').map(a=>a[0]),...AVS.slice(0,12).map(a=>a[0])],pk2=a=>a[Math.floor(Math.random()*a.length)];
 const st=ADV!=null?ADVS[ADV]:null;
 for(let q=1;q<N;q++){const fixed=st&&st.cos&&st.cos[q-1];
 AIC[q]=fixed?{...fixed}:{av:pk2(A),fr:Math.random()<.75?pk2(FR.map(f=>f[0]).filter(x=>x!='none')):'none',ns:Math.random()<.6?pk2(NS.map(x=>x[0]).filter(x=>x!='none')):'none',deck:pk2(DECKS.filter(x=>x[2]!=='b').map(x=>x[0])),back:pk2(BKS.map(x=>x[0])),table:pk2(TBL.map(x=>x[0])),fxc:pk2(FXC.map(x=>x[0]).filter(x=>x!='none')),fxk:pk2(FXK.map(x=>x[0]).filter(x=>x!='none'))};
@@ -1641,7 +1641,7 @@ function advFiltHTML(){const A=advData(),f=store.advF||'all';let falta=0,nw=0;AD
  return `<div class="advfilt">${b('falta','⭐ Me faltan estrellas',falta)}${b('new','🆕 Sin ganar',nw)}${b('all','🗺️ Todo el mapa',null)}</div>`+(f!='all'&&!falta&&f=='falta'?'<div class="box" style="text-align:center">🏆 ¡Tienes las 3 estrellas en todas las mesas abiertas!</div>':'')+(f=='new'&&!nw?'<div class="box" style="text-align:center">✅ Ya ganaste todas las mesas abiertas.</div>':'')}
 function advHTML(bk){const A=advData();
 return bk+`<h2 class="sec">🗺️ Modo Aventura</h2><p class="sb">De mesa en mesa por Venezuela hasta vencer al viejo Hermes en La Sabana. Cada mesa es más difícil. ¡Compite con tus amigos por las estrellas!</p>${store.advCh>0?`<button class="mb" onclick="advOpenCh()">🎁 Abrir cofre de oro (${store.advCh})</button>`:''}${(NET.friends||[]).length?`<div class="box advfr"><b>👥 Tus amigos en la aventura</b><div class="advfl">${NET.friends.slice().sort((a,b)=>(b.advTop??-1)-(a.advTop??-1)).slice(0,8).map(f=>`<div>${avatarHTML(34,f.av||'oro','none')}<small>${String(f.name||'Amigo').slice(0,9).replace(/</g,'')}</small><b>${(f.advTop??-1)+1>0?'Mesa '+((f.advTop??-1)+1):'—'}</b></div>`).join('')}</div></div>`:''}<div class="box" style="display:flex;align-items:center;justify-content:space-between"><b style="font-size:20px">⭐ ${advStars()} / ${ADVS.length*3}</b><button class="sm" onclick="advShare()">📤 Compartir</button></div><div class="box advhd"><div><b>${ADVH()?'⚡ Modo difícil: ACTIVADO':'⚡ Modo difícil'}</b><p class="sub" style="margin:4px 0 0">5 segundos por turno, rivales más hábiles y con más cantos. Entrada doble y +50% de premio la primera vez que ganas cada mesa.</p></div><button class="sm ${ADVH()?'':'off'}" onclick="store.advHard=!store.advHard;save();showMenu('aventura')">${ADVH()?'Desactivar':'Activar'}</button></div>${advFiltHTML()}<div class="advmap">`
-+ADVS.map((x,i)=>{const st=A.st[i]||0,open=st>0||ADVS.slice(0,i).every((_,k)=>(A.st[k]||0)>0);if(!advShow(i,st,open))return '';return (i==40&&(store.advF||'all')=='all'?`<div class="advsep"><b>🌎 Temporada 2: La Diáspora</b><small>${open?'De Cúcuta a Doral: los panas que se fueron también juegan… y no regalan nada.':'🔒 Vence al viejo Hermes en La Sabana para cruzar la frontera'}</small></div>`:'')+`<button class="advn${open?'':' lock'}${x.boss?' boss':''}${x.sp?' sp':''}${st?' done':''}" style="margin-${i%2?'left':'right'}:18%" ${open?`onclick="showAdv(${i})"`:`onclick="toast('🔒 Gana la mesa anterior para desbloquear a '+${JSON.stringify(x.nm.replace('👑 ','')).replace(/"/g,'&quot;')})"`}><span class="advi">${avatarHTML(46,x.cos[0].av,x.cos[0].fr)}${open?'':'<span class="lkb">🔒</span>'}</span><span class="advt"><small>${x.boss?'🔥 JEFE FINAL':(x.sp?'⭐ Mesa especial '+(i+1):'Mesa '+(i+1))}</small><b>${x.pl}</b><span class="advc">vs ${x.nm.replace('👑 ','')}</span><span class="advs">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></span><span class="advr">🎟️ Entrada ${advFee(i)*(ADVH()?2:1)} · Premio 🪙 ${ADVH()&&!((advData().hd||{})[i])?x.rw+Math.round(x.rw*.5):x.rw}${x.cos.some(c=>c.av&&c.av.startsWith('p_'))?' · 👤 avatar':''}${x.sp?' · 🎁 cofre ⭐⭐⭐':''}</span></span>${(NET.friends||[]).filter(f=>(f.advTop??-1)==i).slice(0,3).map(f=>`<span class="advf" title="${String(f.name||'').replace(/"/g,'')}">${avatarHTML(26,f.av||'oro','none')}<small>${String(f.name||'').slice(0,8).replace(/</g,'')}</small></span>`).join('')}${(A.st.reduce((m,v,k)=>v>0?k:m,-1)+1)==i?'<span class="advme">⬅ Tú</span>':''}</button>`}).join('')+`</div>`}
++ADVS.map((x,i)=>{const st=A.st[i]||0,open=st>0||ADVS.slice(0,i).every((_,k)=>(A.st[k]||0)>0);if(!advShow(i,st,open))return '';return (i==40&&(store.advF||'all')=='all'?`<div class="advsep"><b>🌎 Temporada 2: La Diáspora</b><small>${open?'De Cúcuta a Doral: los panas que se fueron también juegan… y no regalan nada.':'🔒 Vence al viejo Hermes en La Sabana para cruzar la frontera'}</small></div>`:'')+`<button class="advn${open?'':' lock'}${x.boss?' boss':''}${x.sp?' sp':''}${st?' done':''}" style="margin-${i%2?'left':'right'}:18%" ${open?`onclick="showAdv(${i})"`:`onclick="toast('🔒 Gana la mesa anterior para desbloquear a '+${JSON.stringify(x.nm.replace('👑 ','')).replace(/"/g,'&quot;')})"`}><span class="advi">${avatarHTML(46,x.cos[0].av,x.cos[0].fr)}${open?'':'<span class="lkb">🔒</span>'}</span><span class="advt"><small>${x.boss?'🔥 JEFE FINAL':(x.sp?'⭐ Mesa especial '+(i+1):'Mesa '+(i+1))}</small><b>${x.pl}</b><span class="advc">vs ${x.nm.replace('👑 ','')}</span><span class="advs">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></span><span class="advr">🎟️ Entrada ${advFee(i)*(ADVH()?2:1)} · Premio 🪙 ${ADVH()&&!((advData().hd||{})[i])?x.rw+Math.round(x.rw*.5):x.rw}${x.cos.some(c=>c.av&&c.av.startsWith('p_'))?' · 👤 avatar':''}${x.sp?' · 🎁 cofre ⭐⭐⭐':''}</span></span>${(NET.friends||[]).filter(f=>(f.advTop??-1)==i).slice(0,2).map(f=>`<span class="advf" title="${String(f.name||'').replace(/"/g,'')}">${avatarHTML(34,f.av||'oro','none')}<small>${String(f.name||'').slice(0,9).replace(/</g,'')}</small></span>`).join('')}${(A.st.reduce((m,v,k)=>v>0?k:m,-1)+1)==i?'<span class="advme">⬅ Tú</span>':''}</button>`}).join('')+`</div>`}
 let ADVSEL=0;function showAdv(i){ADVSEL=i;showMenu('advst')}
 function advStHTML(){const i=ADVSEL,x=ADVS[i],c=x.cos[0],st=advData().st[i]||0;
 return `<button class="bk" onclick="showMenu('aventura')">‹ Mapa</button><div class="advcard${x.boss?' boss':''}"><small>${x.boss?'👑 JEFE FINAL':'Mesa '+(i+1)+' de '+ADVS.length}</small><h2 class="sec" style="margin:4px 0">${x.pl}</h2>${(ADVLORE[x.id]||[])[2]?`<div class="advtit">«${ADVLORE[x.id][2]}»</div>`:''}<div style="margin:14px auto;width:110px">${avatarHTML(110,c.av,c.fr)}</div><div style="font-size:22px;font-weight:900">${nameHTML(x.nm.replace('👑 ',''),c.ns)}</div><div class="advchips"><span>👥 ${x.n==2?'1 vs 1':x.n==3?'3 jugadores':x.team=='solo'?'4 individual':'4 por parejas'}</span>${x.cheat?'<span>🃏 ¡Tramposos de manual!</span>':''}<span>🎯 a ${x.meta} puntos</span><span>⏱ ${x.tt||25} s por turno</span><span>${x.dif=='facil'?'😊 Fácil':'😈 Difícil'}</span></div><p class="sub">Sus cartas, su mesa y sus efectos son de su colección.</p>${(()=>{const L=(store.loreX||{})[x.id]||ADVLORE[x.id];return L?`<div class="box lore"><b>📜 ${x.pl}</b><p>${L[0]}</p><p class="loreq">«${L[1]}»<br><small>— ${x.nm.replace('👑 ','')}</small></p></div>`:''})()}<div class="box">🏆 Premio: <b>${x.rw} de oro</b>${x.boss?' + '+(x.bossTxt||'avatares <b>El viejo Hermes</b> y <b>Corona de diamante</b>, y marco <b>Diamante</b>'):''}<br>🎁 Con ⭐⭐⭐: <b>cofre de oro gratis</b><br>👤 Al ganar: <b>su avatar</b> para tu colección<br><span class="sub">⭐ Gana · ⭐⭐ Gana por 10 o más · ⭐⭐⭐ ${x.n>2?'Que ningún rival llegue a 14 puntos':'Que no pase de '+Math.floor(x.meta/3)+' puntos'}</span></div><div class="advs big">${'★'.repeat(st)}<i>${'★'.repeat(3-st)}</i></div><button class="mb" onclick="advPlay(${i})">¡A jugar!</button></div>`}
@@ -2907,7 +2907,7 @@ document.querySelector('#cg .pc').onclick=()=>LV.mode=='guest'?lvSend({t:'pido'}
 function flash(t,lv=0){lvEv({k:'flash',t,lv});const o=$('ov');o.className=lv>=2?'l'+lv:'';
 o.innerHTML='<div class="ovw">'+T(t)+'</div>'+(lv==4?Array.from({length:16},(_,i)=>`<span class="cf" style="left:${(i*37)%96}%;animation-delay:${(i%5)*.25}s">${['🎉','👑','✨','🔥'][i%4]}</span>`).join(''):'');
 o.style.display='none';void o.offsetWidth;o.style.display='flex';
-clearTimeout(flash.t);const _d=[1000,1100,1400,1700,2200][lv];flash.t=setTimeout(()=>o.style.display='none',_d);flashPause(_d)}
+clearTimeout(flash.t);const _d=[1000,1100,1400,1700,2200][lv];flash.t=setTimeout(()=>{o.style.display='none';o.className=''},_d);flashPause(_d)}
 function flashPause(d){const now=Date.now(),old=Math.max(flash.until||0,now),nu=Math.max(old,now+d),add=nu-old;flash.until=nu;try{if(LV.mode=='host'&&LV.tS&&add>0)LV.tS+=add}catch(e){}}
 function flashCaida(n,ml,p){
 const lv=n==12?4:n==11?3:n==10?2:1,pts=P(n)+(ml?4:0);
@@ -3985,17 +3985,21 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.10b';
+const GAME_VER='2026.11.11b';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-11',v:'2026.11.11b',t:'Arreglos',it:[
+['f','🗺️','Amigos en la Aventura se ven mejor'],
+['f','🃏','La partida ya no se queda pegada'],
+['m','🤠','El Negro ahora juega en Elorza']]},
 {d:'2026-11-10',v:'2026.11.10b',t:'Emojis nuevos',it:[
 ['n','😄','Emojis y mensajes dibujados']]},
 {d:'2026-11-10',v:'2026.11.10a',t:'Personajes nuevos',it:[
 ['n','🗺️','Personajes de la Aventura renovados']]},
 {d:'2026-11-09',v:'2026.11.09a',t:'Arreglos en iPhone',it:[
-['q','📱','Cartas completas en pantallas chicas'],
-['q','✨','Nombres de colores se leen en la mesa']]},
+['f','📱','Cartas completas en pantallas chicas'],
+['f','✨','Nombres de colores se leen en la mesa']]},
 {d:'2026-11-08',v:'2026.11.08a',t:'Partidas de 4',it:[
 ['m','🤖','Si alguien se va, la IA sigue'],
 ['m','👋','Puede volver a su puesto']]},
@@ -4004,8 +4008,8 @@ const CHLOG=[
 ['n','🏆','Sala de trofeos'],
 ['n','🃏','Mesa del clan']]},
 {d:'2026-11-07',v:'2026.11.07i',t:'Arreglos',it:[
-['q','🛒','Compras con mensaje claro'],
-['q','↩️','Botón atrás del teléfono']]},
+['f','🛒','Compras con mensaje claro'],
+['f','↩️','Botón atrás del teléfono']]},
 {d:'2026-11-07',v:'2026.11.07h',t:'Misiones de clan',it:[
 ['n','🎯','Misiones del clan'],
 ['n','🎁','Cofre del Clan'],
@@ -4257,7 +4261,7 @@ let ESCI=0;
 function escuela(i){ESCI=i||0;let d=$('escm');if(!d){d=document.createElement('div');d.id='escm';document.body.appendChild(d)}const L=ESC[ESCI],last=ESCI==ESC.length-1;
 d.innerHTML=`<div class="escb"><div class="escdots">${ESC.map((_,k)=>`<i class="${k==ESCI?'on':''}"></i>`).join('')}</div><div class="escic">${L[0]}</div><b class="esct">${L[1]}</b><div class="escv">${L[2]()}</div><p class="escx">${L[3]}</p><div class="escn">${ESCI?'<button class="sm off" onclick="escuela(ESCI-1)">‹ Anterior</button>':'<button class="sm off" onclick="$(\'escm\').remove()">Cerrar</button>'}${last?'<button class="sm" onclick="$(\'escm\').remove();store.escDone=1;save();Object.assign(opt,{players:2,mode:\'practica\',meta:24});opt.aiBet=0;RN=null;startGame(0)">🎓 Jugar con pistas</button>':'<button class="sm" onclick="escuela(ESCI+1)">Siguiente ›</button>'}</div>${last?'<button class="sm off" style="width:100%;margin-top:8px" onclick="$(\'escm\').remove();guiaCantos()">📖 Ver todos los cantos</button>':''}</div>`}
 const _playSafe=play;play=async function(){try{return await _playSafe.apply(this,arguments)}catch(e){console.warn('Caída: error al tirar, recuperando',e);window._stuck=1;LA=0}};
-let LA=Date.now();setInterval(()=>{try{if(LV.mode=='host'&&LV.REM&&LV.REM[turn]&&busy&&!over&&$('app').style.display=='block'&&Date.now()-LA>7000&&!$('ov').className){LA=Date.now();console.warn('Caída: turno remoto destrabado');busy=false;render();lvRemoteTurn(turn);return}if($('app').style.display!='block'||over||LV.mode=='guest'||(LV.mode=='host'&&LV.REM&&LV.REM[turn])||(typeof PLANNING!='undefined'&&PLANNING)){LA=Date.now();return} if(Date.now()-LA>(window._stuck?1000:12000)&&(busy||turn!=0)&&$('cnt').style.display=='none'&&!$('ov').className){window._stuck=0;LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},1000);
+let LA=Date.now();setInterval(()=>{try{if(LV.mode=='host'&&LV.REM&&LV.REM[turn]&&busy&&!over&&$('app').style.display=='block'&&Date.now()-LA>7000&&$('ov').style.display!='flex'){LA=Date.now();console.warn('Caída: turno remoto destrabado');busy=false;render();lvRemoteTurn(turn);return}if($('app').style.display!='block'||over||LV.mode=='guest'||(LV.mode=='host'&&LV.REM&&LV.REM[turn])||(typeof PLANNING!='undefined'&&PLANNING)){LA=Date.now();return} if(Date.now()-LA>(window._stuck?1000:12000)&&(busy||turn!=0)&&$('cnt').style.display=='none'&&$('ov').style.display!='flex'){window._stuck=0;LA=Date.now();busy=false;console.warn('Caída: partida reanudada');if(turn==0){render();startTimer()}else botPlay()}}catch(e){}},1000);
 window.addEventListener('error',e=>{console.warn('Caída error:',e.message)});
 
 function audioUnlock(){try{if(navigator.audioSession&&navigator.audioSession.type!='playback')navigator.audioSession.type='playback'}catch(e){}try{if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();NB=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);const d=NB.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}
@@ -6193,4 +6197,20 @@ const E7={"😂": "em00", "👏": "em01", "😡": "em02", "🐸": "em03", "🎃"
 .emp.e7p .e7c{font:900 11px 'Nunito',system-ui;line-height:1.1;max-width:110px;text-align:center;white-space:normal}
 img.e7i{object-fit:contain}
 </style>
+<style id="v51css">
+/* v51: amigos en la mesa de la Aventura: solo avatar y nombre, a la derecha, centrados */
+.advn .advf{top:50%!important;right:10px!important;transform:translateY(-50%);background:none!important;border:0!important;box-shadow:none!important;padding:0!important;gap:2px;z-index:2;pointer-events:none}
+.advn .advf+.advf{right:66px!important}
+.advn .advf small{font-size:11px!important;max-width:58px!important;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#fff;font-weight:800;text-shadow:0 1px 2px #000,0 0 3px #000}
+.advn:has(.advf){padding-right:70px!important}
+.advn:has(.advf+.advf){padding-right:124px!important}
+</style>
+<script id="v51js">
+/* v51: avatares de personajes solo en sus mesas (y no se venden: AVP 'v') · El Llano -> Elorza */
+(function(){try{const S=(id,ci,av)=>{const a=ADVS.find(x=>x.id==id);if(a&&a.cos[ci])a.cos[ci].av=av};
+const L=ADVS.find(x=>x.id=='llano');if(L)L.pl='Elorza';
+S('guanare',0,'p_llanero');S('eltocuyo',0,'p_gaitero');S('caricuao',1,'p_moreno');
+S('santiago',0,'p_futbolista');S('santiago',1,'p_dj');S('guayaquil',1,'p_cyber');S('miami',0,'p_cyber');S('doral',1,'p_valquiria');
+}catch(e){console.warn('v51',e)}})();
+</script>
 </body></html>
