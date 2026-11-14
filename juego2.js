@@ -674,3 +674,9 @@ function b58Tut(n){n=Math.max(0,Math.min(B58T.length-1,n|0));const [t,ic,tx]=B58
  try{FIGI['12_1']='fg6/k12_1.webp'+V}catch(e){}            /* clásico: rey de copas con su copa */
  try{['10_0','11_0','12_0','11_3'].forEach(k=>CF5.f[k]='fg6/f'+k+'.webp'+V)}catch(e){}  /* cartoon: oros al lado, caballo con basto */
 })();
+
+;
+/* ==== v61js ==== */
+
+/* ===== v61: enlaces a Privacidad y Borrar cuenta en Ajustes (lo pide AdSense / Play) ===== */
+{const _s=settingsHTML;settingsHTML=function(){let h=_s.apply(this,arguments);try{h+='<div class="box" style="text-align:center;font-size:14px"><a href="privacidad.html" target="_blank" rel="noopener" style="color:#ffd84a;font-weight:800">📄 Política de privacidad</a> · <a href="borrar-cuenta.html" target="_blank" rel="noopener" style="color:#ffd84a;font-weight:800">🗑️ Borrar mi cuenta</a></div>'}catch(e){}return h}}
