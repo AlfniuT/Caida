@@ -222,3 +222,122 @@ img.e7i{object-fit:contain}
 /* v52 · en la partida el fondo de pantalla queda quieto y sin chispitas (la mesa lo tapa) */
 body.g52 #bgl{animation-play-state:paused!important}
 body.g52 #bgfx{display:none!important}
+
+/* v56css */
+
+/* ===== v56: pantalla Mesas + aviso de nombre/avatar ===== */
+.m56h{display:flex;align-items:center;gap:8px}
+.m56h .m56i{width:34px;height:34px;display:inline-flex}
+.m56b{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 12px}
+.m56a.m56a{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:12px 8px;border-radius:20px;color:#fff;background:linear-gradient(160deg,#6a3fc8,#3a1d7a)!important;border:2px solid #b58cff66!important;box-shadow:0 5px 0 #1c0b40,0 8px 18px #0006!important;min-width:0}
+.m56a.m56f{background:linear-gradient(160deg,#8a55f0,#4a2396)!important;border-color:#ffd84a99!important}
+.m56a .m56ic{width:58px;height:58px;display:flex;align-items:center;justify-content:center}
+.m56a .m56ic img,.m56a .m56ic svg{width:58px;height:58px}
+.m56a b{font-family:'Lilita One','Nunito',system-ui,sans-serif;font-size:19px;line-height:1.1}
+.m56a small{font-size:12px;font-weight:700;opacity:.85}
+.m56fr{border-color:#ffd84a88!important}
+#n56m{position:fixed;inset:0;z-index:121;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px}
+#n56m .gbox{max-width:360px;width:100%;text-align:center;animation:pop .25s ease-out}
+#n56m .n56av{display:flex;justify-content:center;margin:2px 0 6px}
+#n56m .n56t{display:block;font:24px 'Lilita One','Nunito',system-ui,sans-serif;margin-bottom:2px}
+#n56m .n56r{background:#2b1a5c;border:2px solid #b58cff55;border-radius:16px;padding:10px;margin:10px 0;text-align:left}
+#n56m .n56r input{flex:1;min-width:0}
+#n56m .mb{width:100%;margin-top:8px}
+
+/* v57css */
+
+/* ===== v57: clan ordenado (nombre + 3 iconos arriba, chat abajo, hojas) ===== */
+.c57hd{background:#2b1a5c;border:2px solid #b58cff55;border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:10px;box-shadow:0 3px 0 #1c0b40;margin-bottom:8px}
+.c57nm{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:center;width:100%;cursor:pointer;border-radius:14px}
+.c57nm:focus-visible{outline:3px solid #ffc93c}
+.c57nt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left}
+.c57n{font-size:20px;line-height:1.1;overflow-wrap:anywhere}
+.c57nt .c43bar{margin:3px 0 0}
+.c57g{color:#7ff0b8;font-weight:800}
+.c57gear{flex:none;font-size:13px;font-weight:800;color:#d8c8ff;background:#3a2378;border-radius:999px;padding:4px 10px}
+.c57ic{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.c57ic button{position:relative;background:#3a2378!important;border-radius:14px!important;padding:8px 4px 7px!important;display:flex;flex-direction:column;align-items:center;gap:1px;box-shadow:0 4px 0 #1c0b40!important;color:#fff;min-width:0}
+.c57ic .e{font-size:28px;line-height:1}
+.c57ic b{font-size:14px}
+.c57ic small{font-size:11px;color:#cbb8f5;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.c57ic .g41bd,.c57sub .g41bd{position:absolute;top:-5px;right:-4px}
+.c57chat{background:#2b1a5c;border:2px solid #b58cff55;border-radius:18px;padding:8px;box-shadow:0 3px 0 #1c0b40}
+.c57ct{display:flex;align-items:center;gap:6px;padding:0 4px 6px;font-size:15px}
+.c57ct i{width:8px;height:8px;border-radius:50%;background:#36cf8c;display:inline-block}
+.c57chat .gchat{height:max(200px,calc(100dvh - 590px));max-height:none}
+.c57chat .gin input{min-width:0}
+.c57chat .gin button{flex:none}
+.c57ask{flex:none;font-size:20px!important;padding:0 10px!important}
+.c57don,.c57pase{display:flex;gap:9px;align-items:center;border-radius:14px;padding:8px 10px}
+.c57don{background:#3a2378;border:2px solid #563c95}
+.c57pase{background:linear-gradient(90deg,#4a3a10,#2b1a5c);border:2px solid #ffc93c}
+.c57pase .e{font-size:28px}
+.c57ov{position:fixed;inset:0;z-index:70;background:#0b0218cc;display:flex;align-items:flex-end;justify-content:center}
+.c57sh{background:#1a0b33;width:100%;max-width:520px;max-height:90%;border-radius:22px 22px 0 0;border:2px solid #b58cff55;border-bottom:0;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
+.c57shh{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
+.c57shh b{font-size:21px;flex:1}
+.c57sub{display:flex;gap:5px;background:#2b1a5c;margin:0 12px 4px;padding:4px;border-radius:13px}
+.c57sub button{flex:1;position:relative;padding:7px 2px!important;border-radius:10px!important;font-weight:800;font-size:13px;color:#cbb8f5;background:none!important;box-shadow:none!important;min-width:0}
+.c57sub button.on{background:#8b5cf6!important;color:#fff}
+.c57b{overflow-y:auto;padding:8px 12px 18px;display:flex;flex-direction:column;gap:8px}
+.c57b>.box{margin:0}
+.c57srt{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.c57srt button{background:#2b1a5c!important;box-shadow:none!important;border-radius:999px!important;padding:4px 10px!important;font-size:12px;font-weight:800;color:#cbb8f5}
+.c57srt button.on{background:#ffc93c!important;color:#3a2300}
+.c57m{background:#2b1a5c;border-radius:14px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.c57mt{display:flex;gap:9px;align-items:center;cursor:pointer}
+.c57pg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.c57pg div{background:#1a0b33;border-radius:10px;padding:4px 6px;font-size:11px;font-weight:700;color:#cbb8f5}
+.c57pg b{display:block;color:#fff;font-size:15px;font-variant-numeric:tabular-nums}
+.c57pg .ok b{color:#7ff0b8}
+.c57det{display:flex;flex-direction:column;gap:6px;border-top:2px solid #563c95;padding-top:7px}
+.c57cg{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.c57cg div{background:#1a0b33;border-radius:9px;padding:4px 2px;text-align:center;font-size:11px;font-weight:700}
+.c57cg b{display:block;font-size:15px}
+.c57cg .ok{background:#11452f;color:#7ff0b8}
+.c57rk{display:flex;gap:9px;align-items:flex-start;background:#3a2378;border-radius:12px;padding:8px 10px;font-size:13px}
+
+/* v58css */
+
+/* ===== v58: Modo Batalla «Pronto» (crear mesa, vitrina de poderes, tutorial) ===== */
+.b58pr{display:inline-block;background:#ffd84a;color:#3a1d7a;font:900 10px 'Nunito',system-ui;letter-spacing:.5px;border-radius:999px;padding:2px 7px;margin-left:5px;vertical-align:middle}
+.b58mode{margin:0 0 10px}
+.b58mode b{display:block;margin-bottom:6px}
+.b58mode .seg button.b58soon{background:#2b1a5c!important;border:1px dashed #b58cff88!important;color:#e2d4ff}
+.b58nx{background:linear-gradient(135deg,#4a2396,#2b1a5c)!important;border:2px solid #ffd84a99!important;border-radius:18px;padding:12px 14px;margin:10px 0}
+.b58nx .b58h{display:flex;align-items:center;gap:8px;font:20px 'Lilita One','Nunito',system-ui,sans-serif}
+.b58nx p{margin:6px 0 0;font-size:13px;line-height:1.35}
+.b58v{background:#2b1a5c!important;border:2px solid #b58cff55;border-radius:18px;padding:10px 10px 12px;margin:0 0 12px}
+.b58v>b{display:block;margin:0 2px 8px}
+.b58g{margin:8px 0 2px;font:900 11px 'Nunito',system-ui;letter-spacing:1.5px;color:#e2d4ff;text-transform:uppercase}
+.b58r{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:6px}
+.b58p{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border-radius:12px;background:#3a1d7a!important;border:1px solid #b58cff44!important;box-shadow:none!important;color:#fff;min-width:0}
+.b58p img{width:44px;height:44px;filter:saturate(.75) brightness(.9)}
+.b58p small{font-size:10px;font-weight:800;line-height:1.1;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.b58p i{position:absolute;top:3px;right:4px;font-style:normal;font-size:11px}
+.b58s{display:flex;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
+.b58s .b58p{flex:0 0 76px;scroll-snap-align:start}
+.b58p em{font-style:normal;font-size:9px;font-weight:800;color:#ffd84a;white-space:nowrap}
+.b58v>b{display:flex!important;align-items:center;gap:6px}
+.b58sw{margin-left:auto;font-size:11px;opacity:.75;font-weight:800}
+#b58m{position:fixed;inset:0;z-index:122;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px}
+#b58m .gbox{max-width:370px;width:100%;text-align:center;animation:pop .25s ease-out}
+#b58m .b58ti{font:24px 'Lilita One','Nunito',system-ui,sans-serif;margin:4px 0}
+#b58m .b58ic{width:84px;height:84px;margin:0 auto}
+#b58m .b58ic img{width:84px;height:84px}
+#b58m .b58tx{font-size:14px;line-height:1.4;text-align:left;background:#2b1a5c;border-radius:14px;padding:10px 12px;margin:8px 0}
+#b58m .b58tx li{margin:3px 0}
+#b58m .b58dots{display:flex;justify-content:center;gap:6px;margin:6px 0 2px}
+#b58m .b58dots i{width:8px;height:8px;border-radius:50%;background:#ffffff33}
+#b58m .b58dots i.on{background:#ffd84a}
+#b58m .b58nav{display:flex;gap:8px;margin-top:8px}
+#b58m .b58nav .mb{flex:1;margin:0}
+.b58bars{display:grid;gap:5px;margin:6px 0;text-align:left}
+.b58bar{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800}
+.b58bar span{width:58px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b58bar div{flex:1;height:12px;border-radius:99px;background:#0006;overflow:hidden;border:1px solid #fff3}
+.b58bar div i{display:block;height:100%;background:linear-gradient(90deg,#3ddc84,#1fae5a)}
+.b58bar.tg{outline:2px solid #ffd84a;border-radius:8px;padding:2px}
+.b58bar.low div i{background:linear-gradient(90deg,#ff6b6b,#c8312f)}
+.b58icrow{display:flex;justify-content:center;gap:6px;margin:6px 0}
+.b58icrow img{width:46px;height:46px}

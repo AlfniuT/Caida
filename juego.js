@@ -297,7 +297,7 @@ ${NET.roomId?`<button class="mb" onclick="showMenu('lobby')">↩ Volver a mi mes
 <h3 class="st">🔑 Unirme con código</h3><div class="box" style="display:flex;gap:8px"><input id="jC" maxlength="4" placeholder="Ej: K7QP" style="text-transform:uppercase;flex:1"><button class="sm" onclick="onlJoinCode()">Unirme</button></div>
 <h3 class="st">🌍 Mesas abiertas <button class="sm" style="float:right;font-size:12px" onclick="onlPub()">↻ Actualizar</button></h3>${NET.pub.length?NET.pub.map(r=>`<div class="box onlr"><div style="display:flex">${r.players.map(u=>onlAv((r.pinfo||{})[u]||{},32)).join('')}</div><div style="flex:1;min-width:0;margin-left:8px"><b>${(r.pinfo&&r.pinfo[r.host]||{}).name||'Mesa'}</b><br><span class="sub">${(r.game=='truco'?'🎴 Truco · ':'')+(r.size==2?'1 vs 1':r.size==3?'3 jugadores':'4 parejas')} · a ${r.meta} · ${r.players.length}/${r.size}</span></div><button class="sm" onclick="onlJoin('${r.id}')">Entrar</button></div>`).join(''):'<p class="sub">No hay mesas abiertas ahora. ¡Crea una!</p>'}
 <button class="mb bk" onclick="showMenu('friends')">👥 Mis amigos</button><button class="sm off" style="width:100%;margin-top:8px" onclick="onlLogout()">Cerrar sesión</button>`}
-async function onlPub(){if(!fbOk()||!FBU)return;const {F,db}=FB;try{const q=F.query(F.collection(db,'rooms'),F.where('pub','==',true),F.where('state','==','lobby'),F.limit(25));const sn=await F.getDocs(q);NET.pub=sn.docs.map(d=>({id:d.id,...d.data()})).filter(r=>!r.ranked&&!r.war&&roomAlive(r)&&r.players.length<r.size&&!r.players.includes(FBU.uid)).sort((a,b)=>(b.t||0)-(a.t||0));if(curView=='online')showMenu('online')}catch(e){toast('Error: '+(e.code||e.message))}}
+async function onlPub(){if(!fbOk()||!FBU)return;const {F,db}=FB;try{const q=F.query(F.collection(db,'rooms'),F.where('pub','==',true),F.where('state','==','lobby'),F.limit(25));const sn=await F.getDocs(q);NET.pub=sn.docs.map(d=>({id:d.id,...d.data()})).filter(r=>!r.ranked&&!r.war&&roomAlive(r)&&r.players.length<r.size&&!r.players.includes(FBU.uid)).sort((a,b)=>(b.t||0)-(a.t||0));if(curView=='online'||curView=='mesas')showMenu(curView)}catch(e){toast('Error: '+(e.code||e.message))}}
 
 const LAGW=`<div class="lagw">🧪 <b>Mesas de 3 y 4 jugadores: aún en pruebas.</b><br>Puede haber fallos, como lag o retraso al jugar. Estamos trabajando para solucionarlo. Las mesas de 1 vs 1 funcionan sin problemas.</div>`;
 {const _lb=lobbyHTML;lobbyHTML=function(bk){try{const r=NET.room;if(r&&!r.ranked&&r.size>2)return _lb((bk||'')+LAGW)}catch(e){}return _lb(bk)}}
@@ -1824,19 +1824,19 @@ cards:'<rect x="6" y="12" width="18" height="26" rx="3" transform="rotate(-18 15
 frame:'<circle cx="24" cy="24" r="16" fill="#2b0f57" stroke="url(#gP)" stroke-width="6"/><circle cx="24" cy="20" r="5" fill="#ffc83d"/><path d="M15 33c2-5 5-7 9-7s7 2 9 7" fill="#ffc83d"/>',
 name:'<rect x="4" y="13" width="40" height="22" rx="11" fill="url(#gB)"/><text x="24" y="29" text-anchor="middle" font-family="Lilita One,sans-serif" font-size="13" fill="#fff">ABC</text>',
 emoji:'<circle cx="24" cy="24" r="18" fill="url(#gG)"/><circle cx="18" cy="21" r="2.5" fill="#5a2a00"/><circle cx="30" cy="21" r="2.5" fill="#5a2a00"/><path d="M16 28c4 6 12 6 16 0" stroke="#5a2a00" stroke-width="3" fill="none" stroke-linecap="round"/>'};
-let ICN=0;const I=(k,z)=>{if(ICAI.has(k))return `<img loading="lazy" decoding="async" class="icai" src="ic5/${k}.webp?v=37" alt="" draggable="false" width="${z||'100%'}" height="${z||'100%'}">`;const u='x'+(++ICN);return `<svg viewBox="0 0 48 48" width="${z||'100%'}" height="${z||'100%'}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GD.replace(/id="g(\w)"/g,'id="g$1'+u+'"')}${(ICO[k]||'').replace(/url\(#g(\w)\)/g,'url(#g$1'+u+')')}</svg>`};
+let ICN=0;const I=(k,z)=>{if(ICAI.has(k))return `<img loading="lazy" decoding="async" class="icai" src="ic5/${k}.webp?v=${k=='tap'?59:37}" alt="" draggable="false" width="${z||'100%'}" height="${z||'100%'}">`;const u='x'+(++ICN);return `<svg viewBox="0 0 48 48" width="${z||'100%'}" height="${z||'100%'}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${GD.replace(/id="g(\w)"/g,'id="g$1'+u+'"')}${(ICO[k]||'').replace(/url\(#g(\w)\)/g,'url(#g$1'+u+')')}</svg>`};
 const mi=(ic,t,sub,f,badge)=>`<button class="mi" onclick="${f}"><span class="mic">${I(ic)}</span><span class="mtx"><b>${t}</b><small>${sub}</small></span>${badge?`<span class="badge2">${badge}</span>`:''}<span class="chev">›</span></button>`;
 const tile=(ic,t,f,badge)=>`<button class="tile" onclick="${f}">${badge?`<span class="badge">${badge}</span>`:''}<span class="tic">${I(ic)}</span><span>${t}</span></button>`;
-const PARENT={ranked:'jugar',online:'jugar',lobby:'online',aventura:'jugar',practica:'jugar',salas:'jugar',torneo:'jugar',friends:'jugar',tutorial:'aprender',how:'aprender',rules:'aprender',cantos:'aprender',stats:'home',logros:'logrosm',hist:'logrosm'};
-const PLBL={home:'Inicio',jugar:'Jugar',aprender:'Aprender',logrosm:'Logros'};
+const PARENT={ranked:'jugar',online:'mesas',lobby:'online',aventura:'jugar',practica:'jugar',salas:'jugar',torneo:'jugar',friends:'mesas',tutorial:'aprender',how:'aprender',rules:'aprender',cantos:'aprender',stats:'home',logros:'logrosm',hist:'logrosm'};
+const PLBL={home:'Inicio',jugar:'Jugar',mesas:'Mesas',online:'Mesas',aprender:'Aprender',logrosm:'Logros'};
 const MIS=[['caidas',3,'Haz 3 caídas','Cualquier partida cuenta',150],['wins',1,'Gana 1 partida','Contra la IA o en salas',150],['games',2,'Juega 2 partidas','Termina dos partidas completas',100],['ml',1,'Haz una mesa limpia','Llévate todas las cartas de la mesa',150],['cantos',2,'Gana 2 cantos','Canta y que valga tu canto',150],['quem',1,'Di «se quemó» una vez','Pilla a un rival distraído',120]];
 function mission(){const d=dayStr(0);if(!store.mis||store.mis.day!=d){const n=Math.floor(Date.now()/864e5);const i=n%MIS.length;store.mis={day:d,i,base:ST()[MIS[i][0]]||0,done:false};save()}const m=MIS[store.mis.i];return{m,cur:Math.min(m[1],Math.max(0,(ST()[m[0]]||0)-store.mis.base)),done:store.mis.done}}
 function claimMis(){const x=mission();if(x.done||x.cur<x.m[1])return;econ('mission').then(r=>{store.mis.done=true;save();sfx.caida(2);toast('🎯 ¡Misión cumplida! +'+r.gold+' de oro');showMenu('home')}).catch(()=>{})}
 const XPN=1000;function addXP(g){store.lv=store.lv||1;store.xp=(store.xp||0)+g;save();if(store.xp>=XPN&&!window._lvBusy&&econOn()){window._lvBusy=1;econ('level',null,true).then(r=>{store.xp=Math.max(0,store.xp-XPN);save();const L2=r.lv;setTimeout(()=>{flash(`<div style="font-size:46px">⭐ ¡NIVEL ${L2}!</div><div style="font-size:24px;color:#ffd84a">+${r.gold} de oro</div><div style="font-size:22px;color:#7ff6ff">+${r.gems} 💎</div>`,3);sfx.caida(3);fxBurst('oro')},2600)}).catch(()=>{store.xp=Math.min(store.xp,XPN*2);save()}).finally(()=>{window._lvBusy=0})}}
 
-const TABI={"tienda": "shop", "profile": "palette", "home": "play", "guild": "shield", "ranked": "trophy", "stats": "stats"},SCI={"dest": "star", "combos": "masks", "cofres": "chest", "av": "profile", "frame": "frame", "name": "name", "cartas": "cards", "table": "table", "fx": "burst", "emo": "emoji", "snd": "speaker", "monedas": "gem", "pbg": "palette"};
-const TABS=[['tienda','🛒','Tienda'],['profile','🎨','Personalizar'],['home','🃏','Jugar'],['guild','🛡️','Clan'],['stats','📊','Estadísticas']];
-const TABOF={truco:'home',pase:'home',guild:'guild',tienda:'tienda',profile:'profile',friends:'home',online:'home',lobby:'home',sala:'home',espera:'home',ranked:'home',stats:'stats'};
+const TABI={"tienda": "shop", "profile": "palette", "home": "play", "guild": "shield", "ranked": "trophy", "stats": "stats", "mesas": "table"},SCI={"dest": "star", "combos": "masks", "cofres": "chest", "av": "profile", "frame": "frame", "name": "name", "cartas": "cards", "table": "table", "fx": "burst", "emo": "emoji", "snd": "speaker", "monedas": "gem", "pbg": "palette"};
+const TABS=[['tienda','🛒','Tienda'],['profile','🎨','Personalizar'],['home','🃏','Jugar'],['guild','🛡️','Clan'],['mesas','🃏','Mesas']];
+const TABOF={truco:'home',pase:'home',guild:'guild',tienda:'tienda',profile:'profile',friends:'mesas',online:'mesas',lobby:'mesas',sala:'mesas',espera:'mesas',ranked:'home',stats:'home',mesas:'mesas'};
 function tabBar(v){let b=$('tabbar');if(!b){b=document.createElement('nav');b.id='tabbar';document.body.appendChild(b)}const cur=TABOF[v]||'home';const unread=Object.values((typeof DM!='undefined'&&DM.unread)||{}).reduce((a,c)=>a+c,0);b.innerHTML=TABS.map(([id,ic,l])=>{if(id=='guild'&&GLD.g){ic=GLD.g.emb||ic}return [id,ic,l]}).map(([id,ic,l])=>`<button class="tbb${cur==id?' on':''}${id=='home'?' mid':''}" onclick="${id=='home'?"showMenu('home')":(id=='profile'?"PF_SEC=null;showMenu('profile');window.scrollTo(0,0)":"showMenu('"+id+"')")}"><span class="tbi">${(id=='guild'&&GLD.g&&GLD.g.emb)||!ICAI.has(TABI[id])?ic:`<img loading="lazy" decoding="async" class="tbi" src="ic5/${TABI[id]}.webp?v=37" alt="">`}${id=='guild'&&unread?'<i class="tbd"></i>':''}</span><small>${l}</small></button>`).join('');b.style.display=($('app')&&$('app').style.display=='block')?'none':'flex'}
 function v40rk(){try{return RKC[rkBest().r]||'#b58cff'}catch(e){return '#b58cff'}}
 function v40hb(){let n=0;try{n=Object.values((typeof DM!='undefined'&&DM.unread)||{}).reduce((a,c)=>a+c,0)}catch(e){}return `<button class="hib" onclick="showMenu('friends')" aria-label="Chat">${n?`<span class="badge">${n>9?'9+':n}</span>`:''}${I('chat')}</button>`+`<button class="hib" onclick="pfOpen('ajustes')" aria-label="Ajustes">${I('settings')}</button>`}
@@ -2598,10 +2598,24 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.14b';
+const GAME_VER='2026.11.14h';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-14',v:'2026.11.14h',t:'Figuras con su pinta',it:[
+['m','🃏','Figuras con su pinta a la vista']]},
+{d:'2026-11-14',v:'2026.11.14g',t:'Tutorial con icono nuevo',it:[
+['m','🎓','Icono nuevo del tutorial']]},
+{d:'2026-11-14',v:'2026.11.14f',t:'Modo Batalla: pronto',it:[
+['n','⚔️','Elige el modo al crear mesa'],
+['n','🎁','Vitrina de poderes en la Aventura']]},
+{d:'2026-11-14',v:'2026.11.14e',t:'Clan ordenado',it:[['m','🛡️','Clan con iconos arriba y chat abajo'],['n','📊','Progreso de cada miembro'],['m','💳','Pase y donar en el chat']]},
+{d:'2026-11-14',v:'2026.11.14d',t:'Mesas en la barra',it:[
+['n','🃏','Mesas en la barra de abajo'],
+['m','📊','Estadísticas ahora en el inicio'],
+['n','👤','Aviso para elegir nombre y avatar']]},
+{d:'2026-11-14',v:'2026.11.14c',t:'Arreglos',it:[
+['f','🚫','«Sin anuncios» ya no se queda cargando']]},
 {d:'2026-11-14',v:'2026.11.14b',t:'Nueva dirección',it:[
 ['n','🌐','Caída ahora en caidajuegos.com'],
 ['m','🔐','Tu cuenta pasa sola a la app nueva']]},
@@ -3603,7 +3617,7 @@ ${on?`<button class="sm" onclick="subManage()">Administrar suscripción</button>
 function subManage(){const u=WALLET&&WALLET.subs&&WALLET.subs.src=='pp'?'https://www.paypal.com/myaccount/autopay/':'https://play.google.com/store/account/subscriptions?sku='+SUB_ID+'&package=com.alfniut.caida';try{window.open(u,'_blank')}catch(e){location.href=u}}
 async function subGrant(op,args,quiet){for(let i=0;i<5;i++){try{const q=await econ(op,args,true);if(q.subNew){sfx.caida(3);try{fxBurst('oro')}catch(e){}flash('<div style="font-size:40px">🚫📺 ¡Sin anuncios activado!</div><div style="font-size:20px">Gracias por apoyar Caída 💛</div>',3)}if(curView=='tienda')showMenu('tienda');return q}catch(e){const m=String((e&&e.message)||'');if(/otra cuenta/.test(m)){if(!quiet)toast('⚠️ '+m);return null}if(i==4){if(!quiet)toast('⏳ Tu suscripción se está confirmando. Se activará sola en unos minutos.');return null}await new Promise(r=>setTimeout(r,3000))}}}
 async function subBuy(){if(subOn())return;if(!econOn()){toast('📶 Necesitas internet e iniciar sesión');return}if(isApp())return gpSubBuy();ppSubBuy()}
-async function gpSubBuy(){if(!GPAY.np){toast('💎 La tienda de Google Play se está cargando. Intenta en unos segundos');try{gpInit()}catch(e){}return}if(GPAY.busy)return;GPAY.busy=true;try{const t=await GPAY.np.purchaseProduct({productIdentifier:SUB_ID,planIdentifier:SUB_PLAN,productType:'subs',isConsumable:false,autoAcknowledgePurchases:false});if(t&&t.purchaseToken)await subGrant('subPlay',{token:t.purchaseToken})}catch(e){if(!/cancel/i.test(String(e&&(e.message||e.code))))toast('No se pudo completar la suscripción. No se te cobró nada.')}GPAY.busy=false}
+async function gpSubBuy(){if(!GPAY.np)GPAY.np=npP();if(!GPAY.np){toast(gpWhy('NO_PLUGIN'));return}if(!GPAY.ready||!GPAY.sub){try{gpInit()}catch(e){}}if(GPAY.busy)return;GPAY.busy=true;try{const t=await GPAY.np.purchaseProduct({productIdentifier:SUB_ID,planIdentifier:SUB_PLAN,productType:'subs',isConsumable:false,autoAcknowledgePurchases:false});if(t&&t.purchaseToken)await subGrant('subPlay',{token:t.purchaseToken})}catch(e){console.warn('gpSubBuy',e);if(!gpCancel(e)){const w=gpErrTxt(e);toast(/not found|UNAVAILABLE|SERVICE|timed out|disconnect|NETWORK|FEATURE/i.test(w)?gpWhy(w):'No se pudo completar la suscripción. No se te cobró nada. ('+w.slice(0,50)+')')}}GPAY.busy=false}
 async function gpSubRecover(){try{if(!GPAY.np||!econOn()||subOn())return;const r=await GPAY.np.getPurchases({productType:'subs'});for(const t of (r.purchases||[])){if(t.purchaseToken&&(t.productIdentifier==SUB_ID||!t.productIdentifier)){await subGrant('subPlay',{token:t.purchaseToken},true);break}}}catch(e){console.warn('subRecover',e)}}
 let _ppSubSdk=null;
 function ppSubSdk(){if(window.ppsub&&ppsub.Buttons)return Promise.resolve();if(_ppSubSdk)return _ppSubSdk;_ppSubSdk=new Promise((ok,ko)=>{const sc=document.createElement('script');sc.src='https://www.paypal.com/sdk/js?client-id='+PP_CLIENT+'&vault=true&intent=subscription&components=buttons&locale=es_ES';sc.setAttribute('data-namespace','ppsub');sc.onload=ok;sc.onerror=()=>{_ppSubSdk=null;ko(new Error('No se pudo cargar PayPal'))};document.head.appendChild(sc)});return _ppSubSdk}
@@ -3890,6 +3904,7 @@ else if(v=='friends')h+=friendsOnlineHTML(bk);
 else if(v=='guild')h+=guildHTML(bk);
 else if(v=='pase')h+=passHTML(bk);
 else if(v=='truco')h+=trucoMenuHTML(bk);
+else if(v=='mesas'){h+=mesasHTML();if(fbOk()&&window.FBU&&Date.now()-(NET.pubAt||0)>20000){NET.pubAt=Date.now();setTimeout(onlPub,100)}}
 else if(v=='online'){h+=onlineHTML(bk);if(fbOk()&&window.FBU&&!NET.pubT){NET.pubT=1;setTimeout(onlPub,100)}}
 else if(v=='lobby')h+=lobbyHTML(bk);
 else if(v=='ranked')h+=rankedHTML(bk);

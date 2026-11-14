@@ -19,8 +19,8 @@ if(go){localStorage.setItem('mig54',/^err/.test(f)?f:'go:'+Date.now());location.
 <title>Caída</title>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#24093f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Caída"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" type="image/png" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"></noscript>
-<!-- GAME_VER='2026.11.14b' (el juego mira esta línea para avisar que hay versión nueva) -->
-<link rel="preload" href="juego.js?v=aa8e36efdc" as="script"><link rel="preload" href="juego2.js?v=45f6d574ab" as="script">
+<!-- GAME_VER='2026.11.14h' (el juego mira esta línea para avisar que hay versión nueva) -->
+<link rel="preload" href="juego.js?v=acce15bbc0" as="script"><link rel="preload" href="juego2.js?v=1cee92d199" as="script">
 <link rel="stylesheet" href="juego.css?v=f0bb57b994">
 </head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
@@ -72,7 +72,7 @@ if(go){localStorage.setItem('mig54',/^err/.test(f)?f:'go:'+Date.now());location.
  window.clearInterval=function(id){if(T.jobs.has(id)){T.jobs.delete(id);return}return _ci(id)};
 })();
 </script>
-<script src="juego.js?v=aa8e36efdc"></script><script type="module">
+<script src="juego.js?v=acce15bbc0"></script><script type="module">
 const V='10.12.2',B='https://www.gstatic.com/firebasejs/'+V+'/';
 try{
 const A=await import(B+'firebase-app.js'),U=await import(B+'firebase-auth.js'),F=await import(B+'firebase-firestore.js');
@@ -90,9 +90,17 @@ U.onAuthStateChanged(auth,u=>{window.FBU=u||null;window.dispatchEvent(new Event(
 }catch(e){window.FBERR=String(e);window.dispatchEvent(new Event('fbauth'));if(window.MIG54=='out'&&!window._m54d){window._m54d=1;location.replace('https://caidajuegos.com/?mig54=err')}}
 </script>
 <script>if(!window.MIG54&&'serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{})})}</script>
-<link rel="stylesheet" href="juego2.css?v=15cb5b19cc">
+<link rel="stylesheet" href="juego2.css?v=b763d32546">
 
-<script src="juego2.js?v=45f6d574ab"></script>
+<script src="juego2.js?v=1cee92d199"></script>
+
+
+
+
+
+
+
+
 
 
 

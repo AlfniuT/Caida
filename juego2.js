@@ -206,7 +206,7 @@ function c43Prog(mid){const gid=store.guild||(NET.me&&NET.me.guild);const cn=C43
 
 /* ---- pedidos de donación en vivo ---- */
 const _gEx43=gExtras;gExtras=function(){_gEx43.apply(this,arguments);const G=GLD.g;if(!G||!window.FBU)return;
- if(!GLD.unD||GLD.unDid!=G.id){try{GLD.unD&&GLD.unD()}catch(e){}GLD.unDid=G.id;const {F,db}=FB;GLD.unD=F.onSnapshot(F.collection(db,'guilds',G.id,'dons'),sn=>{GLD.dons=(sn.docs||[]).map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.t-b.t);if(curView=='guild'&&GLD.tab=='don'&&GLD.view==null&&$('app').style.display!='block')showMenu('guild')},()=>{})}};
+ if(!GLD.unD||GLD.unDid!=G.id){try{GLD.unD&&GLD.unD()}catch(e){}GLD.unDid=G.id;const {F,db}=FB;GLD.unD=F.onSnapshot(F.collection(db,'guilds',G.id,'dons'),sn=>{GLD.dons=(sn.docs||[]).map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.t-b.t);if(curView=='guild'&&GLD.view==null&&$('app').style.display!='block'){if(GLD.tab=='chat')gRender(true);else if(GLD.tab=='don')showMenu('guild')}},()=>{})}};
 const _gStop43=gStop;gStop=function(){try{GLD.unD&&GLD.unD()}catch(e){}GLD.unD=null;GLD.dons=[];return _gStop43.apply(this,arguments)};
 
 /* ---- piezas de pantalla ---- */
@@ -514,4 +514,163 @@ const ask=()=>{try{const c=navigator.connection;if(c&&c.saveData)return;navigato
 window.sw53Info=()=>navigator.serviceWorker.ready.then(r=>r.active&&r.active.postMessage({t:'info'}));
 if(document.readyState=='complete')setTimeout(ask,8000);else window.addEventListener('load',()=>setTimeout(ask,8000));
 setInterval(()=>{if(!document.hidden&&navigator.onLine!==false)ask()},10*60*1000);
+})();
+
+;
+/* ==== v56js ==== */
+
+/* ===== v56: pestaña Mesas (reemplaza a Estadísticas en la barra de abajo) ===== */
+function mesasHTML(){
+ const top=`<h2 class="sec m56h"><span class="m56i">${I('table')}</span>Mesas</h2>`;
+ if(!fbOk())return top+`<div class="box">📶 ${window.FBERR?'No hay conexión a internet. Conéctate y vuelve a entrar.':'Conectando…'}</div>`;
+ if(!window.FBU)return top+`<p class="sb">Juega con personas reales y con tus amigos.</p><button class="mb" onclick="onlLogin('google')">${I('profile',22)} Entrar con Google</button><button class="mb bk" onclick="onlLogin('anon')">Entrar como invitado</button>`;
+ const F=(NET.friends||[]).filter(f=>f.room&&onlineAgo(f.lastSeen));
+ const row=r=>`<div class="box onlr"><div style="display:flex">${r.players.map(u=>onlAv((r.pinfo||{})[u]||{},32)).join('')}</div><div style="flex:1;min-width:0;margin-left:8px"><b>${(r.pinfo&&r.pinfo[r.host]||{}).name||'Mesa'}</b><br><span class="sub">${(r.game=='truco'?'🎴 Truco · ':'')+(r.size==2?'1 vs 1':r.size==3?'3 jugadores':r.solo?'4 individual':'4 parejas')} · a ${r.meta} · ${r.bet?'💰 '+r.bet+' · ':''}${r.players.length}/${r.size}</span></div><button class="sm" onclick="onlJoin('${r.id}')">Entrar</button></div>`;
+ return top
+ +(NET.roomId?`<button class="mb" onclick="showMenu('lobby')">↩ Volver a mi mesa</button>`:'')
+ +`<div class="m56b"><button class="m56a m56f" onclick="showMenu('friends')"><span class="m56ic">${I('friends')}</span><b>Jugar con amigos</b><small>Tu lista, invitar y unirte</small></button><button class="m56a" onclick="showMenu('online')"><span class="m56ic">${I('plus')}</span><b>Crear mesa</b><small>Jugadores, puntos y apuesta</small></button></div>`
+ +(F.length?`<h3 class="st">👥 Amigos en una mesa</h3>`+F.map(f=>`<div class="box onlr m56fr">${onlAv(f,36)}<b style="flex:1;min-width:0;margin-left:8px">${nameHTML(f.name||'Amigo',f.ns)}</b><button class="sm" onclick="onlJoinBy('${f.room}')">Unirme</button></div>`).join(''):'')
+ +`<h3 class="st">🔑 Unirme con código</h3><div class="box" style="display:flex;gap:8px"><input id="jC" maxlength="4" placeholder="Ej: K7QP" style="text-transform:uppercase;flex:1"><button class="sm" onclick="onlJoinCode()">Unirme</button></div>`
+ +`<h3 class="st">🌍 Mesas creadas <button class="sm" style="float:right;font-size:12px" onclick="NET.pubAt=Date.now();onlPub()">↻ Actualizar</button></h3>`
+ +((NET.pub||[]).length?NET.pub.map(row).join(''):'<p class="sub">No hay mesas abiertas ahora. ¡Crea una!</p>');
+}
+
+/* ===== v56: aviso para elegir nombre y avatar (solo a quien no lo hizo) ===== */
+function n56Need(){const n=String(store.name||'').trim();return{name:!n||/^(jugador|player)\s*\d*$/i.test(n),av:!store.avatar||store.avatar=='oro'}}
+function n56Close(){const d=$('n56m');if(d)d.remove()}
+function n56Show(){const N=n56Need();if(!N.name&&!N.av){n56Close();return}let d=$('n56m');if(!d){d=document.createElement('div');d.id='n56m';d.onclick=e=>{if(e.target==d)n56Close()};document.body.appendChild(d)}
+ const t=N.name&&N.av?'Elige tu nombre y tu avatar':N.name?'Elige tu nombre':'Elige tu avatar';
+ d.innerHTML=`<div class="gbox"><div class="n56av">${avatarHTML(84)}</div><b class="n56t">¡Haz tuyo tu perfil!</b><p class="sub">${t}. Así te reconocen tus amigos y rivales en la mesa.</p>`
+ +(N.name?`<div class="n56r"><b>✏️ Tu nombre</b><div style="display:flex;gap:6px;margin-top:6px"><input id="n56in" class="inp" maxlength="16" placeholder="Escribe tu nombre"><button class="sm" id="n56ok">Guardar</button></div></div>`:'')
+ +(N.av?`<button class="mb" id="n56av">👤 Elegir mi avatar</button>`:'')
+ +`<button class="mb bk" id="n56no">Más tarde</button></div>`;
+ $('n56no').onclick=n56Close;
+ if(N.av)$('n56av').onclick=()=>{n56Close();pfOpen('avatar')};
+ if(N.name){const go=()=>{const v=($('n56in').value||'').trim().replace(/[<>"'`\\]/g,'').slice(0,16);if(v.length<3){toast('Mínimo 3 letras');return}if(/^(jugador|player)\s*\d*$/i.test(v)){toast('Elige un nombre propio');return}
+   store.name=v;save();try{if(window.FBU&&fbOk())FB.F.updateDoc(FB.F.doc(FB.db,'users',FBU.uid),myPub()).catch(()=>{})}catch(e){}toast('✅ ¡Listo, '+v+'!');try{if($('menu').style.display!='none')showMenu(curView)}catch(e){}n56Show()};
+  $('n56ok').onclick=go;$('n56in').onkeydown=e=>{if(e.key=='Enter')go()}}
+}
+function n56Check(){try{if(window._n56)return;const N=n56Need();if(!N.name&&!N.av){window._n56=1;return}
+ const busy=$('bmod')||$('dmod')||$('ginvm')||$('gmod')||$('n56m')||($('app')&&$('app').style.display=='block')||($('menu')&&$('menu').style.display=='none')
+  ||((n56Check.k=(n56Check.k||0)+1)<40&&store.seenVer!=GAME_VER&&(store.played>0||store.welcomed));
+ if(busy){setTimeout(n56Check,3000);return}
+ window._n56=1;n56Show()}catch(e){}}
+if(document.readyState=='complete')setTimeout(n56Check,7000);else window.addEventListener('load',()=>setTimeout(n56Check,7000));
+
+;
+/* ==== v57clan ==== */
+
+/* v57 · Clan ordenado: arriba el nombre (toca = personalizar) + Miembros · Misiones · Guerra; abajo el chat; el pase solo como tarjeta en el chat con «Cobrar»; los pedidos de donar salen en el chat */
+const C57={sort:'rk',open:null};
+const C57S={mem:['👥 Miembros',[['mem','Miembros'],['req','➕ Invitar']]],mis:['🎯 Misiones',[['mis','Misiones'],['cof','🎁 Cofre'],['lv','⭐ Premios']]],war:['⚔️ Guerra',[['war','']]],per:['⚙️ Personalizar',[['mesa','🃏 Mesa'],['rang','Rangos'],['tro','🏆 Trofeos'],['aj','Clan']]],don:['🤝 Pedir y donar',[['don','']]]};
+function c57Open(k,t){GLD.sheet=k;GLD.tab=t||C57S[k][1][0][0];C57.open=null;showMenu('guild')}
+function c57Close(){GLD.sheet=null;GLD.tab='chat';showMenu('guild')}
+function c57Tab(t){GLD.tab=t;C57.open=null;showMenu('guild')}
+function c57Tog(u){C57.open=C57.open==u?null:u;showMenu('guild')}
+function c57Sort(k){C57.sort=k;showMenu('guild')}
+function c57On(G,u){if(u==FBU.uid)return true;const t=((G.mp||{})[u]||{}).t;return !!t&&Date.now()-t<15*60e3}
+function c57WarB(G){const W=GLD.c45w;if(!W)return false;const me=FBU.uid,P=W.prev;
+ if(P&&P.foe&&P.ins&&P.ins[me]&&((P.ins[me].b||[]).length||P.ins[me].p)&&!P.ins[me].cl&&store.c45wc!=c45Prev(W.wk))return true;
+ const D=W.cur,I=D&&D.ins&&D.ins[me];return !!(I&&D.foe&&c45Phase()=='bat'&&(I.b||[]).length<3)}
+function c57Head(G){const M=G.members||[],l=clanLvl(G),x=G.xp||0,nx=C43.XPN[l],p=nx?Math.round((x-C43.XPN[l-1])/(nx-C43.XPN[l-1])*100):100,a=gMyR(),b=c43Badges(G),R=GLD.reqs||[],c=c43Cm(G),goal=c43Goal(G),W=GLD.c45w,nIns=Object.keys((W&&W.cur&&W.cur.ins)||{}).length;
+ const B=x=>x?`<i class="g41bd">${x===true?'!':x}</i>`:'';
+ return `<div class="c57hd"><button class="c57nm" onclick="c57Open('per')" aria-label="Personalizar el clan">${gEmbHTML(G,52)}<span class="c57nt"><b class="c57n"><span class="g41tag">[${g41e(G.tag)}]</span> ${g41e(G.name)}</b><small class="sub">⭐ Nivel ${l} · 👥 ${M.length}/30 · ${gCtyTxt(G.cty)} · <span class="c57g">+5 % 🪙</span></small><span class="c43bar"><i style="width:${p}%"></i></span></span><span class="c57gear">⚙️ ›</span></button>
+ <div class="c57ic"><button onclick="c57Open('mem')"><span class="e">👥</span><b>Miembros</b><small>${M.filter(u=>c57On(G,u)).length} conectados</small>${B(a>=2?R.length:0)}</button>
+ <button onclick="c57Open('mis')"><span class="e">🎯</span><b>Misiones</b><small>diaria ${Math.min(c.dn,goal)}/${goal}</small>${B(b.day||b.wk)}</button>
+ <button onclick="c57Open('war')"><span class="e">⚔️</span><b>Guerra</b><small>${nIns} inscritos</small>${B(c57WarB(G))}</button></div></div>`}
+function c57Log(){const me=FBU.uid,LV=store.emoLv||{};let h=GLD.msgs.map(gMsgHTML).join('');
+ h+=(GLD.dons||[]).filter(d=>d.got<d.need).map(d=>{const mine=d.uid==me,lv=LV[d.e]||0;
+  return `<div class="c57don"><span class="c43em">${g41e(d.e)}</span><div style="flex:1;min-width:0"><b>${mine?'Tú pides':g41e(d.name)+' pide'}</b> <small class="sub">${d.got}/${d.need}</small><div class="c43bar"><i style="width:${d.got/d.need*100}%"></i></div>${mine?'':`<small class="sub">${lv>=2?'tienes repetido':lv==1?'solo tienes 1':'no lo tienes'}</small>`}</div>${mine?`<button class="sm off" onclick="c43Cancel('${d.id}')" aria-label="Cancelar pedido">✕</button>`:`<button class="sm${lv>=2?' g41gold':' off'}" ${lv>=2?`onclick="c43Give('${d.id}',this)"`:'disabled'}>Donar</button>`}</div>`}).join('');
+ const c=C45.wal||{},q=c.gifts||[];
+ if(q.length){const g=q[0],ok=c.giftDay!=c43Day();h+=`<div class="c57pase"><span class="e">💳</span><div style="flex:1;min-width:0"><b>${g41e(g.who)} compró el Pase de temporada</b><br><small>+400 🪙 para ti${q.length>1?` · ${q.length-1} más en espera`:''}</small></div>${ok?'<button class="sm g41gold" onclick="c45Gift(this)">Cobrar</button>':'<span class="c43pill">mañana</span>'}</div>`}
+ return h||'<p class="sub">Aún no hay mensajes. ¡Saluda a tu clan!</p>'}
+function c57Chat(G){const E=['😂','👏','🔥','😡','🤥 ¡Mentiroso!'].concat(itemList('emo').filter(it=>owns('emo',it)).map(it=>it.id)).concat(itemList('stk').filter(it=>owns('stk',it)).map(it=>'stk:'+it.id)).filter((v,k,a)=>a.indexOf(v)==k);
+ return `<div class="c57chat"><div class="c57ct"><i></i><b>Chat del clan</b></div><div id="gchat" class="gchat">${c57Log()}</div><div class="g41quick">${G41.quick.map(q=>`<button onclick="gQuick('${q.replace(/'/g,'')}')">${q}</button>`).join('')}</div><div class="gemr">${E.map(e=>`<button data-e="${e.replace(/"/g,'&quot;')}" onclick="gSend({emo:this.dataset.e})">${e.startsWith('stk:')?stkSVG(e.slice(4)):isMsg(e)?`<span class="rxs-m${msgCls(e)}" style="background:${MSGS[e]}">${e}</span>`:e.split(' ')[0]}</button>`).join('')}</div><div class="gin"><input id="gmsg" placeholder="Escribe a tu clan…" maxlength="120" onkeydown="if(event.key=='Enter')gSend()"><button class="sm off c57ask" onclick="c57Open('don')" aria-label="Pedir un emoji repetido">🤝</button><button class="sm" onclick="gSend()">Enviar</button></div><button class="mb" onclick="gShareTable()">📣 Compartir mi mesa con el clan</button></div>`}
+function c57Mem(G){const M=G.members||[],MP=G.mp||{},me=FBU.uid,c=c43Cm(G),goal=c43Goal(G),jd=G.jd||{},W=GLD.c45w,ins=(W&&W.cur&&W.cur.ins)||{},a=gMyR();
+ const cs=u=>Object.values(c.wmy[u]||{}).reduce((s,v)=>s+(+v||0),0),wins=u=>((ins[u]||{}).b||[]).filter(x=>x&&x.w).length;
+ const L=M.slice().sort((x,y)=>C57.sort=='hoy'?(c.dby[y]||0)-(c.dby[x]||0):C57.sort=='can'?cs(y)-cs(x):C57.sort=='war'?wins(y)-wins(x):(gEffR(G,y)-gEffR(G,x)||(jd[x]||0)-(jd[y]||0)));
+ const dots=b=>`<span class="c45dots">${[0,1,2].map(i=>`<i class="${b[i]==null?'':b[i].w?'w':'l'}"></i>`).join('')}</span>`;
+ return `<div class="c57srt"><small class="sub">Ordenar:</small>${[['rk','Rango'],['hoy','Hoy'],['can','Cantos'],['war','Guerra']].map(([k,t])=>`<button class="${C57.sort==k?'on':''}" onclick="c57Sort('${k}')">${t}</button>`).join('')}</div>`+
+ L.map(u=>{const m=MP[u]||{},r=gEffR(G,u),op=C57.open==u,hoy=c.dby[u]||0,I=ins[u],b=(I&&I.b)||[],w=wins(u),wk=c.wmy[u]||{},on=c57On(G,u);
+  const can=u!=me&&(a==3||(a==2&&r<2));
+  return `<div class="c57m"><div class="c57mt" onclick="c57Tog('${u}')">${avatarHTML(40,m.av||'oro',m.fr||'none')}<div style="flex:1;min-width:0"><b>${nameHTML(String(m.name||'Jugador').replace(/</g,''),m.ns)}</b> ${gRkChip(r)}<br><small class="sub">${u==me?'🟢 tú':on?'🟢 conectado':agoT(m.t)} · ⭐ Nivel ${m.lv||1}</small></div><span class="sub">${op?'▲':'▼'}</span></div>
+  <div class="c57pg"><div class="${hoy?'ok':''}"><b>${hoy}</b>partidas hoy</div><div class="${cs(u)?'ok':''}"><b>${cs(u)}</b>cantos semana</div><div class="${w?'ok':''}"><b>${I?w+'/'+b.length:'—'}</b>${I?'guerra':'sin guerra'}</div></div>
+  ${op?`<div class="c57det"><small class="sub">Cantos de la semana (en verde, los de las misiones)</small><div class="c57cg">${C45.CAN.map(k=>`<div class="${(c.ws||[]).includes(k[0])?'ok':''}"><b>${wk[k[0]]||0}</b>${k[2]} ${k[1]}</div>`).join('')}</div>
+   <small>${I?'⚔️ Batallas: '+dots(b):'⚔️ No se inscribió en la guerra'}</small><small class="sub">Aporte a la diaria: ${hoy} de ${goal} · Cofre: ${cs(u)?'✔ puede abrirlo':'sin cantos aún'}</small>
+   <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="sm off" onclick="gProfile('${u}')">👤 Perfil</button>${can?`<button class="sm" onclick="gMemSheet('${u}')">⋯ Rango</button>`:''}</div></div>`:''}</div>`}).join('')}
+function c57Inv(G){const M=G.members||[],a=gMyR(),R=GLD.reqs||[],F=(NET.friends||[]).filter(f=>!M.includes(f.uid));
+ let h=`<div class="box ginvbox"><b>➕ Invitar al clan</b><p class="sub">Manda el enlace por WhatsApp: al tocarlo se abre el juego y les aparece la invitación. La invitación entra directo, sin solicitud.</p><div class="ginvbtns"><button class="sm wa" onclick="gWhats()">🟢 WhatsApp</button><button class="sm" onclick="gCopyLink()">📋 Copiar enlace</button><button class="sm off" onclick="gShareLink()">📤 Compartir</button></div>${F.length?`<p class="sub" style="margin-top:8px">Tus amigos:</p>${F.map(f=>`<div class="wrow"><span>${String(f.name||'Amigo').replace(/</g,'')}</span><button class="sm" onclick="gInvite('${f.uid}','${String(f.name||'').replace(/'/g,'')}');this.disabled=true;this.textContent='✓'">Invitar</button></div>`).join('')}`:''}<p class="sub" style="margin-top:6px">TAG del clan: <b class="g41tag">[${g41e(G.tag)}]</b> (Unirme con TAG)</p></div>`;
+ h+=a>=2?`<div class="box"><b style="font-size:18px">📨 Solicitudes (${R.length})</b>${R.length?R.map(q=>`<div class="g41mr" style="margin-top:6px">${avatarHTML(42,q.av||'oro',q.fr||'none')}<div style="flex:1;min-width:0"><b>${g41e(q.name)}</b><br><small class="sub">⭐ Nivel ${q.lv||1} · ${RKI[q.rk||0]} ${RANKS[q.rk||0]} · ${agoT(q.t).replace('activo ','')}</small></div><button class="sm off" onclick="gReq('${q.id}',false)">No</button><button class="sm" onclick="gReq('${q.id}',true)">Aceptar</button></div>`).join(''):'<p class="sub">No hay solicitudes. Cuando alguien pida entrar, aparece aquí.</p>'}</div>`:'<p class="sub">Las solicitudes las ven el líder y los co-líderes.</p>';
+ return h}
+function c57Rang(G){const M=G.members||[],a=gMyR(),n=r=>M.filter(u=>gEffR(G,u)==r).length;
+ const T=[['Al entrar. Chatea y juega.'],['A los 7 días, o lo asciende un co-líder o el líder.'],['Lo nombra el líder (máx. 3). Acepta solicitudes, asciende novatos, expulsa novatos y veteranos, borra mensajes.'],['Todo: sube y baja rangos, expulsa, edita el clan y pasa el liderazgo. Si no entra en 14 días, pasa al co-líder más antiguo.']];
+ return `<div class="box c43box"><b class="c43t">Rangos del clan</b>${T.map((t,i)=>`<div class="c57rk">${gRkChip(i)}<div style="flex:1;min-width:0">${t[0]}<br><small class="sub">${n(i)} en el clan</small></div></div>`).join('')}<p class="sub">Para subir o bajar a alguien: 👥 Miembros → toca su nombre → ⋯ Rango.</p></div>
+ <div class="box c43box"><b class="c43t">Quién puede entrar</b><p class="sub">${G41.ent[gEntry(G)]}${G.min?' · desde '+RKI[G.min]+' '+RANKS[G.min]:' · cualquier rango'}</p>${a==3?`<button class="mb" onclick="gEdit()">✏️ Cambiar entrada y rango mínimo</button>`:'<p class="sub">Solo el líder lo cambia.</p>'}</div>`}
+function c57Clan(G){const a=gMyR();return `<div class="box c43box"><div class="c43row">${gEmbHTML(G,54)}<div style="flex:1;min-width:0"><b><span class="g41tag">[${g41e(G.tag)}]</span> ${g41e(G.name)}</b>${(G.lema||G.desc)?`<br><small class="sub">«${g41e(G.lema||G.desc)}»</small>`:''}<br><small class="sub">${gCtyTxt(G.cty)} · Tú: ${gRkChip(Math.max(0,a))}</small></div></div>${a==3?`<button class="mb" onclick="gEdit()">✏️ Editar escudo, nombre y lema</button>`:'<p class="sub">Solo el líder puede editar el clan.</p>'}</div><button class="mb bk" onclick="gLeave()">🚪 Salir del clan</button>`}
+function c57Sheet(G){const S=C57S[GLD.sheet];if(!S){GLD.sheet=null;return ''}const t=GLD.tab,a=gMyR(),b=c43Badges(G),R=GLD.reqs||[];
+ const bd={req:a>=2?R.length:0,mis:b.day,cof:b.wk},B=x=>x?`<i class="g41bd">${x===true?'!':x}</i>`:'';
+ let body='';try{body=t=='mem'?c57Mem(G):t=='req'?c57Inv(G):t=='mis'?c43Mis():t=='cof'?c43Cof():t=='lv'?c43LvHTML():t=='war'?warHTML():t=='mesa'?c45Mesa():t=='tro'?c45Tro():t=='rang'?c57Rang(G):t=='aj'?c57Clan(G):t=='don'?c43Don():''}catch(e){body='<div class="box">⚠️ '+String(e.message||e)+'</div>'}
+ return `<div class="c57ov" onclick="if(event.target==this)c57Close()"><div class="c57sh" role="dialog" aria-label="${S[0]}"><div class="c57shh"><b>${S[0]}</b><button class="sm off" onclick="c57Close()" aria-label="Cerrar">✕</button></div>${S[1].length>1?`<div class="c57sub">${S[1].map(([k,l])=>`<button class="${t==k?'on':''}" onclick="c57Tab('${k}')">${l}${B(bd[k])}</button>`).join('')}</div>`:''}<div class="c57b" id="c57b">${body}</div></div></div>`}
+const _guild57=guildHTML;
+guildHTML=function(bk){const G=GLD.g;if(!fbOk()||!window.FBU||!G||GLD.view=='edit'||GLD.view=='crear')return _guild57.apply(this,arguments);
+ if(!GLD.sheet)GLD.tab='chat';
+ try{return bk+c57Head(G)+c57Chat(G)+(GLD.sheet?c57Sheet(G):'')}catch(e){console.warn('v57',e);GLD.sheet=null;GLD.tab='chat';return _guild57.apply(this,arguments)}};
+const _gRender57=gRender;gRender=function(chatOnly){if(chatOnly&&curView=='guild'&&GLD.g&&GLD.view==null){const L=$('gchat');if(L){const at=L.scrollHeight-L.scrollTop-L.clientHeight<60;L.innerHTML=c57Log();if(at)L.scrollTop=L.scrollHeight;return}}return _gRender57.apply(this,arguments)};
+const _sm57=showMenu;showMenu=function(v){const sk=GLD.sheet+'/'+GLD.tab,b=$('c57b'),st=b?b.scrollTop:0;if(v!='guild'){GLD.sheet=null;if(GLD.tab!='chat')GLD.tab='chat'}const r=_sm57.apply(this,arguments);
+ try{if(v=='guild'&&st&&sk==GLD.sheet+'/'+GLD.tab){const b2=$('c57b');if(b2)b2.scrollTop=st}}catch(e){}return r};
+document.addEventListener('keydown',e=>{if(e.key=='Escape'&&GLD.sheet&&curView=='guild'&&!$('gmod'))c57Close()});
+
+;
+/* ==== v58js ==== */
+
+/* ===== v58: Modo Batalla «Pronto» ===== */
+const B58P=[
+ ['Ronda',[['filo','Filo','Cada ronda del combo hace +1 de daño.'],['asronda','As de ronda','Si completas tu ronda de 1 y capturas: mesa limpia y te llevas todas las cartas.'],['corona','Corona','Tu ronda de rey vale el doble.']]],
+ ['Patrulla',[['reloj','Reloj','El rival tiene 5 s para cantar; si no canta, se le quema.'],['barrido','Barrido','Daño completo al rival elegido y 2 al otro.'],['emboscada','Emboscada','El próximo rival que cante en esa mano recibe 3 de daño.']]],
+ ['Vigía',[['vigilante','Vigilante','Ves 1 carta del rival.'],['centinela','Centinela','Las caídas que te hagan en esa mano no valen.'],['alarma','Alarma','Si la carta que vas a tirar le da caída al rival, te avisa antes.']]],
+ ['Registro',[['escudo','Escudo','Anula el siguiente poder del rival.'],['inventario','Inventario','Ves la mano completa de un rival.'],['sello','Sello','Tu próximo canto no se puede anular.'],['contraataque','Contraataque','El próximo que te haga daño recibe 3.'],['caidadoble','Caída doble','Tus caídas en esa mano valen el doble.']]],
+ ['Casa chica',[['caidafuerte','Caída fuerte','Tu próxima caída vale el doble.'],['refugio','Refugio','Te curas 5.'],['vecinos','Vecinos','3 de daño a los rivales de tu izquierda y de tu derecha.']]],
+ ['Casa grande',[['fortaleza','Fortaleza','No recibes daño hasta tu próximo turno.'],['mansion','Mansión','Tu vida máxima sube a 60.'],['sincaidas','Sin caídas','Las caídas del rival en esa mano no valen.']]],
+ ['Flor',[['candado','Candado','El siguiente canto del rival elegido no vale.'],['perfume','Perfume','Te curas 8.'],['espinas','Espinas','Quien te haga caída recibe 3.']]],
+ ['Flor patrulla',[['tormenta','Tormenta','4 de daño a todos los rivales.'],['estampida','Estampida','5 de daño y el rival pierde su combo.'],['limpieza','Limpieza','Tus mesas limpias en esa mano valen el doble.']]],
+ ['Flor registro',[['revivir','Revivir','Tu compañero vuelve con 15 de vida.'],['doble','Doble','Tu siguiente canto vale el doble.'],['renacer','Renacer','Si llegas a 0, vuelves con 20 (1 vez).']]],
+ ['Trivilín',[['triple','Triple','Tu próxima caída vale el triple.'],['cero','Cero','Las caídas y mesas limpias de los rivales en esa mano no valen.'],['reymesa','Rey de la mesa','Tu próxima mesa limpia te cura lo mismo que daña.']]]
+];
+const B58I=id=>`pw6/${id}.webp?v=58`;
+function b58Modal(html){let d=document.getElementById('b58m');if(!d){d=document.createElement('div');d.id='b58m';d.onclick=e=>{if(e.target==d)d.remove()};document.body.appendChild(d)}d.innerHTML=`<div class="gbox">${html}</div>`;return d}
+function b58Close(){const d=document.getElementById('b58m');if(d)d.remove()}
+
+/* 1 · Crear mesa: Modo de juego */
+function b58Soon(){b58Modal(`<div class="b58icrow"><img src="${B58I('barrido')}" alt=""><img src="${B58I('escudo')}" alt=""><img src="${B58I('tormenta')}" alt=""></div><div class="b58ti">⚔️ Modo Batalla</div><p class="sub">¡Pronto! La misma Caída de siempre, pero tus puntos le quitan vida al rival y tus cantos llevan poderes.</p><button class="mb bk" onclick="b58Close()">Entendido</button>`)}
+{const _o=onlineHTML;onlineHTML=function(bk){let h=_o(bk);try{const k='<h3 class="st">➕ Crear mesa</h3><div class="box">';if(h.includes(k)&&!NET._tr)h=h.replace(k,k+`<div class="b58mode"><b>🎮 Modo de juego</b><div class="seg"><button class="on">🃏 Tradicional</button><button class="b58soon" onclick="b58Soon()">⚔️ Batalla<span class="b58pr">PRONTO</span></button></div></div>`)}catch(e){}return h}}
+
+/* 2 · Aventura: Pronto nuevas recompensas + vitrina de poderes */
+function b58Vit(){return `<div class="box b58nx"><div class="b58h">🎁 Pronto: nuevas recompensas</div><p>Vuelve a vencer a los <b>jefes</b> de la Aventura para ganar <b>poderes</b>, aunque ya tengas sus ⭐.</p><p>Los poderes solo se usan en mesas en modo <b>⚔️ Batalla</b>.</p></div>`
+ +`<div class="b58v"><b>✨ Vitrina de poderes <span class="b58pr">PRONTO</span><small class="b58sw">Desliza ›</small></b><div class="b58s">`+B58P.map(([g,L])=>L.map(([id,n])=>`<button class="b58p" onclick="b58Pow('${id}')"><i>🔒</i><img src="${B58I(id)}" alt="" loading="lazy" decoding="async"><small>${n}</small><em>${g}</em></button>`).join('')).join('')+`</div></div>`}
+function b58Pow(id){let G='',P=null;B58P.forEach(([g,L])=>L.forEach(x=>{if(x[0]==id){G=g;P=x}}));if(!P)return;
+ const once=['Casa chica','Casa grande','Flor patrulla','Flor registro','Trivilín'].includes(G);
+ b58Modal(`<div class="b58ic"><img src="${B58I(id)}" alt=""></div><div class="b58ti">${P[1]}</div><p class="sub">Poder de <b>${G}</b> · ${once?'1 vez por partida':'1 vez por mano'}</p><div class="b58tx">${P[2]}<br><br>🔓 Se gana venciendo otra vez a un jefe de la Aventura.<br>⚔️ Solo en mesas en modo Batalla.<br>🃏 Se activa al cantar <b>${G.toLowerCase()}</b> de verdad.</div><button class="mb bk" onclick="b58Close()">Cerrar</button>`)}
+{const _a=advHTML;advHTML=function(bk){let h=_a(bk);try{const k='<p class="sb">',i=h.indexOf(k),j=i<0?-1:h.indexOf('</p>',i);if(j>0)h=h.slice(0,j+4)+b58Vit()+h.slice(j+4);else h+=b58Vit()}catch(e){}return h}}
+
+/* 3 · Aprender: tutorial del Modo Batalla */
+const B58T=[
+ ['⚔️ Modo Batalla','burst',`Es la <b>misma Caída</b>: mismas cartas, mesa, cantos y reglas.<br>Lo que cambia: <b>tus puntos le quitan vida</b> al rival. Gana el último que queda en pie.`],
+ ['❤️ Vida','',`<div class="b58bars"><div class="b58bar"><span>Tú</span><div><i style="width:100%"></i></div>50</div><div class="b58bar"><span>Rival 1</span><div><i style="width:64%"></i></div>32</div><div class="b58bar low"><span>Rival 2</span><div><i style="width:16%"></i></div>8</div></div>Cada jugador empieza con <b>50 de vida</b>. Arriba de la mesa ves las barras de todos.<br>Si nadie cae, a los <b>10 minutos</b> gana quien tenga más vida.`],
+ ['💥 Daño','',`Todo lo que sumaría puntos ahora hace daño:<ul style="margin:6px 0 0 18px;padding:0"><li><b>Caída</b>: sus puntos, al que tiró la carta.</li><li><b>Mesa limpia</b>: 4.</li><li><b>Canto</b>: lo que vale el canto que gana la mano.</li></ul>`],
+ ['🔥 Combos','',`Si cantas el <b>mismo canto seguido</b>, pega más fuerte:<ul style="margin:6px 0 0 18px;padding:0"><li>2.º seguido: <b>+1</b> de daño.</li><li>3.º seguido: <b>el doble</b>.</li></ul>Si cantas otro canto, el combo se corta.`],
+ ['🎯 ¿A quién le pegas?','',`<div class="b58bars"><div class="b58bar"><span>Rival 1</span><div><i style="width:64%"></i></div>32</div><div class="b58bar tg low"><span>🎯 Rival 2</span><div><i style="width:16%"></i></div>8</div></div><b>Toca la barra</b> de un rival para que tu daño vaya a él.<br>Si no eliges, va al que tenga <b>menos vida</b>. En parejas, pónganse de acuerdo.`],
+ ['✨ Poderes','pw',`Antes de jugar pones <b>1 poder en hasta 3 cantos</b>.<br>El poder se activa <b>solo si cantas de verdad</b> (con mentira no).<br>Ronda, patrulla, vigía, registro y flor: 1 vez por mano. Casas, flor patrulla, flor registro y trivilín: 1 vez por partida.<br>Se ganan venciendo otra vez a los <b>jefes</b> de la Aventura.`]
+];
+function b58Tut(n){n=Math.max(0,Math.min(B58T.length-1,n|0));const [t,ic,tx]=B58T[n],last=n==B58T.length-1;
+ const top=ic=='pw'?`<div class="b58icrow"><img src="${B58I('corona')}" alt=""><img src="${B58I('escudo')}" alt=""><img src="${B58I('perfume')}" alt=""></div>`:ic?`<div class="b58ic">${I(ic)}</div>`:'';
+ b58Modal(`${top}<div class="b58ti">${t}</div><div class="b58tx">${tx}</div><div class="b58dots">${B58T.map((_,k)=>`<i class="${k==n?'on':''}"></i>`).join('')}</div><div class="b58nav">${n?`<button class="mb bk" onclick="b58Tut(${n-1})">‹ Atrás</button>`:`<button class="mb bk" onclick="b58Close()">Cerrar</button>`}${last?`<button class="mb" onclick="b58Close();try{store.b58tut=1;save()}catch(e){}toast('⚔️ ¡Pronto podrás jugarlo!')">¡Listo!</button>`:`<button class="mb" onclick="b58Tut(${n+1})">Siguiente ›</button>`}</div><p class="sub" style="margin:8px 0 0">${n+1} de ${B58T.length} · <span class="b58pr">PRONTO</span></p>`)}
+
+
+;
+/* ==== v60fg6 ==== */
+
+/* ===== v60: figuras con su pinta a la vista (FLUX, servidor\pn5) ===== */
+(function(){const V='?v=60';
+ try{FIGI['12_1']='fg6/k12_1.webp'+V}catch(e){}            /* clásico: rey de copas con su copa */
+ try{['10_0','11_0','12_0','11_3'].forEach(k=>CF5.f[k]='fg6/f'+k+'.webp'+V)}catch(e){}  /* cartoon: oros al lado, caballo con basto */
 })();
