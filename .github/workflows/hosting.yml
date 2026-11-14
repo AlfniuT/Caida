@@ -1,0 +1,31 @@
+# Publica caidajuegos.com (Firebase Hosting) solo, cada vez que se sube algo a main.
+# Sin claves: entra a Google Cloud con Workload Identity Federation (cuenta gh-hosting, solo Hosting).
+name: Publicar caidajuegos.com
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: hosting
+  cancel-in-progress: true
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: public
+      - name: Preparar
+        run: |
+          rm -rf public/.git public/.github
+          echo '{"hosting":{"public":"public","ignore":["firebase.json","**/.*"],"headers":[{"source":"/","headers":[{"key":"Cache-Control","value":"no-cache"}]},{"source":"**/*.@(html|js|json)","headers":[{"key":"Cache-Control","value":"no-cache"}]}]}}' > firebase.json
+          grep -o "GAME_VER='[^']*'" public/index.html || true
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/404277256569/locations/global/workloadIdentityPools/github/providers/github
+          service_account: gh-hosting@caida-44657.iam.gserviceaccount.com
+      - name: Publicar en Firebase Hosting
+        run: npx -y firebase-tools@14 deploy --only hosting --project caida-44657 --non-interactive -m "GitHub ${GITHUB_SHA::7}"
