@@ -21,9 +21,9 @@ if(go){localStorage.setItem('mig54',/^err/.test(f)?f:'go:'+Date.now());location.
 <title>Caída</title>
 <link rel="manifest" href="manifest.json"><meta name="theme-color" content="#24093f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Caída"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" type="image/png" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"></noscript>
-<!-- GAME_VER='2026.11.14h' (el juego mira esta línea para avisar que hay versión nueva) -->
-<link rel="preload" href="juego.js?v=acce15bbc0" as="script"><link rel="preload" href="juego2.js?v=91a6101de7" as="script">
-<link rel="stylesheet" href="juego.css?v=f0bb57b994">
+<!-- GAME_VER='2026.11.15a' (el juego mira esta línea para avisar que hay versión nueva) -->
+<link rel="preload" href="juego.js?v=fa81421b8b" as="script"><link rel="preload" href="juego2.js?v=6aa5b15a84" as="script">
+<link rel="stylesheet" href="juego.css?v=456809860f">
 </head><body><svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s0" viewBox="-12 -12 24 24"><circle r="10" fill="#e3ac2f" stroke="#6b4600" stroke-width="1.5"/><circle r="6" fill="none" stroke="#6b4600" stroke-width="1.2"/><circle r="2" fill="#6b4600"/></symbol>
 <symbol id="s1" viewBox="-12 -12 24 24"><path d="M-8,-8H8Q8,3 0,4Q-8,3 -8,-8Z" fill="#b0302a" stroke="#5c1410" stroke-width="1.2"/><path d="M0,4V9M-5,10H5" stroke="#5c1410" stroke-width="2.2" fill="none"/></symbol>
@@ -74,13 +74,13 @@ if(go){localStorage.setItem('mig54',/^err/.test(f)?f:'go:'+Date.now());location.
  window.clearInterval=function(id){if(T.jobs.has(id)){T.jobs.delete(id);return}return _ci(id)};
 })();
 </script>
-<script src="juego.js?v=acce15bbc0"></script><script type="module">
+<script src="juego.js?v=fa81421b8b"></script><script type="module">
 const V='10.12.2',B='https://www.gstatic.com/firebasejs/'+V+'/';
 try{
 const A=await import(B+'firebase-app.js'),U=await import(B+'firebase-auth.js'),F=await import(B+'firebase-firestore.js');
 const app=A.initializeApp({apiKey:"AIzaSyDn3VoGVnnCc2mPei8Z9bebxsFZNShkdKQ",authDomain:"caida-44657.firebaseapp.com",projectId:"caida-44657",storageBucket:"caida-44657.firebasestorage.app",messagingSenderId:"404277256569",appId:"1:404277256569:web:a765d963450d9860de8fa8"});
 const auth=U.getAuth(app),db=F.getFirestore(app);
-window.FB={auth,db,F,U};try{const Fn=await import(B+'firebase-functions.js');window.FB.fn=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'econ');window.FB.ppc=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'ppCreate');window.FB.clan=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'clan');window.FB.ppx=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'ppCapture');window.FB.mig=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'mig')}catch(e){console.warn('functions',e)}try{const D=await import(B+'firebase-database.js');window.FB.D=D;window.FB.rt=D.getDatabase(app,'https://caida-44657-default-rtdb.firebaseio.com')}catch(e){console.warn('rtdb',e)}U.getRedirectResult(auth).catch(()=>{});
+window.FB={auth,db,F,U};try{const Fn=await import(B+'firebase-functions.js');window.FB.fn=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'econ');window.FB.ppc=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'ppCreate');window.FB.clan=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'clan');window.FB.ppx=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'ppCapture');window.FB.mig=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'mig');window.FB.canje=Fn.httpsCallable(Fn.getFunctions(app,'southamerica-west1'),'canje')}catch(e){console.warn('functions',e)}try{const D=await import(B+'firebase-database.js');window.FB.D=D;window.FB.rt=D.getDatabase(app,'https://caida-44657-default-rtdb.firebaseio.com')}catch(e){console.warn('rtdb',e)}U.getRedirectResult(auth).catch(()=>{});
 const MG=window.MIG54;let m54d=0;
 const m54Err=()=>{const f=localStorage.getItem('mig54')||'';const n=/^err\d$/.test(f)?+f.slice(3):0;localStorage.setItem('mig54','err'+(n+1))};
 const m54Out=async u=>{if(m54d||window._m54d)return;m54d=1;window._m54d=1;const D='https://caidajuegos.com/?mig54=';try{if(!u){location.replace(D+'none');return}const ls={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k!='caida_tex1'&&k!='mig54'&&!/^firebase/.test(k))ls[k]=localStorage.getItem(k)}const r=await window.FB.mig({op:'out',ls});location.replace(D+r.data.code)}catch(e){console.warn('mig54',e);location.replace(D+'err')}};
@@ -92,33 +92,9 @@ U.onAuthStateChanged(auth,u=>{window.FBU=u||null;window.dispatchEvent(new Event(
 }catch(e){window.FBERR=String(e);window.dispatchEvent(new Event('fbauth'));if(window.MIG54=='out'&&!window._m54d){window._m54d=1;location.replace('https://caidajuegos.com/?mig54=err')}}
 </script>
 <script>if(!window.MIG54&&'serviceWorker' in navigator&&location.protocol.indexOf('http')==0){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{})})}</script>
-<link rel="stylesheet" href="juego2.css?v=b763d32546">
 
-<script src="juego2.js?v=91a6101de7"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<link rel="stylesheet" href="juego2.css?v=475c8a9349">
+<script src="juego2.js?v=6aa5b15a84"></script>
 
 
 </body></html>
