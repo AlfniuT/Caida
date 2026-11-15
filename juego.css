@@ -1627,27 +1627,45 @@ body.g52 #bgfx{display:none!important}
 .c57cg b{display:block;font-size:15px}
 .c57cg .ok{background:#11452f;color:#7ff0b8}
 .c57rk{display:flex;gap:9px;align-items:flex-start;background:#3a2378;border-radius:12px;padding:8px 10px;font-size:13px}
-/* ===== Publicidad (patrocinadores): valla, avioneta y zeppelin · v63 ===== */
-#board>#spv{position:absolute!important;z-index:0!important;left:8px;right:max(92px,25%);top:5px;height:21px;display:flex;gap:6px;pointer-events:none;margin:0}
-#spv .spb{flex:1;position:relative;background:url(sp7/valla.webp?v=63) center/100% 100% no-repeat;overflow:hidden;border-radius:3px}
-#spv .spt{position:absolute;inset:3px 5px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;font:10px/1 "Lilita One",Arial Rounded MT Bold,sans-serif;color:#ffd84a;text-shadow:0 0 4px #ffb80099;opacity:0;animation:spf 6s infinite}
-#spv .spb:nth-child(2) .spt{color:#fff3d0;text-shadow:0 0 4px #ffcf4099}
-@keyframes spf{0%{opacity:0}6%,44%{opacity:1}50%,100%{opacity:0}}
-body.gcov #spv .spt{animation-play-state:paused}
-body.lowfx #spv .spt{animation:none;opacity:0}body.lowfx #spv .spt:first-child{opacity:1}
+/* ===== Publicidad (patrocinadores): valla, avioneta y zeppelin · v63-v64 ===== */
+/* valla: cartel arriba de la mesa, pegado a su borde; una página por patrocinador (10 s), cambia como los estados */
+#spv{position:relative;z-index:3;flex:none;height:36px;box-sizing:border-box;padding:4px 7px 0;border-radius:14px 14px 0 0;background:linear-gradient(#3a3f5c,#1d2036 60%,#14162a);box-shadow:inset 0 2px 0 #ffffff2e,inset 0 0 0 1.5px #ffd84a55;pointer-events:none}
+#spv:before,#spv:after{content:'';position:absolute;top:9px;width:5px;height:5px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6c0,#d9a520 60%,#7a5200);box-shadow:0 0 3px #ffd84a}
+#spv:before{left:2px}#spv:after{right:2px}
+#spv .sps{position:relative;height:100%;overflow:hidden;border-radius:8px 8px 3px 3px;background:#120826;box-shadow:inset 0 0 0 1.5px #0009}
+#spv .spg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:7px;padding:2px 10px 0;background:var(--bg);transform:translateY(-110%);white-space:nowrap}
+#spv .spg:after{content:'';position:absolute;inset:0;background:radial-gradient(circle,#0000 52%,#00000024 62%) 0 0/3px 3px,linear-gradient(#ffffff38,#fff0 45%,#0000 70%,#0003);pointer-events:none}
+#spv .spg.on{transform:none;animation:spIn .75s cubic-bezier(.3,1.45,.55,1)}
+#spv .spc{display:flex;align-items:center;gap:7px;position:relative;z-index:1;will-change:transform}
+#spv .spg.on .spc{animation:spPan 10s linear forwards}
+@keyframes spPan{from{transform:translateX(calc(var(--sl,60px) * .5))}to{transform:translateX(calc(var(--sl,60px) * -.5))}}
+#spv .spg.on img{animation:spLogo .9s cubic-bezier(.3,1.5,.5,1)}
+@keyframes spLogo{from{transform:rotate(-200deg) scale(.2)}to{transform:none}}
+#spv .spg:before{content:'';position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(100deg,#fff0,#ffffff80,#fff0);transform:skewX(-20deg);z-index:2;opacity:0;pointer-events:none}
+#spv .spg.on:before{animation:spShine 10s linear}
+@keyframes spShine{0%,8%{left:-40%;opacity:0}9%{opacity:1}20%{left:120%;opacity:1}21%,55%{left:-40%;opacity:0}56%{opacity:1}67%{left:120%;opacity:1}68%,100%{opacity:0}}
+#spv .spg.out{animation:spOut .6s ease-in forwards}
+@keyframes spIn{from{transform:translateY(-110%)}to{transform:none}}
+@keyframes spOut{from{transform:none}to{transform:translateY(110%);filter:brightness(.55)}}
+#spv .spg img{width:22px;height:22px;border-radius:50%;flex:none;background:#fff;box-shadow:0 0 0 1.5px #ffffffcc,0 1px 3px #0007}
+#spv .spg b{font:normal 15px/1 "Lilita One",Arial Rounded MT Bold,sans-serif;color:var(--c1)}
+#spv .spg i{font:normal 13px/1 "Lilita One",Arial Rounded MT Bold,sans-serif;font-style:normal;color:var(--c2);padding:3px 7px;border-radius:9px;background:var(--p)}
+#spv .spbars{position:absolute;left:8px;right:8px;top:2px;display:flex;gap:3px;z-index:2}
+#spv .spbars u{flex:1;height:2.5px;border-radius:2px;background:#ffffff70;box-shadow:0 0 1px #0008;position:relative;overflow:hidden}
+#spv .spbars u:before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+#spv .spbars u.ya:before{width:100%}
+#spv .spbars u.va:before{animation:spBar 10s linear forwards}
+@keyframes spBar{to{width:100%}}
+body.gcov #spv .spg,body.gcov #spv .spg *,body.gcov #spv .spg:before,body.gcov #spv .spbars u:before{animation-play-state:paused}
 .spfly{position:fixed;left:0;z-index:61;pointer-events:none;will-change:transform;transition:opacity .35s}.spfly.spoff{opacity:0}
 .spfly img{width:100%;height:auto;display:block}
-/* avioneta: pancarta que ondea + letras que siguen la tela */
+/* avioneta: la pancarta se dibuja en un canvas: tela con una ola que corre del palo a la punta, sombras y letras que se mueven con la tela */
 .spav{aspect-ratio:858/281}
-.spav.cnt{top:max(8px,3vh);width:min(330px,88vw);animation:spCross 4.2s linear forwards}
-.spav.jue{top:0;width:min(200px,54vw);animation:spCross 7s linear forwards}
+.spav.cnt{top:max(8px,3vh);width:min(330px,88vw);animation:spCross 4.6s linear forwards}
+.spav.jue{top:0;width:min(210px,56vw);animation:spCross 7.5s linear forwards}
 .spav .spp{position:absolute;left:60.37%;top:29.18%;width:39.63%;animation:spBob .9s ease-in-out infinite alternate}
-.spav .spbn{position:absolute;left:0;top:0;width:60.37%;height:100%;transform-origin:100% 40%;animation:spFlap .55s ease-in-out infinite alternate}
-.spbn .spl{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%) rotate(var(--r));font:clamp(13px,4.3vw,18px)/1 "Lilita One",Arial Rounded MT Bold,sans-serif;color:#2b1a0a}
-.spav.jue .spbn .spl{font-size:clamp(10px,3vw,13px)}
-.spbn .spl i{display:block;font-style:normal;animation:spWave .9s ease-in-out infinite alternate;animation-delay:var(--d)}
-@keyframes spFlap{from{transform:skewY(-2.5deg) scaleY(1.03)}to{transform:skewY(2.5deg) scaleY(.95)}}
-@keyframes spWave{from{transform:translateY(-22%) rotate(-5deg)}to{transform:translateY(22%) rotate(5deg)}}
+.spav .spbn{position:absolute;left:0;top:0;width:60.37%;height:100%}
+.spbn canvas{position:absolute;left:0;width:100%;display:block}
 @keyframes spBob{from{transform:translateY(-2%)}to{transform:translateY(3%)}}
 @keyframes spCross{from{transform:translateX(-102%)}to{transform:translateX(104vw)}}
 /* zeppelin de Casa Prado (logo y @ ya vienen en el dibujo) */

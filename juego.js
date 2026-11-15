@@ -3009,10 +3009,14 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.15a';
+const GAME_VER='2026.11.15b';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-15',v:'2026.11.15b',t:'Valla de patrocinadores',it:[
+['m','📣','Valla de patrocinadores arriba de la mesa'],
+['n','🐶','Adiestra2 y Takane Studio'],
+['m','✈️','Pancarta de la avioneta que ondea']]},
 {d:'2026-11-15',v:'2026.11.15a',t:'Casa Prado en Caída',it:[
 ['n','☕','Mesa y reverso de Casa Prado'],
 ['n','🎟️','Canjear código en la tienda'],
@@ -4739,35 +4743,70 @@ setInterval(()=>{if(!document.hidden&&navigator.onLine!==false)ask()},10*60*1000
 if(document.readyState=='complete')setTimeout(n56Check,7000);else window.addEventListener('load',()=>setTimeout(n56Check,7000));
 /* clanes: Escape cierra la hoja abierta */
 document.addEventListener('keydown',e=>{if(e.key=='Escape'&&GLD.sheet&&curView=='guild'&&!$('gmod'))c57Close()});
-/* ===== Publicidad (patrocinadores) · v63 =====
-   Valla de estadio en el borde de arriba de la mesa (siempre) + avioneta con pancarta y zeppelin:
+/* ===== Publicidad (patrocinadores) · v63-v64 =====
+   Valla: cartel ARRIBA de la mesa, pegado a su borde (con color propio de cartel). Una página por patrocinador,
+   10 s cada una, con barritas como los estados; el logo entra girando, el mensaje se mueve de derecha a izquierda y pasa un brillo;
+   al cambiar, la página baja y entra la siguiente desde arriba.
+   Avioneta con pancarta que ondea (dibujada en canvas: ola + sombras + letras que se mueven con la tela) y zeppelin:
    - en el conteo de cartas (countAnim / cntGuest llaman a spFly('cnt'));
-   - durante la partida, por arriba (sobre la barra de arriba, sin tapar cartas): la 1.ª a los ~20 s de empezar y después cada 60-90 s.
-   En Rendimiento (body.lowfx) no vuela nada y la valla queda quieta.
-   Patrocinador actual: Casa Prado (Illapel). Para otro: cambiar SPN y las imágenes de sp7/. */
+   - durante la partida, por arriba (sin tapar cartas): la 1.ª a los ~20 s de abrir la mesa y después cada 60-90 s.
+   También en Rendimiento (body.lowfx). Se pausa con una ventana encima (body.gcov).
+   Patrocinadores: Casa Prado (valla, avioneta, zeppelin, mesa y reverso con código), Adiestra2 y Takane Studio (solo valla).
+   SPN.valla: [logo, nombre, @, fondo, color del nombre, color del @, fondo del @]. */
 window.SPN={on:true,
- valla:[['Casa Prado','☕'],['Desayunos y café','🥐'],['@casaprado.illapel','📷'],['caidajuegos.com','🌐']],
+ valla:[
+  ['sp7/l_cp.webp?v=64','Casa Prado','@casaprado.illapel','linear-gradient(#ffd25e,#ffbf2e)','#2b1a0a','#fff3c0','#3a2410'],
+  ['sp7/l_ad2.webp?v=64','Adiestra2','@adiestra2','linear-gradient(#ffffff,#f3efe6)','#1c1c1c','#1c1c1c','#f0b429'],
+  ['sp7/l_tk.webp?v=64','Takane Studio','@takanestudio.cl','linear-gradient(#f1e9df,#d9cdbf)','#111111','#f1e9df','#111111'],
+  ['icon-192.png','Caída','caidajuegos.com','linear-gradient(#3b2580,#24135a)','#fff3d0','#2b1a0a','#ffd84a']],
  banda:'☕ @casaprado.illapel'};
 (function(){
- const V='?v=63',IMG={banda:'sp7/banda.webp'+V,avion:'sp7/avion_cp.webp'+V,zep:'sp7/zeppelin_cp.webp'+V};
+ const V='?v=63',IMG={avion:'sp7/avion_cp.webp'+V,zep:'sp7/zeppelin_cp.webp'+V};
  /* centro de la pancarta (en % de la imagen completa avioneta+pancarta 858×281): x → y */
  const CUR=[[7,73.7],[14,68.7],[21,60.9],[28,51.6],[35,42.3],[42,34.5],[49,29.5],[56,29.2]];
  const cy=x=>{for(let i=1;i<CUR.length;i++)if(x<=CUR[i][0]){const [x0,y0]=CUR[i-1],[x1,y1]=CUR[i],t=(x-x0)/(x1-x0);return [y0+(y1-y0)*t,Math.atan2((y1-y0)*0.3275,(x1-x0))*180/Math.PI]}return [CUR[CUR.length-1][1],0]};
- let MC;
- function banda(t){const L=[...t];MC=MC||document.createElement('canvas').getContext('2d');MC.font='15px "Lilita One",Arial Rounded MT Bold,sans-serif';
-  const w=L.map(c=>MC.measureText(c).width||6),T=w.reduce((a,b)=>a+b,0),x0=10,x1=52;let acc=0;
-  return L.map((c,i)=>{const x=x0+(x1-x0)*((acc+w[i]/2)/T);acc+=w[i];const [y,r]=cy(x);
-   return `<span class="spl" style="--x:${(x/60.37*100).toFixed(1)}%;--y:${y.toFixed(1)}%;--r:${r.toFixed(1)}deg;--d:-${(i*0.09).toFixed(2)}s"><i>${c==' '?'&nbsp;':c}</i></span>`}).join('')}
- window.spValla=function(){try{if(!SPN.on)return;const b=$('board');if(!b||$('spv'))return;const d=document.createElement('div');d.id='spv';
-  const L=SPN.valla,half=Math.ceil(L.length/2),seg=a=>`<div class="spb">${a.map(([t,e],i)=>`<span class="spt" style="animation-duration:${3*a.length}s;animation-delay:${3*i}s">${e} ${t}</span>`).join('')}</div>`;
-  d.innerHTML=seg(L.slice(0,half))+seg(L.slice(half));b.prepend(d)}catch(e){}};
- const lite=()=>document.body.classList.contains('lowfx');
+ /* pancarta en canvas: la tela se dibuja en columnas de 2 px, cada una subida/bajada por una ola que corre del palo (derecha)
+    a la punta (izquierda); cuanto más lejos del palo, más se mueve. Sombra según la pendiente de la ola. Las letras se dibujan
+    encima siguiendo la tela (posición y giro). Solo corre mientras la avioneta está en pantalla. */
+ let BIMG=null;const bimg=()=>{if(!BIMG){BIMG=new Image();BIMG.src='sp7/banda.webp'+V}return BIMG};
+ function bandera(e){try{const bn=e.querySelector('.spbn');if(!bn)return;const im=bimg(),cv=document.createElement('canvas');bn.appendChild(cv);
+  const r=bn.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),W=Math.max(10,Math.round(r.width*dpr)),H=Math.max(10,Math.round(r.height*dpr)),P=Math.round(H*.14);
+  cv.width=W;cv.height=H+2*P;cv.style.top=(-P/dpr)+'px';cv.style.height=((H+2*P)/dpr)+'px';const g=cv.getContext('2d');
+  const A=H*.075,TT=1.35,L=[...SPN.banda],fs=Math.round(H*.175);let wl=null,t0=performance.now(),last=0;
+  const kf=xb=>Math.max(0,Math.min(1,(1-xb)*1.12)),ph=(xb,t)=>2*Math.PI*(t/TT+xb*.85);
+  const dy=(xb,t)=>A*kf(xb)*Math.sin(ph(xb,t));
+  function letras(){g.font=fs+'px "Lilita One",Arial Rounded MT Bold,sans-serif';const w=L.map(c=>g.measureText(c).width||fs*.4),T=w.reduce((a,b)=>a+b,0),x0=10,x1=52;let acc=0;
+   wl=L.map((c,i)=>{const x=x0+(x1-x0)*((acc+w[i]/2)/T);acc+=w[i];const [y,rr]=cy(x);return {c,xb:x/60.37,y:y/100*H,r:rr*Math.PI/180}})}
+  function frame(now){if(!e.isConnected)return;requestAnimationFrame(frame);
+   if(document.body.classList.contains('lowfx')&&now-last<32)return;last=now;if(!im.complete||!im.naturalWidth)return;
+   const t=(now-t0)/1000,iw=im.naturalWidth,ih=im.naturalHeight,S=2*Math.max(1,Math.round(dpr/2));g.clearRect(0,0,W,H+2*P);
+   for(let x=0;x<W;x+=S){const xb=x/W,o=dy(xb,t);g.drawImage(im,xb*iw,0,iw*S/W+.5,ih,x,P+o,S+.6,H)}
+   g.globalCompositeOperation='source-atop';
+   for(let x=0;x<W;x+=S){const xb=x/W,k=kf(xb),sl=Math.cos(ph(xb,t));g.fillStyle=sl>0?`rgba(80,40,0,${(.28*k*sl).toFixed(3)})`:`rgba(255,250,225,${(-.22*k*sl).toFixed(3)})`;g.fillRect(x,0,S,H+2*P)}
+   g.globalCompositeOperation='source-over';
+   if(!wl)letras();g.fillStyle='#2b1a0a';g.textAlign='center';g.textBaseline='middle';g.font=fs+'px "Lilita One",Arial Rounded MT Bold,sans-serif';
+   for(const q of wl){const x=q.xb*W,o=dy(q.xb,t),sl=Math.atan2(dy(q.xb+.01,t)-dy(q.xb-.01,t),.02*W);g.save();g.translate(x,P+q.y+o);g.rotate(q.r+sl);g.fillText(q.c,0,0);g.restore()}}
+  requestAnimationFrame(frame)}catch(x){}}
+ /* valla */
+ function pagina(d,k){const P=d.querySelectorAll('.spg'),U=d.querySelectorAll('.spbars u'),old=d._k;d._k=k;
+  P.forEach((p,i)=>{p.classList.remove('on','out');if(i===old&&old!==k)p.classList.add('out');if(i===k)p.classList.add('on')});
+  try{const p=P[k],c=p&&p.firstChild;if(c)p.style.setProperty('--sl',Math.max(24,p.clientWidth-c.offsetWidth-20)+'px')}catch(e){}
+  U.forEach((u,i)=>{u.classList.remove('va','ya');if(i<k)u.classList.add('ya')});void d.offsetWidth;if(U[k])U[k].classList.add('va')}
+ function borde(d,b){try{const cs=getComputedStyle(b),ga=parseFloat(getComputedStyle(b.parentNode).rowGap)||0,bt=parseFloat(cs.borderTopWidth)||0;
+  d.style.marginBottom=-(ga+bt)+'px'}catch(e){}}
+ window.spValla=function(){try{if(!SPN.on)return;const b=$('board');if(!b)return;let d=$('spv');
+  if(!d){d=document.createElement('div');d.id='spv';
+   d.innerHTML=`<div class="sps">${SPN.valla.map(([l,n,a,bg,c1,c2,p])=>`<div class="spg" style="--bg:${bg};--c1:${c1};--c2:${c2};--p:${p}"><div class="spc"><img src="${l}" alt=""><b>${n}</b><i>${a}</i></div></div>`).join('')}<div class="spbars">${SPN.valla.map(()=>'<u></u>').join('')}</div></div>`;
+   b.parentNode.insertBefore(d,b);d.addEventListener('animationend',e=>{if(e.animationName=='spBar')pagina(d,(d._k+1)%SPN.valla.length)});pagina(d,0)}
+  borde(d,b)}catch(e){}};
+ /* avioneta y zeppelin */
  let flying=0,turno=0;
- function add(all,cls,html){const e=document.createElement('div');e.className='spfly '+cls;e.innerHTML=html;e.addEventListener('animationend',ev=>{if(ev.target==e)e.remove()});document.body.appendChild(e);all.push(e);setTimeout(()=>e.remove(),13000);return e}
- const avion=k=>`<div class="spbn"><img src="${IMG.banda}" alt="">${banda(SPN.banda)}</div><img class="spp" src="${IMG.avion}" alt="">`;
+ function add(all,cls,html){const e=document.createElement('div');e.className='spfly '+cls;e.innerHTML=html;e.addEventListener('animationend',ev=>{if(ev.target==e)e.remove()});document.body.appendChild(e);all.push(e);
+  if(/spav/.test(cls))bandera(e);setTimeout(()=>e.remove(),13000);return e}
+ const avion=()=>`<div class="spbn"></div><img class="spp" src="${IMG.avion}" alt="">`;
  const zep=()=>`<img src="${IMG.zep}" alt="">`;
  /* modo 'cnt': avioneta arriba + zeppelin abajo mientras se cuentan las cartas. modo 'jue': uno solo por arriba (alternan). Devuelve una función para apagarlos. */
- window.spFly=function(modo){try{if(!SPN.on||document.hidden||lite())return null;if(modo!='cnt'&&flying)return null;
+ window.spFly=function(modo){try{if(!SPN.on||document.hidden)return null;if(modo!='cnt'&&flying)return null;
   const all=[];flying=1;setTimeout(()=>flying=0,modo=='cnt'?6000:12000);
   if(modo=='cnt'){add(all,'spav cnt',avion());add(all,'spzp cnt',zep())}
   else{if(turno++%2==0)add(all,'spav jue',avion());else add(all,'spzp jue',zep())}
@@ -4776,7 +4815,7 @@ window.SPN={on:true,
  let enMesa=false,prox=0;
  setInterval(()=>{try{const b=$('board'),ve=!!(b&&b.offsetParent);
   if(!ve){enMesa=false;return}const now=Date.now();if(!enMesa){enMesa=true;prox=now+20000;return}
-  if(now<prox||over||document.hidden||lite()||document.body.classList.contains('gcov'))return;
+  if(now<prox||over||document.hidden||document.body.classList.contains('gcov'))return;
   const c=$('cnt');if(c&&c.style.display=='flex')return;
   if(spFly('jue'))prox=now+60000+Math.random()*30000;else prox=now+5000}catch(e){}},2500);
 })();
