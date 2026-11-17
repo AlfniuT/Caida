@@ -1682,3 +1682,20 @@ body.gcov #spv .spg,body.gcov #spv .spg *,body.gcov #spv .spg:before,body.gcov #
 .cjbtn{width:100%;padding:12px;border:0;border-radius:14px;background:linear-gradient(#ff9a3d,#ff5c7a);color:#fff;font:800 18px/1 inherit;box-shadow:0 4px 0 #0005}
 .cjbtn:disabled{opacity:.6}
 .cjok{background:#11452f;border-radius:12px;padding:10px;margin-top:10px;color:#bff6d8;font-weight:700}
+
+/* ===== Botones de canto fijos (v67) =====
+   Nunca se achican (antes: 19-44 px según jugadores y pantalla; gtight los bajaba a ~20 px).
+   Mismo tamaño siempre: 44 px de alto mínimo, letra 13 px. Si falta sitio se achica el registro, el aviso y la mesa. */
+#cg.cg{gap:6px!important;grid-auto-rows:minmax(44px,auto)}
+#cg.cg button{min-height:44px!important;height:auto!important;padding:6px 3px!important;font-size:13px!important;line-height:1.15!important;border-radius:10px!important;touch-action:manipulation}
+#cg.cg button.pressed{transform:scale(.97)}
+#app #lg.log{max-height:4.5em!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;pointer-events:auto}
+#app #lg.log div{line-height:1.45}
+#app #lg .lgn{color:var(--lc);font-weight:900;text-shadow:none}
+#app #lg .lgn .n-vacio,#app #lg .lgn .n-bhole,#app #lg .lgn .n-sombra2,#app #lg .lgn .n-niebla,#app #lg .lgn .n-galaxia{-webkit-text-stroke:.5px rgba(255,255,255,.75)}
+#app #lg .lgn [class^="n-"]{animation-duration:6s}
+#app #lg .lgn>span{font-weight:900}
+body.gtight #app #lg.log{max-height:2.95em!important}
+body.gtight2 #app #lg.log{display:block!important;max-height:1.5em!important}
+body.gtight #tm{min-height:0!important;font-size:12px!important;margin:0!important}
+body.gtight #rem{font-size:11.5px!important;padding:2px 6px!important}

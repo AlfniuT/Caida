@@ -22,6 +22,13 @@ t=t.replace(/([a-záéíóúñ:] )El rival/g,'$1el rival').replace(/para Tú/g,'
 if(t.startsWith('Tú ')){t=t.replace(' y se lleva ',' y te llevas ').replace('Tú se lleva','Tú te llevas')}
 const M={tira:'tiras',canta:'cantas',suma:'sumas',pide:'pides',llega:'llegas',tiene:'tienes',gana:'ganas',dice:'dices',va:'vas',enseña:'enseñas','no tenía':'no tenías','no tiene':'no tienes'};
 return t.replace(/Tú (tira|canta|suma|pide|llega|tiene|gana|dice|va|enseña|no tenía|no tiene)(?=[\s.,:!]|$)/g,(m,v)=>'Tú '+M[v])}
+/* ===== Registro de la partida (v67): 30 líneas, se desliza, nombres con su estilo ===== */
+const LGC=['#ffd84a','#5fe3ff','#ff8fd0','#7dff9a'];
+function lgNames(){const L=[];try{for(let p=0;p<N;p++){const n=String(p==0?'Tú':nm(p)).replace(/<[^>]*>/g,'');if(!n)continue;const st=p==0?(store.nameStyle||'none'):((AIC[p]&&AIC[p].ns)||'none');L.push({n,p,st})}}catch(e){}return L.sort((a,b)=>b.n.length-a.n.length)}
+function lgDeco(t,L){if(!L.length)return t;const re=new RegExp('(^|[^\\wÁÉÍÓÚáéíóúÑñ])('+L.map(x=>x.n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![\\wÁÉÍÓÚáéíóúÑñ])','g');
+ return String(t).split(/(<[^>]*>)/).map(part=>part.startsWith('<')?part:part.replace(re,(m,a,n)=>{const x=L.find(y=>y.n==n);if(!x)return m;const inner=x.st&&x.st!='none'?nameHTML(n,x.st):n;return a+'<b class="lgn" style="--lc:'+LGC[x.p%4]+'">'+inner+'</b>'})).join('')}
+function lgPaint(){const el=$('lg');if(!el)return;if(!el.dataset.v67){el.dataset.v67=1;el.dataset.stick='1';el.addEventListener('scroll',()=>{el.dataset.stick=el.scrollHeight-el.scrollTop-el.clientHeight<24?'1':'0'},{passive:true});try{new ResizeObserver(()=>{if(el.dataset.stick!=='0')el.scrollTop=el.scrollHeight}).observe(el)}catch(e){}}
+ const L=lgNames();el.innerHTML=log.slice(-30).map(t=>'<div>'+lgDeco(t,L)+'</div>').join('');if(el.dataset.stick!=='0')el.scrollTop=el.scrollHeight}
 function msg(t){try{const tk=mtick();LM={t,tk};if(ADDP&&ADDP.tk==tk&&(!ADDP.w||ADDP.lm)&&!/^Cartas:/.test(t)){ADDP.w=t;ADDP.lm=false}if(/^Cartas:/.test(t))GLOG.push({h:GH,t:-1,n:0,w:t,tk})}catch(e){}log.push(T(t));if(LV.mode=='host'){LV.raw.push(t);if(LV.raw.length>12)LV.raw.shift();lvPushSoon()}}
 
 let GLOG=[],GH=0,GQ=0,LM=null,ADDP=null,MTK=0,MTC=0;
@@ -1828,7 +1835,7 @@ for(const k of ['top','left','right'])$('s-'+k).innerHTML=SEAT[k]!=null?seatHTML
 $('dpile').innerHTML='';
 $('tb').innerHTML=table.map(c=>last&&last.id==c.id?cardHTML(c).replace('class="c','class="c lastc'):cardHTML(c)).join('')+(tmp?cardHTML(tmp).replace('class="c','class="c tmp'):'');
 fitTable();$('hd').innerHTML=hands[0].map(cardHTML).join('');if(PLANNING)setTimeout(planBadges,0);$('hd').classList.toggle('myt',turn==0&&!over&&hands[0].length>0);$('p0').classList.toggle('myt',turn==0&&!over);
-$('lg').innerHTML=log.slice(-4).map(t=>'<div>'+t+'</div>').join('');renderCg();
+lgPaint();renderCg();
 document.querySelectorAll('#hd .c').forEach(el=>el.onclick=()=>{if(PLANNING){planTap(el.dataset.id);return}if(LV.mode=='guest'){if(turn==0&&!over&&!busy){busy=true;const c=(hands[0]||[]).find(x=>String(x.id)==el.dataset.id);if(c){gFly(0,c,el);el.style.visibility='hidden'}LV.sentTsq=LV.gtsq;LV.sentAt=Date.now();LV.mS=performance.now();LV.mT=LV.gtsq;lvSend({t:'play',id:el.dataset.id,tsq:LV.gtsq});LV.pp={id:String(el.dataset.id),n:0};clearTimeout(LV.ppT);LV.ppT=setTimeout(lvPPchk,2500)}return}if(turn==0&&!busy&&!over){const c=hands[0].find(x=>x.id==el.dataset.id);busy=true;play(0,c)}});
 }
 function lvPPchk(){const q=LV.pp;if(!q||LV.mode!='guest')return;if(over||turn!==0||!(hands[0]||[]).some(x=>String(x.id)==q.id)){LV.pp=null;return}if(q.n>=3){LV.pp=null;LV.sentTsq=null;busy=false;render();toast('📶 Conexión lenta: vuelve a tirar tu carta');return}q.n++;LV.sentAt=Date.now();lvSend({t:'play',id:q.id,tsq:LV.gtsq});LV.ppT=setTimeout(lvPPchk,2500)}
@@ -3009,10 +3016,13 @@ setTimeout(()=>{try{if(FBU&&fbOk()&&(store.played||0)>0)csSave(true)}catch(e){}}
 document.addEventListener('visibilitychange',()=>{try{if(document.visibilityState=='hidden'&&store.cloudCode&&window._csDirty&&FBU&&fbOk())csSave(true)}catch(e){}});
 
 /* ===== NOVEDADES (se muestran una vez por cada actualización) ===== */
-const GAME_VER='2026.11.15d';
+const GAME_VER='2026.11.16a';
 /* Historial de cambios: agregar una entrada NUEVA ARRIBA cada vez que se actualice el juego.
    n = nuevo · m = mejorado · f = arreglado · q = quitado o cambiado para mejorar */
 const CHLOG=[
+{d:'2026-11-16',v:'2026.11.16a',t:'Arreglos',it:[
+['f','👆','Botones de canto grandes y fáciles de tocar'],
+['m','📜','El registro se desliza y muestra quién tiró cada carta']]},
 {d:'2026-11-15',v:'2026.11.15d',t:'Personajes nuevos',it:[
 ['n','🚆','Ronald en Valles del Tuy'],
 ['n','💈','TheBarber y Gabito en Santiago'],
