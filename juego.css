@@ -1699,3 +1699,83 @@ body.gtight #app #lg.log{max-height:2.95em!important}
 body.gtight2 #app #lg.log{display:block!important;max-height:1.5em!important}
 body.gtight #tm{min-height:0!important;font-size:12px!important;margin:0!important}
 body.gtight #rem{font-size:11.5px!important;padding:2px 6px!important}
+
+/* ===== Avioneta y zeppelin en la partida (v68) =====
+   Antes volaban pegados al borde de arriba (top:0): la pancarta (que ondea) se cortaba arriba y tapaban el boton Menu.
+   Ahora bajan un poco (con el margen del telefono) y el boton Menu queda por delante. */
+.spav.jue{top:calc(env(safe-area-inset-top,0px) + 16px)}
+.spzp.jue{top:calc(env(safe-area-inset-top,0px) + 12px)}
+.spav.cnt{top:calc(env(safe-area-inset-top,0px) + max(22px,4vh))}
+#app>div:first-child>button.sm{position:relative;z-index:62}
+
+/* ===== Aviso de mensajes nuevos (v69) ===== */
+.mbd{position:absolute;top:-6px;right:-8px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:#ff3d3d;color:#fff;font:900 11px/19px 'Nunito',system-ui,sans-serif;text-align:center;font-style:normal;box-shadow:0 0 0 2px #2a0d52;z-index:3;pointer-events:none}
+.tbi{position:relative}
+.hbtns .hib{position:relative}
+.mbd.mn{top:-8px;right:-8px}
+#mban{position:fixed;left:0;right:0;top:0;z-index:460;display:flex;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 8px) 10px 0;pointer-events:none;transform:translateY(-130%);transition:transform .32s cubic-bezier(.2,1.3,.4,1)}
+#mban.on{transform:translateY(0)}
+#mban .mbx{pointer-events:auto;display:flex;align-items:center;gap:10px;width:100%;max-width:420px;padding:8px 12px 8px 8px;border-radius:16px;background:linear-gradient(135deg,#4a2396,#2b1a5c)!important;border:2px solid #ffd84a!important;box-shadow:0 10px 24px #000a!important;color:#fff;text-align:left;cursor:pointer}
+#mban .mbi{flex:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#0005;overflow:hidden;font-size:22px}
+#mban .mbt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2}
+#mban .mbt small{font:900 10px 'Nunito',system-ui,sans-serif;letter-spacing:.6px;color:#ffd84a;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mban .mbt b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mban .mbt span{font-size:13px;opacity:.92;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mban .mbx>i{flex:none;font:900 12px 'Nunito',system-ui,sans-serif;font-style:normal;color:#ffd84a}
+@media (prefers-reduced-motion:reduce){#mban{transition:none}}
+
+/* ===== Aventura · modo historia (v71) ===== */
+.ahist{text-align:left;display:flex;flex-direction:column;gap:8px;background:linear-gradient(180deg,#2b1a5c,#1f1046)!important}
+.ahcap{font-weight:900;font-size:13px;letter-spacing:.04em;color:#ffd84a;text-transform:uppercase}
+.ahprev{font-size:13px;color:#cbb8f5}
+.ahl{display:flex;gap:8px;align-items:flex-end;opacity:0;animation:ahin .45s ease-out forwards}
+.ahl.me{flex-direction:row-reverse}
+.ahl .av{flex:none}
+.ahb{background:#3a2378;border:2px solid #563c95;border-radius:16px 16px 16px 4px;padding:7px 11px;font-size:15px;line-height:1.35;min-width:0;max-width:85%;overflow-wrap:anywhere}
+.ahl.me .ahb{background:#5b33b8;border-color:#8b5cf6;border-radius:16px 16px 4px 16px}
+.ahb b{display:block;font-size:12px;color:#ffd84a;margin-bottom:2px}
+.ahv{font-style:normal;background:#11452f;color:#7ff0b8;border-radius:999px;padding:0 6px;font-size:10px;margin-left:4px}
+.ahn{font-style:italic;color:#e6dcff;background:#140a2e;border-radius:12px;padding:7px 11px;font-size:14px;opacity:0;animation:ahin .45s ease-out forwards}
+@keyframes ahin{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+#advdlg{position:fixed;inset:0;z-index:9990;background:#0b0218cc;display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.advdlgb{background:#1a0b33;border:2px solid #b58cff55;border-radius:22px;padding:14px;width:100%;max-width:440px;display:flex;flex-direction:column;gap:9px;max-height:80vh;overflow-y:auto}
+.advsep.t3{background:linear-gradient(135deg,#1c0b40,#3a0f5c 60%,#0b3d91)!important}
+.afich{text-align:left;display:flex;flex-direction:column;gap:8px}
+.afich.fam{background:linear-gradient(160deg,#4a1940,#2b1a5c 55%)!important;border:2px solid #ff8fb8!important;box-shadow:0 0 18px #ff5fa244}
+.afam{font-weight:900;font-size:14px;color:#ffb3d1;letter-spacing:.03em}
+.afrow{display:flex;gap:10px;align-items:center}
+.afrow .av{flex:none}
+.afi{min-width:0;display:flex;flex-direction:column;gap:2px}
+.afi b{font-size:15px}
+.afi small{font-size:12px;color:#cbb8f5}
+.afi em{font-style:normal;font-size:12px;color:#ffc6dc;font-weight:700}
+.afchips{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.afchips span{background:#3a2378;border:1px solid #6b4fb0;border-radius:999px;padding:1px 7px;font-size:11px;white-space:nowrap}
+.afrow.fam .afchips span{border-color:#ff8fb8}
+.mb.advfamb{background:linear-gradient(135deg,#8a2a5c,#5b33b8)!important;border:2px solid #ff8fb8!important}
+#advfam{position:fixed;inset:0;z-index:9990;background:#0b0218dd;display:flex;align-items:center;justify-content:center;padding:12px}
+.advfamw{background:#1a0b33;border:2px solid #ff8fb8;border-radius:22px;padding:14px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;text-align:center}
+.aft{background:#2b1a5c;border-radius:16px;padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.aftt{font-weight:900;color:#ffb3d1;font-size:14px}
+.afh{display:flex;justify-content:center;gap:6px;width:100%;border-top:2px solid #ff8fb855;padding-top:6px}
+.afh.n{border-top:2px dashed #ff8fb855}
+.afc{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
+.afn{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0;max-width:120px}
+.afn b{font-size:13px}
+.afn small{font-size:10px;color:#cbb8f5;line-height:1.2}
+.afn i{font-style:normal;font-size:10px;color:#ffd84a}
+.afn.lock .av{filter:grayscale(1) brightness(.6)}
+@media (prefers-reduced-motion:reduce){.ahl,.ahn{animation:none;opacity:1}}
+
+/* ===== Tienda por secciones (v72) ===== */
+.wallet .s72cj{margin-left:auto;flex:none;border:0;border-radius:999px;padding:6px 12px;font:900 12px 'Nunito',system-ui,sans-serif;background:linear-gradient(135deg,#ffd84a,#ff9a2a)!important;color:#3a1d7a!important;box-shadow:0 3px 0 #b8860b!important}
+.s72subs{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.s72subs::-webkit-scrollbar{display:none}
+.s72sub{flex:none;border-radius:999px;padding:7px 12px;font:800 13px 'Nunito',system-ui,sans-serif;background:#2b1a5c!important;border:1px solid #b58cff55!important;color:#e2d4ff!important;box-shadow:none!important}
+.s72sub small{opacity:.7;margin-left:2px}
+.s72sub.on{background:#fff!important;color:#3a1d7a!important;border-color:#fff!important}
+.s72prs{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.s72pr{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:6px;border-radius:16px;background:#2b1a5c;border:1px solid #b58cff44}
+.s72pr>.si{width:auto!important;margin:0!important}
+.s72soon{text-align:center;padding:22px 14px;border-radius:18px;background:#2b1a5c;border:2px dashed #ffd84a88;display:flex;flex-direction:column;gap:8px}
+.s72soon b{font:400 22px 'Lilita One','Nunito',system-ui,sans-serif}
+.s72chip{display:inline-block;vertical-align:middle;background:#ffd84a;color:#3a1d7a;font:900 10px 'Nunito',system-ui,sans-serif;border-radius:999px;padding:2px 8px;letter-spacing:.5px}
